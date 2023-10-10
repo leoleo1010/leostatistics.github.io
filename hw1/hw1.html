@@ -164,11 +164,13 @@
         <!--------------------->
         <!-- CODICE EFFETTIVO-->
         <!-- BOTTONE PER GENERARE -->
-        <button class="bottone-rosso" onclick="drawRectangle()">Disegna Linea</button>
+        <canvas id="myCanvas1" width="400" height="400"></canvas>
+
+        <button class="bottone-rosso" onclick="drawRectangle()">Disegna Rettangolo</button>
 
         <script>
             function drawRectangle() {
-                var canvas = document.getElementById("myCanvas");
+                var canvas = document.getElementById("myCanvas1");
                 var context = canvas.getContext("2d");
                 var x1 = 50;
                 var y1 = 50;
