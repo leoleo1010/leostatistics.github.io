@@ -156,8 +156,16 @@
         <button class="bottone-rosso" onclick="drawPoint()">Disegna punto</button>
         <script>
             function drawPoint() {
-                background( 220 );
-                point( 50, 40 );
+                var canvas = document.getElementById("myCanvas");
+                var context = canvas.getContext("2d");
+                var x1 = 50;
+                var y1 = 50;
+                context.strokeStyle = "black";
+                context.lineWidth = 5;
+                context.beginPath();
+                context.moveTo(x1, y1);
+                // context.lineTo(x1,y1);
+                context.closePath();
             }
         </script>
 
