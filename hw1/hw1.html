@@ -77,7 +77,31 @@
             <a href="https://onlinedegrees.bradley.edu/blog/whats-the-difference-between-descriptive-and-inferential-statistics/">Link 2</a>
     </div>
 
-    <div>
+    <div class="container mt-5">
+        <p><b>Codice che genera la linea:</b></p>
+        <textarea>
+            <!-- Bottone HTML per disegnare la linea
+            <button class="bottone-rosso" onclick="drawLine()">Disegna Linea</button>
+
+            <script>
+                function drawLine() {
+                    var canvas = document.getElementById("myCanvas");
+                    var context = canvas.getContext("2d");
+                    var x1 = 50;
+                    var y1 = 50;
+                    var x2 = 350;
+                    var y2 = 350;
+                    context.strokeStyle = "black";
+                    context.lineWidth = 5;
+                    context.beginPath();
+                    context.moveTo(x1, y1);
+                    context.lineTo(x2, y2);
+                    context.stroke();
+                    context.closePath();
+                }
+            </script>
+            -->
+        </textarea>
         <canvas id="myCanvas" width="400" height="400"></canvas>
 
         <!-- Bottone HTML per disegnare la linea -->
@@ -91,7 +115,7 @@
                 var y1 = 50;
                 var x2 = 350;
                 var y2 = 350;
-                context.strokeStyle = "blue";
+                context.strokeStyle = "black";
                 context.lineWidth = 5;
                 context.beginPath();
                 context.moveTo(x1, y1);
