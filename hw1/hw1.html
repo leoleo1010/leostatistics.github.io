@@ -136,36 +136,51 @@
             }
         </script>
 
-     <!-- GENERA PUNTO -->
-        <p><b>Codice che genera un punto:</b></p>
+     <!-- GENERA RETTANGOLO -->
+        <p><b>Codice che genera un Rettangolo:</b></p>
         <pre>
             <code>
-            
+                
+                &lt;button class="bottone-rosso" onclick="drawRectangle()"&gt;Disegna Rettangolo &lt;/button&gt;
+        
+                &lt;script&gt;
+                    function drawRectangle() {
+                        var canvas = document.getElementById("myCanvas");
+                        var context = canvas.getContext("2d");
+                        var x1 = 50;
+                        var y1 = 50;
+                        var x2 = 350;
+                        var y2 = 350;
+                        context.strokeStyle = "black";
+                        context.lineWidth = 5;
+                        context.beginPath();
+                        ctx.fillRect(50, 50, 100, 100);
+                        context.closePath();
+                    }
+                &lt;/script&gt;
             </code>
         </pre>
 
         <!--------------------->
         <!-- CODICE EFFETTIVO-->
         <!-- BOTTONE PER GENERARE -->
-        <button class="bottone-rosso" onclick="drawPoint()">Disegna punto</button>
+        <button class="bottone-rosso" onclick="drawRectangle()">Disegna Linea</button>
 
         <script>
-            function drawPoint() {
+            function drawRectangle() {
                 var canvas = document.getElementById("myCanvas");
                 var context = canvas.getContext("2d");
                 var x1 = 50;
                 var y1 = 50;
+                var x2 = 350;
+                var y2 = 350;
                 context.strokeStyle = "black";
                 context.lineWidth = 5;
                 context.beginPath();
-                context.moveTo(x1, y1);
-                context.stroke();
-                context.lineTo(x1,y1);
+                ctx.fillRect(50, 50, 100, 100);
                 context.closePath();
             }
         </script>
-        
-
     </div>
         
 </body>
