@@ -79,10 +79,12 @@
 
     <div class="container mt-5">
         <p><b>Codice che genera la linea:</b></p>
-        <textarea readonly="readonly">
-            <code>
+        <code></code>
+            <script type="text-plain">
+                <!-- CODICE PER GENERARE LINEA -->
                 <canvas id="myCanvas" width="400" height="400"></canvas>
-
+        
+                <!-- Bottone HTML per disegnare la linea -->
                 <button class="bottone-rosso" onclick="drawLine()">Disegna Linea</button>
         
                 <script>
@@ -101,10 +103,10 @@
                         context.stroke();
                         context.closePath();
                     }
-                </script>
-            </code>
-        </textarea>
-
+                    &lt;/script&gt; 
+            </script>
+            
+        </code>
         <!-- CODICE PER GENERARE LINEA -->
         <canvas id="myCanvas" width="400" height="400"></canvas>
 
