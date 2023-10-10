@@ -1,6 +1,6 @@
-function getLine(){
-    
 <canvas id="myCanvas" width="400" height="400"></canvas>
+
+function getLine(){
     // Ottieni il riferimento al canvas
     var canvas = document.getElementById("myCanvas");
     // Ottieni il contesto di disegno 2D del canvas
