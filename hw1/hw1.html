@@ -77,12 +77,12 @@
             <a href="https://onlinedegrees.bradley.edu/blog/whats-the-difference-between-descriptive-and-inferential-statistics/">Link 2</a>
     </div>
 
-    <hr width="50%" color="black" size="4">
+    <hr width="100%" color="black" size="2">
 
     
     <div class="container mt-5">
         <h2>Applications</h2>
-
+    <!-- GENERA LINEA -->
         <p><b>Codice che genera la linea:</b></p>
         <pre>
             <code>
@@ -112,7 +112,7 @@
         </pre>
 
         <!------------------------------->
-        <!-- CODICE PER GENERARE LINEA -->
+        <!-- CODICE EFFETTIVO -->
         <canvas id="myCanvas" width="400" height="400"></canvas>
 
         <!-- BOTTONE PER GENERARE -->
@@ -135,7 +135,32 @@
                 context.closePath();
             }
         </script>
-        
+
+     <!-- GENERA PUNTO -->
+        <p><b>Codice che genera un punto:</b></p>
+        <pre>
+            <code>
+                &lt;script&gt;
+                    function setup() {
+                        background( 220 );
+                        point( 50, 40 );
+                    }
+                &lt;scriipt&gt;
+            </code>
+        </pre>
+
+        <!--------------------->
+        <!-- CODICE EFFETTIVO-->
+
+        <!-- BOTTONE PER GENERARE -->
+        <button class="bottone-rosso" onclick="drawPoint()">Disegna punto</button>
+        <script>
+            function drawPoint() {
+                background( 220 );
+                point( 50, 40 );
+            }
+        </script>
+
     </div>
         
 </body>
