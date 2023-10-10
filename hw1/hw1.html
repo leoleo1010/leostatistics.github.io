@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        /* Stile per il bottone */
+        .bottone-rosso {
+            background-color: red; /* Colore di sfondo rosso */
+            color: white; /* Colore del testo bianco */
+            padding: 10px 20px; /* Spaziatura interna (padding) */
+            border: none; /* Rimuove il bordo */
+            cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -66,5 +76,10 @@
              <!-- Secondo link -->
             <a href="https://onlinedegrees.bradley.edu/blog/whats-the-difference-between-descriptive-and-inferential-statistics/">Link 2</a>
     </div>
+
+    <div class="container mt-5">
+        <p>Cliccare il bottone per generare la linea e mostrre il codice</p>
+        <button onclick="createLine" class ="bottone-rosso">GENERA</button>
+    </div> 
 </body>
 </html>
