@@ -140,20 +140,15 @@
         <p><b>Codice che genera un punto:</b></p>
         <pre>
             <code>
-                &lt;script&gt;
-                    function setup() {
-                        background( 220 );
-                        point( 50, 40 );
-                    }
-                &lt;scriipt&gt;
+            
             </code>
         </pre>
 
         <!--------------------->
         <!-- CODICE EFFETTIVO-->
-
         <!-- BOTTONE PER GENERARE -->
         <button class="bottone-rosso" onclick="drawPoint()">Disegna punto</button>
+
         <script>
             function drawPoint() {
                 var canvas = document.getElementById("myCanvas");
@@ -164,10 +159,11 @@
                 context.lineWidth = 5;
                 context.beginPath();
                 context.moveTo(x1, y1);
-                // context.lineTo(x1,y1);
+                context.stroke();
                 context.closePath();
             }
         </script>
+        
 
     </div>
         
