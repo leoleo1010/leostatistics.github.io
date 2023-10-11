@@ -82,7 +82,7 @@
     
     <div class="container mt-5">
         <h2>Applications</h2>
-    <!-- GENERA LINEA -->
+         <!-- GENERA LINEA -->
         <p><b>Codice che genera la linea:</b></p>
         <pre>
             <code>
@@ -136,19 +136,35 @@
             }
         </script>
 
-     <!-- GENERA RETTANGOLO -->
+         <!-- GENERA RETTANGOLO -->
         <p><b>Codice che genera un Rettangolo:</b></p>
         <pre>
             <code>
-                
+                &lt;canvas id="myCanvas1" width="400" height="400"&gt;&lt;/canvas&gt;
+
+                <!-- BOTTONE PER GENERARE -->
+                &lt;button class="bottone-rosso" onclick="drawRectangle()"&gt;Disegna Rettangolo&lt;/button&gt;
+        
+                &lt;script&gt;
+                    function drawRectangle() {
+                        var canvas1 = document.getElementById("myCanvas1");
+                        var context1 = canvas1.getContext("2d");
+                        context1.fillStyle = "black";
+                        context1.lineWidth = 5;
+                        context1.beginPath();
+                        context1.fillRect(10, 20, 50, 150);
+                        context1.closePath();
+                    }
+                &lt;/script&gt;
             </code>
         </pre>
 
         <!--------------------->
         <!-- CODICE EFFETTIVO-->
-        <!-- BOTTONE PER GENERARE -->
+        
         <canvas id="myCanvas1" width="400" height="400"></canvas>
 
+        <!-- BOTTONE PER GENERARE -->
         <button class="bottone-rosso" onclick="drawRectangle()">Disegna Rettangolo</button>
 
         <script>
@@ -164,6 +180,37 @@
                 context1.beginPath();
                 context1.fillRect(10, 20, 50, 150);
                 context1.closePath();
+            }
+        </script>
+
+        <!-- GENERA CERCHIO -->
+        <p><b>Codice che genera un Cerchio:</b></p>
+        <pre>
+            <code>
+
+            </code>
+        </pre>
+
+        <!--------------------->
+        <!-- CODICE EFFETTIVO-->
+
+        <canvas id="myCanvas2" width="400" height="400"></canvas>
+
+        <!-- BOTTONE PER GENERARE -->
+        <button class="bottone-rosso" onclick="drawCicle()">Disegna Cerchio</button>
+
+        <script>
+            function drawCircle(){
+                var myCanvas2 = document.getElementById("myCanvas2");
+                var context2 = myCanvas2.getContext("2d");
+                context2.beginPath();
+                context2.arc(100, 100, 50, 0, 2 * Math.PI);
+                context2.fillStyle = "#00ff00";
+                context2.fill();
+                context2.strokeStyle = "#000000";
+                context2.stroke();
+                context2.closePath();
+
             }
         </script>
     </div>
