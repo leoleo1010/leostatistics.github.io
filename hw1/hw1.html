@@ -83,13 +83,13 @@
     <div class="container mt-5">
         <h2>Applications</h2>
          <!-- GENERA LINEA -->
-        <p><b>Codice che genera la linea:</b></p>
+        <p><b>Code that generates a Line:</b></p>
         <pre>
             <code>
                 &lt;canvas&gt; id="myCanvas" width="400" height="400"&gt; &lt;/canvas&gt;
 
         
-                &lt;button class="bottone-rosso" onclick="drawLine()"&gt;Disegna Linea &lt;/button&gt;
+                &lt;button class="bottone-rosso" onclick="drawLine()"&gt;Draw Line &lt;/button&gt;
         
                 &lt;script&gt;
                     function drawLine() {
@@ -116,7 +116,7 @@
         <canvas id="myCanvas" width="400" height="400"></canvas>
 
         <!-- BOTTONE PER GENERARE -->
-        <button class="bottone-rosso" onclick="drawLine()">Disegna Linea</button>
+        <button class="bottone-rosso" onclick="drawLine()">Draw Line</button>
 
         <script>
             function drawLine() {
@@ -137,13 +137,13 @@
         </script>
 
          <!-- GENERA RETTANGOLO -->
-        <p><b>Codice che genera un Rettangolo:</b></p>
+        <p><b>Code that generates a Rectangle</b></p>
         <pre>
             <code>
                 &lt;canvas id="myCanvas1" width="400" height="400"&gt;&lt;/canvas&gt;
 
                 <!-- BOTTONE PER GENERARE -->
-                &lt;button class="bottone-rosso" onclick="drawRectangle()"&gt;Disegna Rettangolo&lt;/button&gt;
+                &lt;button class="bottone-rosso" onclick="drawRectangle()"&gt;Draw Rectangle&lt;/button&gt;
         
                 &lt;script&gt;
                     function drawRectangle() {
@@ -165,7 +165,7 @@
         <canvas id="myCanvas1" width="400" height="400"></canvas>
 
         <!-- BOTTONE PER GENERARE -->
-        <button class="bottone-rosso" onclick="drawRectangle()">Disegna Rettangolo</button>
+        <button class="bottone-rosso" onclick="drawRectangle()">Draw Rectangle</button>
 
         <script>
             function drawRectangle() {
@@ -184,13 +184,13 @@
         </script>
 
         <!-- GENERA CERCHIO -->
-        <p><b>Codice che genera un Cerchio:</b></p>
+        <p><b>Code that generates a Circle:</b></p>
         <pre>
             <code>
                 &lt;canvas id="myCanvas2" width="400" height="400"&gt;&lt;/canvas&gt;
 
                 
-                &lt;button class="bottone-rosso" onclick="drawCircle()"&gt;Disegna Cerchio&lt;/button&gt;
+                &lt;button class="bottone-rosso" onclick="drawCircle()"&gt;Draw Circle&lt;/button&gt;
         
                 &lt;script&gt;
                     function drawCircle(){
@@ -205,7 +205,7 @@
                         context2.closePath();
         
                     }
-                    &lt;/script&gt;
+                &lt;/script&gt;
             </code>
         </pre>
 
@@ -215,7 +215,7 @@
         <canvas id="myCanvas2" width="400" height="400"></canvas>
 
         <!-- BOTTONE PER GENERARE -->
-        <button class="bottone-rosso" onclick="drawCircle()">Disegna Cerchio</button>
+        <button class="bottone-rosso" onclick="drawCircle()">Draw Circle</button>
 
         <script>
             function drawCircle(){
@@ -231,6 +231,61 @@
 
             }
         </script>
+
+        <!-- GENERA PUNTO -->
+        <p><b>Code that generates a Point:</b></p>
+        <pre>
+            <code>
+                &lt;canvas id="myCanvas3" width="400" height="400"&gt;&lt;/canvas&gt;
+
+                &lt;button class="bottone-rosso" onclick="drawPoint()"&gt;Draw Point&lt;/button&gt;
+        
+                &lt;script&gt;
+                    function drawPoint(){
+                        var myCanvas3 = document.getElementById("myCanvas3");
+                        var context3 = myCanvas3.getContext("2d");
+                        var x = 200;
+                        var y = 200;
+                    
+                        // Imposta il colore del punto
+                        context3.fillStyle = 'black';
+                    
+                        // Disegna il punto
+                        context3.beginPath();
+                        context3.arc(x, y, 5, 0, 2 * Math.PI);
+                        context3.fill();
+                        context3.closePath();
+                    }
+                &lt;/script&gt;
+            </code>
+        </pre>
+
+        <!--------------------->
+        <!-- CODICE EFFETTIVO ---->
+
+        <canvas id="myCanvas3" width="400" height="400"></canvas>
+
+        <!-- BOTTONE PER GENERARE -->
+        <button class="bottone-rosso" onclick="drawPoint()">Draw Point</button>
+
+        <script>
+            function drawPoint(){
+                var myCanvas3 = document.getElementById("myCanvas3");
+                var context3 = myCanvas3.getContext("2d");
+                var x = 200;
+                var y = 200;
+            
+                // Imposta il colore del punto
+                context3.fillStyle = 'black';
+            
+                // Disegna il punto
+                context3.beginPath();
+                context3.arc(x, y, 5, 0, 2 * Math.PI);
+                context3.fill();
+                context3.closePath();
+            }
+        </script>
+
     </div>
         
 </body>
