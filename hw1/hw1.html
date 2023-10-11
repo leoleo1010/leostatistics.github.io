@@ -164,19 +164,23 @@
         <!--------------------->
         <!-- CODICE EFFETTIVO-->
         <!-- BOTTONE PER GENERARE -->
-        <canvas id="myCanvas1" width="420" height="420"></canvas>
+        <canvas id="myCanvas1" width="400" height="400"></canvas>
 
         <button class="bottone-rosso" onclick="drawRectangle()">Disegna Rettangolo</button>
 
         <script>
             function drawRectangle() {
-                var c = document.getElementById('lavagna');
-                var ctx=c.getContext("2d");
-                 ctx.rect(10,20,50,150);   // crea il rettangolo
-                 ctx.fill();  //  riempe il rettangolo
-                 ctx.rect(120,20,100,30);  // crea il rettangolo
-                 ctx.stroke();  //  disegna il contorno     
-            }   
+                var canvas1 = document.getElementById("myCanvas1");
+                var context1 = canvas1.getContext("2d");
+                var x1 = 50;
+                var y1 = 50;
+                var x2 = 350;
+                var y2 = 350;
+                context1.fillStyle = "black";
+                context1.lineWidth = 5;
+                context1.beginPath();
+                ctx.fillRect(50, 50, 100, 100);
+            }
         </script>
     </div>
         
