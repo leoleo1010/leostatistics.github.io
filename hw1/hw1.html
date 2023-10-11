@@ -187,7 +187,25 @@
         <p><b>Codice che genera un Cerchio:</b></p>
         <pre>
             <code>
+                &lt;canvas id="myCanvas2" width="400" height="400"&gt;&lt;/canvas&gt;
 
+                
+                &lt;button class="bottone-rosso" onclick="drawCicle()"&gt;Disegna Cerchio&lt;/button&gt;
+        
+                &lt;script&gt;
+                    function drawCircle(){
+                        var myCanvas2 = document.getElementById("myCanvas2");
+                        var context2 = myCanvas2.getContext("2d");
+                        context2.beginPath();
+                        context2.arc(100, 100, 50, 0, 2 * Math.PI);
+                        context2.fillStyle = "#00ff00";
+                        context2.fill();
+                        context2.strokeStyle = "#000000";
+                        context2.stroke();
+                        context2.closePath();
+        
+                    }
+                    &lt;/script&gt;
             </code>
         </pre>
 
