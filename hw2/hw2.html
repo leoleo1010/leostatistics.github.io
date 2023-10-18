@@ -139,36 +139,57 @@
                         percentualFrequencies.joint[key] = (relativeFrequencies.joint[key] * 100).toFixed(2) + "%";
                     }
 
-                    // Visualizza i risultati
+                    // Visualizza solo i risultati relativi ai valori inseriti
                     var risultati = document.getElementById("risultati");
                     risultati.innerHTML = "<h3>Frequenza Assoluta</h3>";
-                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (frequencyCount.background[backgroundValue] || 0) + " occorrenze</p>";
-                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (frequencyCount.ambitious[ambitiousValue] || 0) + " occorrenze</p>";
-                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (frequencyCount.weight[weightValue] || 0) + " occorrenze</p>";
+                    if (backgroundValue) {
+                        risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (frequencyCount.background[backgroundValue] || 0) + " occorrenze</p>";
+                    }
+                    if (!isNaN(ambitiousValue)) {
+                        risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (frequencyCount.ambitious[ambitiousValue] || 0) + " occorrenze</p>";
+                    }
+                    if (!isNaN(weightValue)) {
+                        risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (frequencyCount.weight[weightValue] || 0) + " occorrenze</p>";
+                    }
 
                     risultati.innerHTML += "<h3>Frequenza Relativa</h3>";
-                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (relativeFrequencies.background[backgroundValue] || 0) + "</p>";
-                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (relativeFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
-                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (relativeFrequencies.weight[weightValue] || 0) + "</p>";
+                    if (backgroundValue) {
+                        risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (relativeFrequencies.background[backgroundValue] || 0) + "</p>";
+                    }
+                    if (!isNaN(ambitiousValue)) {
+                        risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (relativeFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
+                    }
+                    if (!isNaN(weightValue)) {
+                        risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (relativeFrequencies.weight[weightValue] || 0) + "</p>";
+                    }
 
                     risultati.innerHTML += "<h3>Frequenza Percentuale</h3>";
-                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (percentualFrequencies.background[backgroundValue] || 0) + "</p>";
-                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (percentualFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
-                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (percentualFrequencies.weight[weightValue] || 0) + "</p>";
+                    if (backgroundValue) {
+                        risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (percentualFrequencies.background[backgroundValue] || 0) + "</p>";
+                    }
+                    if (!isNaN(ambitiousValue)) {
+                        risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (percentualFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
+                    }
+                    if (!isNaN(weightValue)) {
+                        risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (percentualFrequencies.weight[weightValue] || 0) + "</p>";
+                    }
 
                     risultati.innerHTML += "<h3>Joint Frequenza Assoluta</h3>";
-                    for (var key in frequencyCount.joint) {
-                        risultati.innerHTML += "<p>" + key + ": " + frequencyCount.joint[key] + " occorrenze</p>";
+                    if (backgroundValue && !isNaN(weightValue)) {
+                        var jointKey = backgroundValue + " - " + weightValue;
+                        risultati.innerHTML += "<p>" + jointKey + ": " + (frequencyCount.joint[jointKey] || 0) + " occorrenze</p>";
                     }
 
                     risultati.innerHTML += "<h3>Joint Frequenza Relativa</h3>";
-                    for (var key in relativeFrequencies.joint) {
-                        risultati.innerHTML += "<p>" + key + ": " + relativeFrequencies.joint[key] + "</p>";
+                    if (backgroundValue && !isNaN(weightValue)) {
+                        var jointKey = backgroundValue + " - " + weightValue;
+                        risultati.innerHTML += "<p>" + jointKey + ": " + (relativeFrequencies.joint[jointKey] || 0) + "</p>";
                     }
 
                     risultati.innerHTML += "<h3>Joint Frequenza Percentuale</h3>";
-                    for (var key in percentualFrequencies.joint) {
-                        risultati.innerHTML += "<p>" + key + ": " + percentualFrequencies.joint[key] + "</p>";
+                    if (backgroundValue && !isNaN(weightValue)) {
+                        var jointKey = backgroundValue + " - " + weightValue;
+                        risultati.innerHTML += "<p>" + jointKey + ": " + (percentualFrequencies.joint[jointKey] || 0) + "</p>";
                     }
                 });
         }
