@@ -4,6 +4,8 @@
     <title>Array-Based Data Structure</title>
 </head>
 <body>
+    <div id="output"></div>
+
     <script>
         // Create a data structure using an array
         const dataStructure = [];
@@ -55,26 +57,31 @@
             return false; // Key not found
         }
 
+        // Display the result on the page
+        function displayResult(result) {
+            document.getElementById("output").innerHTML += result + "<br>";
+        }
+
         // Example of using the methods
         addElement("name", "Mario");
         addElement("age", 30);
 
         if (keyExists("name")) {
-            console.log("Key 'name' exists.");
+            displayResult("Key 'name' exists.");
         } else {
-            console.log("Key 'name' does not exist.");
+            displayResult("Key 'name' does not exist.");
         }
 
-        console.log("Value associated with 'age': " + getValue("age"));
+        displayResult("Value associated with 'age': " + getValue("age"));
 
         setValue("age", 31); // Set a new value for "age"
-        console.log("New value associated with 'age': " + getValue("age"));
+        displayResult("New value associated with 'age': " + getValue("age"));
 
         removeElement("name");
         if (keyExists("name")) {
-            console.log("Key 'name' exists.");
+            displayResult("Key 'name' exists.");
         } else {
-            console.log("Key 'name' does not exist.");
+            displayResult("Key 'name' does not exist.");
         }
     </script>
 </body>
