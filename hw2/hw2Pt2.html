@@ -1,11 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Array-Based Data Structure</title>
 </head>
 <body>
-    <p>pt2</p>
+    <script>
+        // Create a data structure using an array
+        const dataStructure = [];
+
+        // Method to add an element with a key and value
+        function addElement(key, value) {
+            dataStructure.push({ key, value });
+        }
+
+        // Method to remove an element based on the key
+        function removeElement(key) {
+            for (let i = 0; i < dataStructure.length; i++) {
+                if (dataStructure[i].key === key) {
+                    dataStructure.splice(i, 1);
+                    i--; // Decrement the index to avoid skipping an element
+                }
+            }
+        }
+
+        // Method to get the value associated with a key
+        function getValue(key) {
+            for (const item of dataStructure) {
+                if (item.key === key) {
+                    return item.value;
+                }
+            }
+            return undefined; // Key not found
+        }
+
+        // Method to set the value associated with a key
+        function setValue(key, value) {
+            for (const item of dataStructure) {
+                if (item.key === key) {
+                    item.value = value;
+                    return;
+                }
+            }
+            // If the key doesn't exist, add it
+            addElement(key, value);
+        }
+
+        // Method to check the existence of a key
+        function keyExists(key) {
+            for (const item of dataStructure) {
+                if (item.key === key) {
+                    return true;
+                }
+            }
+            return false; // Key not found
+        }
+
+        // Example of using the methods
+        addElement("name", "Mario");
+        addElement("age", 30);
+
+        if (keyExists("name")) {
+            console.log("Key 'name' exists.");
+        } else {
+            console.log("Key 'name' does not exist.");
+        }
+
+        console.log("Value associated with 'age': " + getValue("age"));
+
+        setValue("age", 31); // Set a new value for "age"
+        console.log("New value associated with 'age': " + getValue("age"));
+
+        removeElement("name");
+        if (keyExists("name")) {
+            console.log("Key 'name' exists.");
+        } else {
+            console.log("Key 'name' does not exist.");
+        }
+    </script>
 </body>
 </html>
