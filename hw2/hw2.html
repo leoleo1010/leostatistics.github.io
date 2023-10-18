@@ -78,9 +78,9 @@
                             }
                         }
 
-                        // Calcola il joint tra "Background (degree)" e "weight"
-                        if (background && !isNaN(weight)) {
-                            var jointKey = background + " - " + weight;
+                        // Calcola il joint tra "Background (degree)" e "Weight" solo per i valori inseriti
+                        if (background == backgroundValue && weight == weightValue) {
+                            var jointKey = backgroundValue + " - " + weightValue;
                             if (!frequencyCount.joint[jointKey]) {
                                 frequencyCount.joint[jointKey] = 1;
                             } else {
