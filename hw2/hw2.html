@@ -1,13 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <p>oo
-    </p>
+    <title>Calcolo Distribuzione di Frequenza</title>
 </head>
 <body>
-    
+    <h1>Calcolo Distribuzione di Frequenza</h1>
+
+    <!-- Spazi di input per le variabili -->
+    <label for="backgroundInput">Background (Qualitativo):</label>
+    <input type="text" id="backgroundInput"><br><br>
+
+    <label for="ambitiousInput">Ambitious (Quantitativo Discreto):</label>
+    <input type="number" id="ambitiousInput" min="0" max="5" step="1"><br><br>
+
+    <label for="weightInput">Weight (Quantitativo Continuo):</label>
+    <input type="number" id="weightInput" step="0.01"><br><br>
+
+    <button onclick="calcolaDistribuzione()">Calcola Distribuzione</button>
+
+    <h2>Risultati:</h2>
+    <div id="risultati"></div>
+
+    <script>
+        function calcolaDistribuzione() {
+            // Ottieni i valori inseriti dall'utente
+            var backgroundValue = document.getElementById("backgroundInput").value;
+            var ambitiousValue = parseInt(document.getElementById("ambitiousInput").value);
+            var weightValue = parseFloat(document.getElementById("weightInput").value);
+
+            // Leggi il file TSV (dati.tsv) e calcola la distribuzione di frequenza
+            fetch('dati.tsv')
+                .then(response => response.text())
+                .then(data => {
+                    var lines = data.split('\n');
+                    var header = lines[0].split('\t');
+                    var backgroundIndex = header.indexOf('Background (degree)');
+                    var ambitiousIndex = header.indexOf('Ambitious (0-5)');
+                    var weightIndex = header.indexOf('weight');
+
+                    var frequencyCount = {
+                        background: {},
+                        ambitious: {},
+                        weight: {},
+                        joint: {}
+                    };
+
+                    var totalRows = 0;
+
+                    for (var i = 1; i < lines.length; i++) {
+                        var values = lines[i].split('\t');
+                        var background = values[backgroundIndex];
+                        var ambitious = parseInt(values[ambitiousIndex]);
+                        var weight = parseFloat(values[weightIndex]);
+
+                        // Conta la frequenza assoluta per ciascuna variabile
+                        if (background) {
+                            if (!frequencyCount.background[background]) {
+                                frequencyCount.background[background] = 1;
+                            } else {
+                                frequencyCount.background[background]++;
+                            }
+                        }
+
+                        if (!isNaN(ambitious)) {
+                            if (!frequencyCount.ambitious[ambitious]) {
+                                frequencyCount.ambitious[ambitious] = 1;
+                            } else {
+                                frequencyCount.ambitious[ambitious]++;
+                            }
+                        }
+
+                        if (!isNaN(weight)) {
+                            if (!frequencyCount.weight[weight]) {
+                                frequencyCount.weight[weight] = 1;
+                            } else {
+                                frequencyCount.weight[weight]++;
+                            }
+                        }
+
+                        // Calcola il joint tra "Background (degree)" e "weight"
+                        if (background && !isNaN(weight)) {
+                            var jointKey = background + " - " + weight;
+                            if (!frequencyCount.joint[jointKey]) {
+                                frequencyCount.joint[jointKey] = 1;
+                            } else {
+                                frequencyCount.joint[jointKey]++;
+                            }
+                        }
+
+                        totalRows++;
+                    }
+
+                    // Calcola frequenze relative
+                    var relativeFrequencies = {
+                        background: {},
+                        ambitious: {},
+                        weight: {},
+                        joint: {}
+                    };
+
+                    for (var key in frequencyCount.background) {
+                        relativeFrequencies.background[key] = frequencyCount.background[key] / totalRows;
+                    }
+
+                    for (var key in frequencyCount.ambitious) {
+                        relativeFrequencies.ambitious[key] = frequencyCount.ambitious[key] / totalRows;
+                    }
+
+                    for (var key in frequencyCount.weight) {
+                        relativeFrequencies.weight[key] = frequencyCount.weight[key] / totalRows;
+                    }
+
+                    for (var key in frequencyCount.joint) {
+                        relativeFrequencies.joint[key] = frequencyCount.joint[key] / totalRows;
+                    }
+
+                    // Calcola frequenze percentuali
+                    var percentualFrequencies = {
+                        background: {},
+                        ambitious: {},
+                        weight: {},
+                        joint: {}
+                    };
+
+                    for (var key in relativeFrequencies.background) {
+                        percentualFrequencies.background[key] = (relativeFrequencies.background[key] * 100).toFixed(2) + "%";
+                    }
+
+                    for (var key in relativeFrequencies.ambitious) {
+                        percentualFrequencies.ambitious[key] = (relativeFrequencies.ambitious[key] * 100).toFixed(2) + "%";
+                    }
+
+                    for (var key in relativeFrequencies.weight) {
+                        percentualFrequencies.weight[key] = (relativeFrequencies.weight[key] * 100).toFixed(2) + "%";
+                    }
+
+                    for (var key in relativeFrequencies.joint) {
+                        percentualFrequencies.joint[key] = (relativeFrequencies.joint[key] * 100).toFixed(2) + "%";
+                    }
+
+                    // Visualizza i risultati
+                    var risultati = document.getElementById("risultati");
+                    risultati.innerHTML = "<h3>Frequenza Assoluta</h3>";
+                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (frequencyCount.background[backgroundValue] || 0) + " occorrenze</p>";
+                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (frequencyCount.ambitious[ambitiousValue] || 0) + " occorrenze</p>";
+                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (frequencyCount.weight[weightValue] || 0) + " occorrenze</p>";
+
+                    risultati.innerHTML += "<h3>Frequenza Relativa</h3>";
+                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (relativeFrequencies.background[backgroundValue] || 0) + "</p>";
+                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (relativeFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
+                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (relativeFrequencies.weight[weightValue] || 0) + "</p>";
+
+                    risultati.innerHTML += "<h3>Frequenza Percentuale</h3>";
+                    risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (percentualFrequencies.background[backgroundValue] || 0) + "</p>";
+                    risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (percentualFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
+                    risultati.innerHTML += "<p>Weight (" + weightValue + "): " + (percentualFrequencies.weight[weightValue] || 0) + "</p>";
+
+                    risultati.innerHTML += "<h3>Joint Frequenza Assoluta</h3>";
+                    for (var key in frequencyCount.joint) {
+                        risultati.innerHTML += "<p>" + key + ": " + frequencyCount.joint[key] + " occorrenze</p>";
+                    }
+
+                    risultati.innerHTML += "<h3>Joint Frequenza Relativa</h3>";
+                    for (var key in relativeFrequencies.joint) {
+                        risultati.innerHTML += "<p>" + key + ": " + relativeFrequencies.joint[key] + "</p>";
+                    }
+
+                    risultati.innerHTML += "<h3>Joint Frequenza Percentuale</h3>";
+                    for (var key in percentualFrequencies.joint) {
+                        risultati.innerHTML += "<p>" + key + ": " + percentualFrequencies.joint[key] + "</p>";
+                    }
+                });
+        }
+    </script>
 </body>
 </html>
