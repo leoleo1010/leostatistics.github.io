@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simulazione Sicurezza</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Frequenza Cumulativa delle Penetrazioni (f)</h1>
+    <canvas id="chart1" width="400" height="200"></canvas>
+
+    <h1>Frequenza Relativa</h1>
+    <canvas id="chart2" width="400" height="200"></canvas>
+
+    <h1>Rapporto Normalizzato</h1>
+    <canvas id="chart3" width="400" height="200"></canvas>
+
+    <p>Inserisci il numero di attacchi (N): <input type="number" id="numAttacksInput" value="100"></p>
+    <p>Inserisci il numero di macchine (M): <input type="number" id="numMachinesInput" value="5"></p>
+    <button onclick="startSimulation()">Inizia la simulazione</button>
+
+    <script>
+        let numAttacks = 0;
+        let numMachines = 0;
+        let penetrationResults = [];
+        let penetrationCounts = [];
+        let relativeFrequencies = [];
+        let normalizedRatios = [];
+
+        function getRandomColor() {
+            // Genera valori casuali per i canali R, G e B
+            var r = Math.floor(Math.random() * 256); // Valore tra 0 e 255
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+        
+            // Componi il colore in formato "rgb(r, g, b)"
+            return 'rgb(' + r + ',' + g + ',' + b + ')';
+        }        
+
+        function startSimulation() {
+            numAttacks = parseInt(document.getElementById("numAttacksInput").value, 10);
+            numMachines = parseInt(document.getElementById("numMachinesInput").value, 10);
+
+            penetrationResults = Array.from({ length: numMachines }, () => []);
+            penetrationCounts = Array.from({ length: numMachines }, () => [0]);
+            relativeFrequencies = Array.from({ length: numMachines }, () => []);
+            normalizedRatios = Array.from({ length: numMachines }, () => []);
+
+            // Intervallo per aggiornare i risultati delle penetrazioni ogni 1 secondo.
+            const resultsInterval = setInterval(countPenetrationResults, 1000);
+
+            // Intervallo per animare i grafici ogni 1 secondo.
+            const animationInterval = setInterval(animateCharts, 1000);
+
+            // Reset canvas and clear intervals when the simulation is done.
+            setTimeout(() => {
+                clearInterval(resultsInterval);
+                clearInterval(animationInterval);
+            }, numAttacks * 1000);
+        }
+
+        function countPenetrationResults() {
+            for (let machine = 0; machine < numMachines; machine++) {
+                const attackSuccess = Math.random() < 0.5;
+                penetrationResults[machine].push(attackSuccess ? 1 : 0);
+
+                // Calcola il numero totale di penetrazioni fino a questo punto.
+                const totalPenetrations = penetrationResults[machine].reduce((a, b) => a + b, 0);
+                penetrationCounts[machine].push(totalPenetrations);
+
+                // Calcola la frequenza relativa e il rapporto normalizzato.
+                const relativeFrequency = totalPenetrations / penetrationResults[machine].length;
+                relativeFrequencies[machine].push(relativeFrequency);
+                const normalizedRatio = totalPenetrations / Math.sqrt(penetrationResults[machine].length);
+                normalizedRatios[machine].push(normalizedRatio);
+            }
+        }
+
+        function drawAxisLabels(ctx, canvas) {
+            // Disegna i numeri sugli assi.
+            ctx.font = "12px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillStyle = "black";
+
+            // Ettichette asse X
+            for (let i = 0; i <= numAttacks; i++) {
+                const x = i * (canvas.width / numAttacks);
+                ctx.fillText(i, x, canvas.height + 15);
+            }
+
+            // Ettichette asse Y
+            for (let i = 0; i <= 10; i++) {
+                const y = i * (canvas.height / 10);
+                ctx.fillText(10 - i, -15, y);
+            }
+        }
+
+        function animateCharts() {
+            const chartCanvas1 = document.getElementById("chart1");
+            const xIncrement1 = chartCanvas1.width / numAttacks;
+            const ctx1 = chartCanvas1.getContext("2d");
+
+            // Clear the previous chart
+            ctx1.clearRect(0, 0, chartCanvas1.width, chartCanvas1.height);
+
+            // Draw the X and Y axes
+            ctx1.beginPath();
+            ctx1.moveTo(0, chartCanvas1.height);
+            ctx1.lineTo(chartCanvas1.width, chartCanvas1.height);
+            ctx1.moveTo(0, chartCanvas1.height);
+            ctx1.lineTo(0, 0);
+            ctx1.stroke();
+
+            // Disegna numeri sugli assi
+            drawAxisLabels(ctx1, chartCanvas1);
+
+            for (let machine = 0; machine < numMachines; machine++) {
+                // Draw the updated chart for Penetration Counts
+                ctx1.beginPath();
+                for (let i = 0; i < penetrationCounts[machine].length; i++) {
+                    const x = i * xIncrement1;
+                    const y = chartCanvas1.height - (penetrationCounts[machine][i] * (chartCanvas1.height - 20) / numAttacks);
+                    ctx1.lineTo(x, y);
+                }
+                //const colors = ["blue", "green", "red", "purple", "orange"];
+                ctx1.strokeStyle = getRandomColor([machine]);
+                ctx1.stroke();
+            }
+
+            const chartCanvas2 = document.getElementById("chart2");
+            const xIncrement2 = chartCanvas2.width / numAttacks;
+            const ctx2 = chartCanvas2.getContext("2d");
+
+            // Clear the previous chart
+            ctx2.clearRect(0, 0, chartCanvas2.width, chartCanvas2.height);
+
+            // Draw the X and Y axes
+            ctx2.beginPath();
+            ctx2.moveTo(0, chartCanvas2.height);
+            ctx2.lineTo(chartCanvas2.width, chartCanvas2.height);
+            ctx2.moveTo(0, chartCanvas2.height);
+            ctx2.lineTo(0, 0);
+            ctx2.stroke();
+
+            // Disegna numeri sugli assi
+            drawAxisLabels(ctx2, chartCanvas2);
+
+            for (let machine = 0; machine < numMachines; machine++) {
+                // Draw the updated chart for Relative Frequency
+                ctx2.beginPath();
+                for (let i = 0; i < relativeFrequencies[machine].length; i++) {
+                    const x = i * xIncrement2;
+                    const y = chartCanvas2.height - (relativeFrequencies[machine][i] * (chartCanvas2.height - 20));
+                    ctx2.lineTo(x, y);
+                }
+                //const colors = ["blue", "green", "red", "purple", "orange"];
+                // const colorsTwo = getRandomColor();
+                // ctx.strokeStyle = getRandomColor();
+                ctx2.strokeStyle = getRandomColor([machine]);
+                ctx2.stroke();
+            }
+
+            const chartCanvas3 = document.getElementById("chart3");
+            const xIncrement3 = chartCanvas3.width / numAttacks;
+            const ctx3 = chartCanvas3.getContext("2d");
+
+            // Clear the previous chart
+            ctx3.clearRect(0, 0, chartCanvas3.width, chartCanvas3.height);
+
+            // Draw the X and Y axes
+            ctx3.beginPath();
+            ctx3.moveTo(0, chartCanvas3.height);
+            ctx3.lineTo(chartCanvas3.width, chartCanvas3.height);
+            ctx3.moveTo(0, chartCanvas3.height);
+            ctx3.lineTo(0, 0);
+            ctx3.stroke();
+
+            // Disegna numeri sugli assi
+            drawAxisLabels(ctx3, chartCanvas3);
+
+            for (let machine = 0; machine < numMachines; machine++) {
+                // Draw the updated chart for Normalized Ratio
+                ctx3.beginPath();
+                for (let i = 0; i < normalizedRatios[machine].length; i++) {
+                    const x = i * xIncrement3;
+                    const y = chartCanvas3.height - (normalizedRatios[machine][i] * (chartCanvas3.height - 20));
+                    ctx3.lineTo(x, y);
+                }
+                // const colors = ["blue", "green", "red", "purple", "orange"];
+                // ctx3.strokeStyle = colors[machine];
+                ctx3.strokeStyle = getRandomColor([machine]);
+                ctx3.stroke();
+            }
+        }
+    </script>
+</body>
+</html>

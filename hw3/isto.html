@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Istogramma</title>
+</head>
+<body>
+    <h1>Istogramma</h1>
+    <div id="histogram"></div>
+
+    <script>
+        // Dati dell'istogramma (qui i dati sono di esempio, dovresti sostituirli con i tuoi dati simulati)
+        var data = [3, 7, 9, 12, 5, 20, 8, 11];
+
+        // Dimensioni dell'istogramma
+        var width = 400;
+        var height = 300;
+        var barWidth = width / data.length;
+
+        // Creazione del contenitore dell'istogramma
+        var histogramContainer = document.getElementById('histogram');
+        histogramContainer.style.width = width + 'px';
+        histogramContainer.style.height = height + 'px';
+
+        // Creazione degli elementi dell'istogramma
+        for (var i = 0; i < data.length; i++) {
+            var bar = document.createElement('div');
+            bar.className = 'bar';
+            bar.style.height = (data[i] * 10) + 'px';  // Moltiplicazione per 10 solo per scopi di visualizzazione
+            bar.style.width = barWidth - 2 + 'px';  // Sottrazione di 2 pixel per spaziare le barre
+            histogramContainer.appendChild(bar);
+        }
+    </script>
+
+    <style>
+        .bar {
+            background-color: blue;
+            display: inline-block;
+            margin-right: 2px;
+        }
+    </style>
+</body>
+</html>

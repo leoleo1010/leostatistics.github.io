@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Hw pt. attack</title>
+    <style>
+        #grafico {
+            width: 400px;
+            height: 400px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="grafico"></canvas>
+    <div>
+        <label for="numeroAttacchi">Inserisci il numero di attacchi:</label>
+        <input type="number" id="numeroAttacchi" min="1">
+        <label for="numeroAttacchi">Inserisci il numero di macchine:</label>
+        <input type="number" id="numeroMacchine" min="1">
+        <button onclick="avviaAnimazione()">Avvia Animazione</button>
+    </div>
+    <script>
+        // Ottieni il riferimento al canvas HTML
+        var canvas = document.getElementById('grafico');
+        var ctx = canvas.getContext('2d'); //get canvas context
+
+        // Imposta le dimensioni del canvas
+        canvas.width = 1000;
+        canvas.height = 1000;
+
+        // Imposta l'origine degli assi
+        var originX = 500;
+        var originY = 500;
+
+        function getRandomColor() {
+            // Genera valori casuali per i canali R, G e B
+            var r = Math.floor(Math.random() * 256); // Valore tra 0 e 255
+            var g = Math.floor(Math.random() * 256);
+            var b = Math.floor(Math.random() * 256);
+        
+            // Componi il colore in formato "rgb(r, g, b)"
+            return 'rgb(' + r + ',' + g + ',' + b + ')';
+        }        
+
+    function avviaAnimazione(){
+        // Chiedi all'utente di inserire il numero di attacchi
+        var N = document.getElementById('numeroAttacchi').value;
+        N = parseInt(N);
+        var M = document.getElementById('numeroMacchine').value;
+        M = parseInt(M);
+
+        if (N < 1 || M < 1) {
+            alert("I numeri devono essere > 1");
+        } else {
+            // Disegna gli assi cartesiani con numeri
+            ctx.beginPath();
+            ctx.moveTo(originX, 0);
+            ctx.lineTo(originX, canvas.height);
+            ctx.moveTo(0, originY);
+            ctx.lineTo(canvas.width, originY);
+
+            // Numeri sugli assi X e Y
+            for (var i = 1; i <= N * M; i++) {
+                var xValue = i * 20;
+                var yValue = i * 20;
+                ctx.fillText(i, originX + xValue, originY + 12);
+                ctx.fillText(i, originX - 16, originY - yValue + 6);
+            }
+            ctx.stroke();
+
+            // Inizializza le coordinate
+            var x = 0;
+            // y viene resettata prima di disegnare ogni segmento del grafico
+
+            var res = [];  // Per tenere traccia del valore cumulativo della y di ogni macchina dopo ogni attacco 
+            var xEnd = []; // Per tenere traccia dell'ultimo estremo destro della coordinata X di ciascuna macchina
+            var yEnd = []; // Per tenere traccia dell'ultimo estremo destro della coordinata Y di ciascuna macchina
+
+            for (var i = 0; i < M; i++) {
+                res[i] = 0; // Inizializza i valori delle rette per ciascuna macchina
+                xEnd[i] = 0; // Inizializza l'estremo destro X
+                yEnd[i] = 0; // Inizializza l'estremo destro Y
+            }
+            var j = N; // controlla che la funzione animateLine venga eseguita N volte
+            var k = N; // controlla che la funzione Attacco venga eseguita N volte
+
+            // Funzione per animare la retta
+            function animateLine() {
+                if (j > 0) {
+                    x += 1;
+                    for (var i = 0; i < M; i++) {
+                        var y = 0; // resetta la y
+
+                        if (xEnd[i] == 0) {
+                            ctx.beginPath();
+                            ctx.moveTo(originX, originY);
+                        }
+
+                        // individua la posizione dell'estremo destro della retta relativa alla macchina corrente
+                        ctx.moveTo(originX + xEnd[i] * 20, originY - yEnd[i] * 20);
+
+                        y += res[i]; // recupera la y precedente
+                        xEnd[i] = x; // Aggiorna l'estremo destro X
+                        yEnd[i] = y; // Aggiorna l'estremo destro Y
+
+                        // individua il punto da segnare sul grafico su canvas
+                        var canvasX = originX + xEnd[i] * 20;
+                        var canvasY = originY - yEnd[i] * 20;
+
+                        // traccia la linea dalla posizione attuale a quella finale
+                        ctx.lineTo(canvasX, canvasY);
+                         ctx.strokeStyle ="blue";
+                        // FUNZIONE PER GENERARE COLORE RANDOM
+                        // ctx.strokeStyle = getRandomColor();
+                        ctx.stroke();
+                    }
+                    j--;
+                }
+            }
+
+            // Funzione per aggiornare i valori delle rette
+            function Attacco() {
+                if (k > 0) {
+                    for (var i = 0; i < M; i++) {
+                        if (Math.random() > 0.5) {
+                            res[i] += -1;
+                        } else {
+                            res[i] += 1;
+                        }
+                    }
+                }
+                k--;
+            }
+
+            setInterval(Attacco, 1000); // Ogni 1000 millisecondi (1 secondo)
+            setInterval(animateLine, 1000); // Ogni 1000 millisecondi (1 secondo)
+        }
+    }
+    </script>
+</body>
+
+</html>

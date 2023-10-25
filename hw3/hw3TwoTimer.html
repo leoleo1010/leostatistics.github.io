@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Animazione della retta con funzione "Attacco" e assi cartesiani</title>
+    <style>
+        #grafico {
+            width: 1000px;
+            height: 1000px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="grafico"></canvas>
+
+    <div>
+        <label for="numeroAttacchi">Inserisci il numero di attacchi:</label>
+        <input type="number" id="numeroAttacchi" min="1">
+        <button onclick="avviaAnimazione()">Avvia Animazione</button>
+    </div>
+
+    <script>
+        // Ottieni il riferimento al canvas HTML
+        var canvas = document.getElementById('grafico');
+        var ctx = canvas.getContext('2d');
+        var res = 0;
+
+        // Imposta le dimensioni del canvas
+        canvas.width = 1000;
+        canvas.height = 1000;
+
+        // Imposta l'origine degli assi
+        var originX = 50;
+        var originY = 700;
+
+        // Funzione "Attacco" che restituisce -1 o 1 in base a una condizione
+        function Attacco() {
+            if (Math.random() > 0.5) {
+                return res += -1;
+                
+            } else {
+                return res += 1;
+            }
+        }
+
+        function avviaAnimazione() {
+            // Chiedi all'utente di inserire il numero di attacchi
+            var N = document.getElementById('numeroAttacchi').value;
+            N = parseInt(N);
+
+            if (N < 1) {
+                alert("Il numero di attacchi deve essere almeno 1.");
+            } else {
+                // Disegna gli assi cartesiani con numeri
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.moveTo(originX, 0);
+                ctx.lineTo(originX, canvas.height);
+                ctx.moveTo(0, originY);
+                ctx.lineTo(canvas.width, originY);
+
+                // Numeri sugli assi X e Y
+                for (var i = 1; i <= 1000; i++) {
+                    var xValue = i * 20;
+                    var yValue = i * 20;
+                    ctx.fillText(i, originX + xValue, originY + 12);
+                    ctx.fillText(i, originX - 16, originY - yValue + 6);
+                }
+
+                ctx.stroke();
+
+                // Inizializza le coordinate
+                var x = 0;
+                var y = 0;
+
+                // Inizia il disegno della retta
+                ctx.beginPath();
+                ctx.moveTo(originX, originY);
+
+                var i = 0;
+
+                // Funzione per animare la retta
+                function animateLine() {
+                    if (i < N) {
+                        x += 1;
+                        y += res;
+                        console.log(res + " inizio");
+
+                        // Calcola le coordinate sul canvas
+                        var canvasX = originX + x * 20;  // Mappatura x
+                        var canvasY = originY - y * 20;  // Mappatura y (negativo perché l'origine è in alto)
+
+                        // Disegna il punto sul canvas
+                        ctx.lineTo(canvasX, canvasY);
+                        ctx.strokeStyle = "blue";
+                        ctx.stroke();
+                        i += 1;
+                        res = 0;
+                        console.log(res + " fine");
+                    }
+                }
+
+                // Intervallo per l'animazione
+                var interval = setInterval(Attacco, 1000); // Ogni 1000 millisecondi (1 secondo)
+                var interval2 = setInterval(animateLine, 1000); // Ogni 1000 millisecondi (1 secondo)
+            }
+        }
+    </script>
+</body>
+</html>
