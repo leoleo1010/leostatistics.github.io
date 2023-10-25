@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Code C# developed </h1>
+    <hr>
+    <h2>partial class Form1</h2>
+    <pre>
+        <code>
+            namespace hw3
+            {
+                using System;
+                using System.Drawing;
+                using System.Windows.Forms;
+                using System.Collections.Generic;
+            
+                public partial class Form1 : Form
+                {
+                    private Bitmap canvas;
+                    private Bitmap chartBitmap;
+                    private Bitmap blueChartBitmap;
+                    private Bitmap greenChartBitmap;
+                    private Bitmap orangeChartBitmap;
+                    private List<ResizableRect> resizableRectangles = new List<ResizableRect>();
+                    private List<List<Tuple<int, int>>> systemScores;
+                    private List<Color> systemColors;
+                    private int maxAttacks;
+                    private SecurityScoreChart scoreChart;
+                    private FrequencyChart freqChart;
+                    private FrequencyChart relFreqChart;
+                    private FrequencyChart normFreqChart;
+                    private int currentSystem;
+                    private int systemsCount = 10;
+                    private int numberOfAttacks =16;
+                    private TextBox textBoxAttacks;
+                    private TextBox textBoxSystems;
+            
+                    public Form1()
+                    {
+                        InitializeComponent();
+                        this.Load += Form1_Load;
+                        pictureBox1.MouseDown += pictureBox1_MouseDown;
+                        pictureBox1.MouseMove += pictureBox1_MouseMove;
+                        pictureBox1.MouseUp += pictureBox1_MouseUp;
+                        pictureBox1.Paint += pictureBox1_Paint;
+                        pictureBox1.MouseWheel += pictureBox1_MouseWheel;
+            
+                        pictureBox1.Dock = DockStyle.Fill;
+                        this.WindowState = FormWindowState.Maximized;
+            
+                    }
+            
+                    private void Form1_Load(object sender, EventArgs e)
+                    {
+                        // Inizializza la bitmap con la dimensione del PictureBox
+                        int canvasWidth = pictureBox1.Width;
+                        int canvasHeight = pictureBox1.Height;
+            
+                        canvas = new Bitmap(canvasWidth, canvasHeight);
+            
+                        int rectWidth = canvasWidth / 2 - 20;
+                        int rectHeight = canvasHeight / 2 - 20;
+                        chartBitmap = new Bitmap(canvasWidth, canvasHeight);
+            
+                        ResizableRect redRect = new ResizableRect(new Rectangle(10, 10, rectWidth, rectHeight), Color.Red, canvas);
+                        ResizableRect blueRect = new ResizableRect(new Rectangle(rectWidth + 20, 10, rectWidth, rectHeight), Color.Blue, canvas);
+                        ResizableRect greenRect = new ResizableRect(new Rectangle(10, rectHeight + 20, rectWidth, rectHeight), Color.Green, canvas);
+                        ResizableRect orangeRect = new ResizableRect(new Rectangle(rectWidth + 20, rectHeight + 20, rectWidth, rectHeight), Color.Orange, canvas);
+            
+                        resizableRectangles.Add(redRect);
+                        resizableRectangles.Add(blueRect);
+                        resizableRectangles.Add(greenRect);
+                        resizableRectangles.Add(orangeRect);
+            
+                        systemColors = new List<Color>();
+                        for (int i = 0; i < systemsCount; i++)
+                        {
+                            systemColors.Add(GetRandomColor());
+                        }
+            
+                        scoreChart = new SecurityScoreChart(numberOfAttacks, rectWidth, rectHeight, 500, canvasHeight - rectHeight, systemsCount, chartBitmap, redRect, systemColors);
+                        scoreChart.SetPictureBox(pictureBox1);
+            
+                        this.systemScores = scoreChart.GetSystemScores();
+                        blueChartBitmap = new Bitmap(canvasWidth, canvasHeight);
+                        greenChartBitmap = new Bitmap(canvasWidth, canvasHeight);
+                        orangeChartBitmap = new Bitmap(canvasWidth, canvasHeight);
+                        freqChart = new FrequencyChart(rectWidth, rectHeight, 0, 0, numberOfAttacks, blueChartBitmap, blueRect, systemsCount, systemScores, systemColors);
+                        freqChart.SetPictureBox(pictureBox1);
+                        relFreqChart = new FrequencyChart(rectWidth, rectHeight, 0, 0, numberOfAttacks, greenChartBitmap, greenRect, systemsCount, systemScores, systemColors);
+                        relFreqChart.SetPictureBox(pictureBox1);
+                        normFreqChart = new FrequencyChart(rectWidth, rectHeight, 0, 0, numberOfAttacks, orangeChartBitmap, orangeRect, systemsCount, systemScores, systemColors);
+                        normFreqChart.SetPictureBox(pictureBox1);
+            
+                        using (Graphics graphics = Graphics.FromImage(canvas))
+                        {
+                            DrawRectanglesOnCanvas(graphics);
+                        }
+            
+                        pictureBox1.Image = canvas;
+                    }
+            
+                    private void DrawRectanglesOnCanvas(Graphics graphics)
+                    {
+                        graphics.Clear(Color.White);
+            
+                        foreach (var rect in resizableRectangles)
+                        {
+                            rect.Draw(graphics);
+                        }
+                    }
+            
+                    private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+                    {
+                        foreach (var rect in resizableRectangles)
+                        {
+                            rect.MouseDown(e.Location);
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(canvas))
+                        {
+                            DrawRectanglesOnCanvas(graphics);
+                        }
+                        pictureBox1.Invalidate();
+                    }
+            
+                    private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+                    {
+                        foreach (var rect in resizableRectangles)
+                        {
+                            rect.MouseMove(e.Location);
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(canvas))
+                        {
+                            DrawRectanglesOnCanvas(graphics);
+                        }
+                        pictureBox1.Invalidate();
+                    }
+            
+                    private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+                    {
+                        foreach (var rect in resizableRectangles)
+                        {
+                            rect.MouseUp();
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(canvas))
+                        {
+                            DrawRectanglesOnCanvas(graphics);
+                        }
+                        pictureBox1.Invalidate();
+                    }
+            
+                    private void pictureBox1_Paint(object sender, PaintEventArgs e)
+                    {
+                        scoreChart.chartX = resizableRectangles[0].Rectangle.X;
+                        scoreChart.chartY = resizableRectangles[0].Rectangle.Y;
+            
+                        freqChart.chartX = resizableRectangles[1].Rectangle.X;
+                        freqChart.chartY = resizableRectangles[1].Rectangle.Y;
+            
+                        relFreqChart.chartX = resizableRectangles[2].Rectangle.X;
+                        relFreqChart.chartY = resizableRectangles[2].Rectangle.Y;
+            
+                        normFreqChart.chartX = resizableRectangles[3].Rectangle.X;
+                        normFreqChart.chartY = resizableRectangles[3].Rectangle.Y;
+            
+                        using (Graphics graphics = Graphics.FromImage(scoreChart.GetChartBitmap()))
+                        {
+                            graphics.Clear(Color.Transparent);
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(blueChartBitmap))
+                        {
+                            graphics.Clear(Color.Transparent);
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(greenChartBitmap))
+                        {
+                            graphics.Clear(Color.Transparent);
+                        }
+            
+                        using (Graphics graphics = Graphics.FromImage(orangeChartBitmap))
+                        {
+                            graphics.Clear(Color.Transparent);
+                        }
+            
+                        scoreChart.Draw();
+                        e.Graphics.DrawImage(scoreChart.GetChartBitmap(), 0, 0);
+            
+                        freqChart.DrawBlueRectFrequency(blueChartBitmap);
+                        relFreqChart.DrawGreenRectFrequency(greenChartBitmap);
+                        normFreqChart.DrawOrangeRectFrequency(orangeChartBitmap);
+                        e.Graphics.DrawImage(freqChart.GetChartBitmap(), 0, 0);
+                        e.Graphics.DrawImage(relFreqChart.GetChartBitmap(), 0, 0);
+                        e.Graphics.DrawImage(normFreqChart.GetChartBitmap(), 0, 0);
+            
+            
+                    }
+            
+                    private void pictureBox1_MouseWheel(object sender, MouseEventArgs e)
+                    {
+                        foreach (var rect in resizableRectangles)
+                        {
+                            if (rect.Rectangle.Contains(e.Location))
+                            {
+                                float zoomFactor = e.Delta > 0 ? 1.1f : 0.9f;
+            
+                                if (rect == resizableRectangles[0])
+                                {
+                                    scoreChart.Zoom(zoomFactor);
+                                    using (Graphics graphics = Graphics.FromImage(chartBitmap))
+                                    {
+                                        graphics.Clear(Color.Transparent);
+                                    }
+                                }
+                                else if (rect == resizableRectangles[1])
+                                {
+                                    freqChart.Zoom(zoomFactor);
+                                    using (Graphics graphics = Graphics.FromImage(freqChart.GetChartBitmap()))
+                                    {
+                                        graphics.Clear(Color.Transparent);
+                                    }
+                                }
+                                else if (rect == resizableRectangles[2])
+                                {
+                                    relFreqChart.Zoom(zoomFactor);
+                                    using (Graphics graphics = Graphics.FromImage(relFreqChart.GetChartBitmap()))
+                                    {
+                                        graphics.Clear(Color.Transparent);
+                                    }
+                                }
+                                else if (rect == resizableRectangles[3])
+                                {
+                                    normFreqChart.Zoom(zoomFactor);
+                                    using (Graphics graphics = Graphics.FromImage(normFreqChart.GetChartBitmap()))
+                                    {
+                                        graphics.Clear(Color.Transparent);
+                                    }
+                                }
+            
+                                pictureBox1.Invalidate();
+                                break;
+                            }
+                        }
+                    }
+            
+                    private void buttonCalculate_Click(object sender, EventArgs e)
+                    {
+                        if (int.TryParse(nAttacks.Text, out numberOfAttacks) && int.TryParse(nSystems.Text, out systemsCount))
+                        {
+                            scoreChart.SetAttacksCount(numberOfAttacks);
+                            freqChart.SetNumberOfAttacks(numberOfAttacks);
+                            relFreqChart.SetNumberOfAttacks(numberOfAttacks);
+                            normFreqChart.SetNumberOfAttacks(numberOfAttacks);
+            
+                            scoreChart.SetSystemsCount(systemsCount);
+                            freqChart.SetSystemsCount(systemsCount);
+                            relFreqChart.SetSystemsCount(systemsCount);
+                            normFreqChart.SetSystemsCount(systemsCount);
+                            for (int i = 0; i < systemsCount; i++)
+                            {
+                                systemColors.Add(GetRandomColor());
+                            }
+                            scoreChart.SetSystemColor(systemColors);
+                            freqChart.SetSystemColors(systemColors);
+                            relFreqChart.SetSystemColors(systemColors);
+                            normFreqChart.SetSystemColors(systemColors);
+                            UpdateUI();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Inserisci valori numerici validi per numberOfAttacks e systemsCount.");
+                        }
+                    }
+            
+                    public static Color GetRandomColor()
+                    {
+                        Random random = new Random();
+                        return Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                    }
+            
+                    private void UpdateUI()
+                    {
+                        scoreChart.CalculateScores();
+                        this.systemScores = scoreChart.GetSystemScores();
+                        List <List <Tuple < float,float>>> drawData = freqChart.CalculateCumulativeFrequency(systemScores);
+                        relFreqChart.CalculateRelativeFrequency(drawData);
+                        normFreqChart.CalculateNormalizedFrequency(drawData);
+                        pictureBox1.Invalidate();
+                    }
+                }
+            
+            }
+        </code>
+    </pre>
+    
+    <hr>
+    <h2>class FrequencyChart</h2>
+    <pre>
+        <code>
+            using System;
+            using System.Drawing;
+            using System.Drawing.Drawing2D;
+            using System.Media;
+            using static System.Windows.Forms.AxHost;
+            
+            
+            public class FrequencyChart
+            {
+                public int chartWidth; // Larghezza del grafico.
+                public int chartHeight; // Altezza del grafico.
+                public int chartX; // Posizione X del grafico all'interno del rettangolo 
+                public int chartY; // Posizione Y del grafico all'interno del rettangolo 
+                private float scaleX = 100; // Fattore di scala per adattare il grafico alle dimensioni del rettangolo.
+                private float scaleY = 100;
+                private PictureBox pictureBox; // Riferimento al PictureBox su cui disegnare il grafico.
+                private Bitmap chartbitmap;
+                private ResizableRect rect;
+                private Region clipRegion;
+                private List<List<Tuple<float, float>>> frequencyDrawingData;
+                private List<List<Tuple<float, float>>> relFrequencyDrawingData;
+                private List<List<Tuple<float, float>>> normalFrequencyDrawingData;
+                private List<List<Tuple<int, int>>> drawingData;
+                private float cartesianZoom = 1.0f;
+                public List<Color> systemColors;
+                private int numberOfAttacks;
+                private int systemsCount;
+            
+                public FrequencyChart(int chartWidth, int chartHeight, int chartX, int chartY, int numberOfAttacks, Bitmap chartbitmap, ResizableRect rect,
+                    int systemsCount,List< List<Tuple<int,int>>> systemScores, List<Color> systemColors)
+                {
+                    this.chartWidth = chartWidth;
+                    this.chartHeight = chartHeight;
+                    this.chartX = chartX;
+                    this.chartY = chartY;
+                    this.chartbitmap = chartbitmap;
+                    this.rect = rect;
+                    this.numberOfAttacks = numberOfAttacks;
+                    this.systemsCount = systemsCount;
+                    this.systemColors = systemColors;
+            
+                    frequencyDrawingData = new List<List<Tuple<float, float>>>();
+                    relFrequencyDrawingData = new List<List<Tuple<float, float>>>();
+                    normalFrequencyDrawingData = new List<List<Tuple<float, float>>>();
+            
+                    List<List<Tuple<float, float>>> drawData=CalculateCumulativeFrequency(systemScores);
+                    CalculateRelativeFrequency(drawData);
+                    CalculateNormalizedFrequency(drawData);
+                }
+            
+            
+                public void SetPictureBox(PictureBox pictureBox)
+                {
+                    this.pictureBox = pictureBox;
+                }
+            
+                public PictureBox GetPictureBox()
+                {
+                    return this.pictureBox;
+                }
+            
+            
+                public List<List<Tuple<float,float>>> CalculateCumulativeFrequency(List<List<Tuple<int, int>>> systemScores)
+                {
+                    frequencyDrawingData.Clear();
+            
+                    for (int currentSystem = 0; currentSystem < this.systemsCount; currentSystem++)
+                    {
+                        List<Tuple<float, float>> systemDataF = new List<Tuple<float, float>>();
+                        systemDataF.Add(new Tuple<float, float>(0, 4));
+                        frequencyDrawingData.Add(systemDataF);
+                        for (int attackNo = 1; attackNo <= this.numberOfAttacks; attackNo++)
+                        {
+                            if (systemScores[currentSystem][attackNo].Item2 == 1)
+                            {
+                                float precY = this.frequencyDrawingData[currentSystem].Last().Item2;
+                                this.frequencyDrawingData[currentSystem].Add(new Tuple<float, float>(attackNo, precY));
+                            }
+                            else
+                            {
+                                float precY = this.frequencyDrawingData[currentSystem].Last().Item2;
+                                this.frequencyDrawingData[currentSystem].Add(new Tuple<float, float>(attackNo, precY -1));
+                            }
+                        }
+                    }
+                    return frequencyDrawingData;
+                }
+                
+                public void CalculateRelativeFrequency(List<List<Tuple<float,float>>> frequencyDrawingData)
+                {
+                    relFrequencyDrawingData.Clear();
+                    for (int currentSystem = 0; currentSystem < this.systemsCount; currentSystem++)
+                    {
+                        List<Tuple<float, float>> systemDataF = new List<Tuple<float, float>>();
+                        systemDataF.Add(new Tuple<float, float>(0, 4));
+                        relFrequencyDrawingData.Add(systemDataF);
+                        for (int attackNo = 1; attackNo <= this.numberOfAttacks; attackNo++)
+                        {
+                            float precY = this.relFrequencyDrawingData[currentSystem].Last().Item2;
+                            this.relFrequencyDrawingData[currentSystem].Add(new Tuple<float, float>(attackNo, (float)((precY + frequencyDrawingData[currentSystem][attackNo].Item2)) / numberOfAttacks));
+                        }
+                    }
+                }
+            
+                public void CalculateNormalizedFrequency(List<List<Tuple<float, float>>> frequencyDrawingData)
+                {
+                    normalFrequencyDrawingData.Clear();
+                    for (int currentSystem = 0; currentSystem < this.systemsCount; currentSystem++)
+                    {
+                        List<Tuple<float, float>> systemDataF = new List<Tuple<float, float>>();
+                        systemDataF.Add(new Tuple<float, float>(0, 4));
+                        normalFrequencyDrawingData.Add(systemDataF);
+                        for (int attackNo = 1; attackNo <= numberOfAttacks; attackNo++)
+                        {
+                            float precY = this.normalFrequencyDrawingData[currentSystem].Last().Item2;
+                            this.normalFrequencyDrawingData[currentSystem].Add(new Tuple<float, float>(attackNo, (float)((precY + frequencyDrawingData[currentSystem][attackNo].Item2) / Math.Sqrt(numberOfAttacks))));
+                        }
+                    }
+                }
+            
+                public void DrawLine(Graphics graphics, ResizableRect rect)
+                {
+                    // Distanza tra i punti sulle ascisse e le ordinate
+                    float stepX = 1 * scaleX * cartesianZoom; // Distanza tra i punti sull'asse x
+                    float stepY = 1 * scaleY * cartesianZoom; // Distanza tra i punti sull'asse y
+            
+                    // Calcola l'origine del piano in base al fattore di zoom
+                    float originX = chartX + 0 ;  // Origine x (non spostato)
+                    float originY = chartY + 6* scaleY * cartesianZoom; // Origine y (spostato di 6 e considerando lo zoom)
+            
+                    // Calcola il numero di punti lungo le ascisse e le ordinate in base alle dimensioni del rettangolo rosso
+                    int pointsCountX = (int)(rect.Rectangle.Width / stepX);
+                    int pointsCountY = (int)(rect.Rectangle.Height / stepY);
+            
+                    // Disegna la griglia
+            
+                    for (int i = -pointsCountX; i <= pointsCountX; i++)
+                    {
+                        float x = i * stepX + originX;
+                        int textX = (int)x;
+                        int textY = (int)rect.Rectangle.Bottom + 2;
+            
+                        string numberX = (i).ToString();  // Usa i come numero progressivo
+                        SizeF textSizeX = graphics.MeasureString(numberX, SystemFonts.DefaultFont);
+                        System.Drawing.PointF textLocationX = new System.Drawing.PointF(x, chartY + 4 * scaleY * cartesianZoom);
+            
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point(textX, (int)rect.Rectangle.Top), new Point(textX, (int)rect.Rectangle.Bottom));
+                        graphics.DrawString(numberX, SystemFonts.DefaultFont, Brushes.Black, textLocationX);
+                    }
+            
+                    for (int i = -pointsCountY; i <= pointsCountY; i++)
+                    {
+                        float y = i * stepY + originY;
+            
+                        // Linee orizzontali
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point((int)rect.Rectangle.Left, (int)y), new Point((int)rect.Rectangle.Right, (int)y));
+                    }
+                }
+            
+                public void DrawFrequency(Graphics graphics, List<List<Tuple<float,float>>> systemDrawing)
+                {
+                    float startX = 0;
+                    float startY = 0;
+                    float endX = 0;
+                    float endY = 0;
+                    for (int system = 0; system < systemsCount; system++)
+                    {
+                        
+                        for (int point = 0; point < systemDrawing[system].Count - 1; point++)
+                        {
+            
+                            startX = (systemDrawing[system][point].Item1 * scaleX * cartesianZoom) + chartX;
+                            startY = (systemDrawing[system][point].Item2 * scaleY * cartesianZoom) + chartY;
+                            endX = (systemDrawing[system][point + 1].Item1 * scaleX * cartesianZoom) + chartX;
+                            endY = (systemDrawing[system][point + 1].Item2 * scaleY * cartesianZoom) + chartY;
+            
+                            // Disegna solo se il grafico è visibile
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), startX, startY, 4, 4);
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), endX, endY, 4, 4);
+                            DrawFloatLine(graphics, new Pen(systemColors[system], 3), new PointF(startX, startY), new PointF(endX, endY));
+                        }
+                    }
+                }
+            
+                public struct PointF
+            {
+                public float X { get; set; }
+                public float Y { get; set; }
+            
+                public PointF(float x, float y)
+                {
+                    X = x;
+                    Y = y;
+                }
+            }
+                // Disegna una linea approssimata tra due punti con coordinate float.
+                private void DrawFloatLine(Graphics g, Pen pen, PointF startPoint, PointF endPoint)
+                {
+                    float step = 1.0f / Math.Max(Math.Abs(endPoint.X - startPoint.X), Math.Abs(endPoint.Y - startPoint.Y));
+            
+                    for (float t = 0; t <= 1; t += step)
+                    {
+                        float x = startPoint.X + t * (endPoint.X - startPoint.X);
+                        float y = startPoint.Y + t * (endPoint.Y - startPoint.Y);
+                        g.DrawRectangle(pen, x, y, 1, 1); // Disegna un pixel
+                    }
+                }
+            
+                public void DrawBlueRectFrequency(Bitmap bitmap)
+                {
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        clipRegion = new Region(rect.Rectangle);
+                        graphics.SetClip(clipRegion, CombineMode.Intersect);
+                        chartX = rect.Rectangle.X;
+                        chartY = rect.Rectangle.Y;
+                        int centerBlueY = rect.Rectangle.Top + rect.Rectangle.Height / 2;
+                        chartY = centerBlueY - chartHeight / 2;
+                        DrawLine(graphics, rect);
+                        DrawFrequency(graphics, frequencyDrawingData);
+                        DrawHistograms(graphics, frequencyDrawingData);
+                        graphics.ResetClip();
+                    }
+                    pictureBox.Invalidate();
+                }
+            
+                public void DrawGreenRectFrequency(Bitmap bitmap)
+                {
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        clipRegion = new Region(rect.Rectangle);
+                        graphics.SetClip(clipRegion, CombineMode.Intersect);
+                        chartX = rect.Rectangle.X;
+                        chartY = rect.Rectangle.Y;
+                        int centerGreenY = rect.Rectangle.Top + rect.Rectangle.Height / 2;
+                        chartY = centerGreenY - chartHeight / 2;
+                        DrawLine(graphics, rect);
+                        DrawFrequency(graphics, relFrequencyDrawingData);
+                        DrawHistograms(graphics, relFrequencyDrawingData);
+                        graphics.ResetClip();
+                    }
+                    pictureBox.Invalidate();
+                }
+            
+                public void DrawOrangeRectFrequency(Bitmap bitmap)
+                {
+                    using (Graphics graphics = Graphics.FromImage(bitmap))
+                    {
+                        clipRegion = new Region(rect.Rectangle);
+                        graphics.SetClip(clipRegion, CombineMode.Intersect);
+                        chartX = rect.Rectangle.X;
+                        chartY = rect.Rectangle.Y;
+                        int centerOrangeY = rect.Rectangle.Top + rect.Rectangle.Height / 2;
+                        chartY = centerOrangeY - chartHeight / 2;
+                        DrawLine(graphics, rect);
+                        DrawFrequency(graphics, normalFrequencyDrawingData);
+                        DrawHistograms(graphics, normalFrequencyDrawingData);
+                        graphics.ResetClip();
+                    }
+                    pictureBox.Invalidate();
+                }
+            
+                public void DrawHistograms(Graphics graphics, List<List<Tuple<float,float>>> drawingData)
+                {
+                    float barWidth = 1.0f / systemsCount * scaleX * cartesianZoom;
+            
+                    // Ottieni le coordinate X delle linee verticali da utilizzare come ancoraggio
+                    float anchorXFirstSeries = (numberOfAttacks / 2.0f) * scaleX * cartesianZoom + chartX;
+                    float anchorXSecondSeries = numberOfAttacks * scaleX * cartesianZoom + chartX;
+            
+                    // Calcola la posizione iniziale della prima serie (ancorata a "numero di attacchi / 2")
+                    float startXFirstSeries = anchorXFirstSeries - (barWidth * systemsCount / 2);
+            
+                    // Calcola la posizione iniziale della seconda serie (ancorata a "numero di attacchi")
+                    float startXSecondSeries = anchorXSecondSeries - (barWidth * systemsCount / 2);
+            
+                    float initialY = chartY + 4 * scaleY * cartesianZoom;  // Posizione iniziale delle barre
+            
+                    for (int systemIndex = 0; systemIndex < systemsCount; systemIndex++)
+                    {
+                        float xFirstSeries = startXFirstSeries + systemIndex * barWidth;
+                        float xSecondSeries = startXSecondSeries + systemIndex * barWidth;
+            
+                        float firstScore = drawingData[systemIndex][numberOfAttacks / 2].Item2;
+                        float secondScore = drawingData[systemIndex][numberOfAttacks].Item2;
+            
+                        float normalizedFirstScore = (float)firstScore / 2.0f;
+                        float normalizedSecondScore = (float)secondScore / 2.0f;
+            
+                        float initialHeight = 4 * scaleY * cartesianZoom;  // Altezza iniziale delle barre
+                        float firstBarHeight = normalizedFirstScore * scaleY * cartesianZoom;
+                        float secondBarHeight = normalizedSecondScore * scaleY * cartesianZoom;
+            
+                        float yFirstSeries = initialY - initialHeight + firstBarHeight;  // Calcolo della nuova posizione Y delle barre
+                        float ySecondSeries = initialY - initialHeight + secondBarHeight;
+            
+                        RectangleF barFirstSeries = new RectangleF(xFirstSeries, yFirstSeries, barWidth, initialHeight - firstBarHeight);
+                        RectangleF barSecondSeries = new RectangleF(xSecondSeries, ySecondSeries, barWidth, initialHeight - secondBarHeight);
+            
+                        graphics.FillRectangle(new SolidBrush(systemColors[systemIndex]), barFirstSeries);
+                        graphics.FillRectangle(new SolidBrush(systemColors[systemIndex]), barSecondSeries);
+                    }
+                }
+            
+            
+            
+                internal Image GetChartBitmap()
+                {
+                    return this.chartbitmap;
+                }
+            
+                public void setDrawingData(List<List<Tuple<int, int>>> drawingData)
+                {
+                    this.drawingData = drawingData;
+                }
+            
+                public void Zoom(float zoomFactor)
+                {
+                    // Aggiorna il fattore di scala
+                    scaleX *= zoomFactor;
+                    scaleY *= zoomFactor;
+            
+                    SetCartesianZoom(cartesianZoom * zoomFactor);
+                }
+            
+                public void SetCartesianZoom(float zoomFactor)
+                {
+                    cartesianZoom = zoomFactor;
+                }
+            
+                public void SetSystemsCount(int systemsCount)
+                {
+                    this.systemsCount = systemsCount;
+                }
+            
+                public void SetNumberOfAttacks(int numberOfAttacks)
+                {
+                    this.numberOfAttacks = numberOfAttacks;
+                }
+            
+                public void SetSystemColors(List<Color> getSystemColors)
+                {
+                    this.systemColors = systemColors;
+                }
+            }             
+        </code>
+    </pre>
+
+    <hr>
+    <h2> class SecurityScoreChart</h2>
+    <pre>
+        <code>
+            using System;
+            using System.Collections.Generic;
+            using System.Data;
+            using System.Drawing;
+            using System.Drawing.Drawing2D;
+            using System.Media;
+            using System.Windows.Forms;
+            using static System.Formats.Asn1.AsnWriter;
+            using Timer = System.Windows.Forms.Timer;
+            
+            public class SecurityScoreChart
+            {
+            
+                private int attacksCount; // Numero di attacchi.
+                public int chartWidth; // Larghezza del grafico.
+                public int chartHeight; // Altezza del grafico.
+                public int chartX; // Posizione X del grafico all'interno del rettangolo rosso.
+                public int chartY; // Posizione Y del grafico all'interno del rettangolo rosso.
+                private float scaleX = 100; // Fattore di scala per adattare il grafico alle dimensioni del rettangolo rosso.
+                private float scaleY = 100;
+                private PictureBox pictureBox; // Riferimento al PictureBox su cui disegnare il grafico.
+                private int systemsCount;
+                private Bitmap chartbitmap;
+                private ResizableRect redRect;
+                private Region clipRegion;
+                List<List<Tuple<int, int>>> drawingData;
+                List<Tuple<int, int>> systemData;
+                List<List<Tuple<int, int>>> systemScores;
+                private int redRectX;
+                private int redRectY;
+                public int redRectTop;
+                private int redRectHeight;
+                private float cartesianZoom = 1.0f;
+                public List<Color> systemColors;
+              
+            
+            
+            
+            
+                public SecurityScoreChart(int attacksCount, int chartWidth, int chartHeight, int chartX, int chartY, int systemsCount, Bitmap chartbitmap, ResizableRect redRect, List<Color> systemColors)
+                {
+                    this.attacksCount = attacksCount;
+                    this.chartWidth = chartWidth;
+                    this.chartHeight = chartHeight;
+                    this.chartX = chartX;
+                    this.chartY = chartY;
+                    this.chartbitmap = chartbitmap;
+                    this.systemsCount = systemsCount; // Inizializza il numero di sistemi.
+                    this.redRect = redRect;
+                    this.systemColors = systemColors;
+                    redRectX = redRect.Rectangle.X;
+                    redRectY = redRect.Rectangle.Y;
+                    redRectHeight = redRect.Rectangle.Height;
+            
+                    CalculateScores();
+            
+                }
+            
+            
+            
+                public void SetPictureBox(PictureBox pictureBox)
+                {
+                    this.pictureBox = pictureBox;
+                }
+            
+                public PictureBox GetPictureBox()
+                {
+                    return this.pictureBox;
+                }
+            
+                public void CalculateScores()
+                {
+                    Random random = new Random();
+                    systemScores = new List<List<Tuple<int, int>>>(systemsCount);
+                    drawingData = new List<List<Tuple<int, int>>>(systemsCount);
+            
+                    for (int currentSystem = 0; currentSystem < systemsCount; currentSystem++)
+                    {
+                        systemData = new List<Tuple<int, int>>();
+                        systemData.Add(new Tuple<int, int>(0, 4));
+                        drawingData.Add(systemData);
+            
+                        systemData = new List<Tuple<int, int>>();
+                        systemData.Add(new Tuple<int, int>(0, 0));
+                        systemScores.Add(systemData);
+            
+                        for (int attack = 1; attack <= attacksCount; attack++)
+                        {
+                            double successProbability = random.NextDouble();
+            
+                            // Calcola l'esito dell'attacco e aggiorna il punteggio.
+                            if (successProbability > 0.5)
+                            {
+                                this.systemScores[currentSystem].Add(new Tuple<int, int>(attack, 1));
+                                int precY = drawingData[currentSystem].Last().Item2;
+                                drawingData[currentSystem].Add(new Tuple<int, int>(attack, precY + 1));
+                            }
+                            else
+                            {
+                                this.systemScores[currentSystem].Add(new Tuple<int, int>(attack, -1));
+                                int precY = drawingData[currentSystem].Last().Item2;
+                                drawingData[currentSystem].Add(new Tuple<int, int>(attack, precY - 1));
+                            }
+                        }
+                    }
+                }
+            
+                private void SetSystemScores(List<List<Tuple<int, int>>> systemScores)
+                {
+                    this.systemScores = systemScores;
+                }
+            
+                public void DrawLines(Graphics graphics)
+                {
+                    int startX;
+                    int startY;
+                    int endX;
+                    int endY;
+                    int thickness = systemsCount;
+            
+                    // Distanza tra i punti sulle ascisse e le ordinate
+                    float stepX = 1 * scaleX * cartesianZoom; // Distanza tra i punti sull'asse x
+                    float stepY = 1 * scaleY * cartesianZoom; // Distanza tra i punti sull'asse y
+            
+                    // Calcola l'origine del piano in base al fattore di zoom
+                    float originX = chartX + 0;  // Origine x (non spostato)
+                    float originY = chartY + 6 * scaleY * cartesianZoom; // Origine y (spostato di 6 e considerando lo zoom)
+            
+                    // Calcola il numero di punti lungo le ascisse e le ordinate in base alle dimensioni del rettangolo rosso
+                    int pointsCountX = (int)(redRect.Rectangle.Width / stepX);
+                    int pointsCountY = (int)(redRect.Rectangle.Height / stepY);
+            
+                    // Disegna la griglia
+            
+                    for (int i = -pointsCountX; i <= pointsCountX; i++)
+                    {
+                        float x = i * stepX + originX;
+                        int textX = (int)x;
+                        int textY = (int)redRect.Rectangle.Bottom + 2;
+            
+                        string numberX = (i).ToString();  // Usa i come numero progressivo
+                        SizeF textSizeX = graphics.MeasureString(numberX, SystemFonts.DefaultFont);
+                        PointF textLocationX = new PointF(x, chartY + 4 * scaleY * cartesianZoom);
+            
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point((int)x, (int)redRect.Rectangle.Top), new Point((int)x, (int)redRect.Rectangle.Bottom));
+                        graphics.DrawString(numberX, SystemFonts.DefaultFont, Brushes.Black, textLocationX);
+                    }
+            
+                    for (int i = -pointsCountY; i <= pointsCountY; i++)
+                    {
+                        float y = i * stepY + originY;
+            
+                        // Linee orizzontali
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point((int)redRect.Rectangle.Left, (int)y), new Point((int)redRect.Rectangle.Right, (int)y));
+                    }
+            
+                    for (int system = 0; system < systemsCount; system++)
+                    {
+                        for (int point = 0; point < drawingData[system].Count - 1; point++)
+                        {
+            
+                            startX = (int)(drawingData[system][point].Item1 * scaleX * cartesianZoom) + chartX;
+                            startY = (int)(drawingData[system][point].Item2 * scaleY * cartesianZoom) + chartY;
+                            endX = (int)(drawingData[system][point + 1].Item1 * scaleX * cartesianZoom) + chartX;
+                            endY = (int)(drawingData[system][point + 1].Item2 * scaleY * cartesianZoom) + chartY;
+            
+                            // Disegna solo se il grafico è visibile
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), startX, startY, 4, 4);
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), endX, endY, 4, 4);
+                            graphics.DrawLine(new Pen(systemColors[system], 3), new Point(startX, startY), new Point(endX, endY));
+                        }
+                    }
+                }
+            
+                public void DrawHistograms(Graphics graphics)
+                {
+                    float barWidth = 1.0f / systemsCount * scaleX * cartesianZoom;
+            
+                    // Ottieni le coordinate X delle linee verticali da utilizzare come ancoraggio
+                    float anchorXFirstSeries = (attacksCount / 2.0f) * scaleX * cartesianZoom + chartX;
+                    float anchorXSecondSeries = attacksCount * scaleX * cartesianZoom + chartX;
+            
+                    // Calcola la posizione iniziale della prima serie (ancorata a "numero di attacchi / 2")
+                    float startXFirstSeries = anchorXFirstSeries - (barWidth * systemsCount / 2);
+            
+                    // Calcola la posizione iniziale della seconda serie (ancorata a "numero di attacchi")
+                    float startXSecondSeries = anchorXSecondSeries - (barWidth * systemsCount / 2);
+            
+                    float initialY = chartY + 4 * scaleY * cartesianZoom;  // Posizione iniziale delle barre
+            
+                    for (int systemIndex = 0; systemIndex < systemsCount; systemIndex++)
+                    {
+                        float xFirstSeries = startXFirstSeries + systemIndex * barWidth;
+                        float xSecondSeries = startXSecondSeries + systemIndex * barWidth;
+            
+                        int firstScore = drawingData[systemIndex][attacksCount / 2].Item2;
+                        int secondScore = drawingData[systemIndex][attacksCount].Item2;
+            
+                        float normalizedFirstScore = (float)firstScore / 2.0f;
+                        float normalizedSecondScore = (float)secondScore / 2.0f;
+            
+                        float initialHeight = 4 * scaleY * cartesianZoom;  // Altezza iniziale delle barre
+                        float firstBarHeight = normalizedFirstScore * scaleY * cartesianZoom;
+                        float secondBarHeight = normalizedSecondScore * scaleY * cartesianZoom;
+            
+                        float yFirstSeries = initialY - initialHeight + firstBarHeight;  // Calcolo della nuova posizione Y delle barre
+                        float ySecondSeries = initialY - initialHeight + secondBarHeight;
+            
+                        RectangleF barFirstSeries = new RectangleF(xFirstSeries, yFirstSeries, barWidth, initialHeight - firstBarHeight);
+                        RectangleF barSecondSeries = new RectangleF(xSecondSeries, ySecondSeries, barWidth, initialHeight - secondBarHeight);
+            
+                        graphics.FillRectangle(new SolidBrush(systemColors[systemIndex]), barFirstSeries);
+                        graphics.FillRectangle(new SolidBrush(systemColors[systemIndex]), barSecondSeries);
+                    }
+                }
+            
+            
+            
+                public void Draw()
+                {
+                    using (Graphics graphics = Graphics.FromImage(chartbitmap))
+                    {
+                        // Calcola la regione di clipping basata sul resizableRect rosso
+                        clipRegion = new Region(redRect.Rectangle);
+                        graphics.SetClip(clipRegion, CombineMode.Intersect);
+            
+                        // Calcola la posizione Y del grafico in modo che sia al centro dell'altezza del resizableRect rosso
+                        int centerY = redRect.Rectangle.Top + redRect.Rectangle.Height / 2;
+                        chartY = centerY - chartHeight / 2;
+                        DrawHistograms(graphics);
+                        DrawLines(graphics);
+            
+                    }
+                    pictureBox.Invalidate();
+                }
+            
+            
+            
+                internal Image GetChartBitmap()
+                {
+                    return this.chartbitmap;
+                }
+            
+                public void SetCartesianZoom(float zoomFactor)
+                {
+                    cartesianZoom = zoomFactor;
+                }
+            
+                public float GetCartesianZoom()
+                {
+                    return this.cartesianZoom;
+                }
+            
+                public void Zoom(float zoomFactor)
+                {
+                    // Aggiorna il fattore di scala
+                    scaleX *= zoomFactor;
+                    scaleY *= zoomFactor;
+            
+                    SetCartesianZoom(cartesianZoom * zoomFactor);
+            
+                    // Ricalcola il disegno del grafico
+                    Draw();
+                }
+            
+                public static Color GetRandomColor()
+                {
+                    Random random = new Random();
+                    return Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                }
+            
+                public List<List<Tuple<int, int>>> GetDrawingData()
+                {
+                    return this.drawingData;
+                }
+            
+                public List<List<Tuple<int, int>>> GetSystemScores()
+                {
+                    return this.systemScores;
+                }
+            
+                public List<Color> GetSystemColors()
+                {
+                    return this.systemColors;
+                }
+            
+                public void SetSystemsCount(int systemsCount)
+                {
+                    this.systemsCount = systemsCount;
+                }
+            
+                public void SetAttacksCount(int numberOfAttacks)
+                {
+                    this.attacksCount = numberOfAttacks;
+                }
+            
+                public void SetSystemColor(List<Color> systemColors)
+                {
+                    this.systemColors = systemColors;
+                }
+            }
+        </code>
+    </pre>
+    
+    <hr>
+    <h2>class ResizableRect</h2>
+    <pre>
+        <code>
+            using System;
+            using System.Drawing;
+            using System.Collections.Generic;
+            
+            public class ResizableRect
+            {
+                private Rectangle rectangle;
+                private bool isResizing;
+                private bool isMoving;
+                private Point resizeStart;
+                private bool isResizingTop;
+                private Point resizeStartTop;
+                private Point moveStart;
+                private Color rectColor;
+                private Random random;
+                private Bitmap canvas;
+                private float zoomFactor = 1.0f;
+            
+            
+                public ResizableRect(Rectangle rect, Color color, Bitmap canvas)
+                {
+                    rectangle = rect;
+                    rectColor = color;
+                    random = new Random();
+                    this.canvas = canvas;
+                }
+            
+                public Rectangle Rectangle
+                {
+                    get { return rectangle; }
+                }
+            
+                public Color RectColor
+                {
+                    get { return rectColor; }
+                    set { rectColor = value; }
+                }
+            
+                public void Draw(Graphics graphics)
+                {
+                    using (SolidBrush backgroundBrush = new SolidBrush(Color.White)) // Imposta il colore di sfondo (in questo caso bianco)
+                    {
+                        graphics.FillRectangle(backgroundBrush, rectangle); // Riempie il rettangolo con il colore di sfondo
+                    }
+                    using (Pen pen = new Pen(rectColor, 2))
+                    {
+                        graphics.DrawRectangle(pen, rectangle);
+                    }
+                }
+            
+                public void MouseDown(Point location)
+                {
+                    if (rectangle.Contains(location))
+                    {
+                        if (location.X > rectangle.Left + 8 && location.X < rectangle.Right - 8)
+                        {
+                            isMoving = true;
+                            moveStart = location;
+                        }
+                        else if (location.Y < rectangle.Top + 8)
+                        {
+                            isResizingTop = true;
+                            resizeStartTop = location;
+                        }
+                        else
+                        {
+                            isResizing = true;
+                            resizeStart = location;
+                        }
+                    }
+                }
+            
+                public void MouseMove(Point location)
+                {
+                    if (isResizing)
+                    {
+                        int newWidth = rectangle.Width + location.X - resizeStart.X;
+                        int newHeight = rectangle.Height + location.Y - resizeStart.Y;
+                        int newLeft = rectangle.Left;
+                        int newTop = rectangle.Top;
+            
+                        if (newWidth < 0)
+                        {
+                            newLeft = rectangle.Left + newWidth;
+                            newWidth = Math.Abs(newWidth);
+                        }
+            
+                        if (newHeight < 0)
+                        {
+                            newTop = rectangle.Top + newHeight;
+                            newHeight = Math.Abs(newHeight);
+                        }
+            
+                        rectangle = new Rectangle(newLeft, newTop, newWidth, newHeight);
+                        resizeStart = location;
+                    }
+                    else if (isMoving)
+                    {
+                        int deltaX = location.X - moveStart.X;
+                        int deltaY = location.Y - moveStart.Y;
+                        int newLeft = rectangle.Left + deltaX;
+                        int newTop = rectangle.Top + deltaY;
+                        int newWidth = rectangle.Width;
+                        int newHeight = rectangle.Height;
+                        rectangle = new Rectangle(newLeft, newTop, newWidth, newHeight);
+                        moveStart = location;
+                    }
+                    else if (isResizingTop)
+                    {
+                        int newHeight = rectangle.Height + rectangle.Top - location.Y;
+                        int newTop = location.Y;
+            
+                        if (newHeight < 0)
+                        {
+                            newTop = rectangle.Top + newHeight;
+                            newHeight = Math.Abs(newHeight);
+                        }
+            
+                        rectangle = new Rectangle(rectangle.Left, newTop, rectangle.Width, newHeight);
+                        resizeStartTop = location;
+                    }
+                }
+            
+                public void MouseUp()
+                {
+                    isResizing = false;
+                    isMoving = false;
+                    isResizingTop = false;
+                }
+            }
+        </code>
+    </pre>
+
+    <hr>
+
+    <h2> partial class Form1</h2>
+    <pre>
+        <code>
+            namespace hw3
+            {
+                partial class Form1
+                {
+                    /// <summary>
+                    ///  Required designer variable.
+                    /// </summary>
+                    private System.ComponentModel.IContainer components = null;
+            
+                    /// <summary>
+                    ///  Clean up any resources being used.
+                    /// </summary>
+                    /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+                    protected override void Dispose(bool disposing)
+                    {
+                        if (disposing && (components != null))
+                        {
+                            components.Dispose();
+                        }
+                        base.Dispose(disposing);
+                    }
+            
+                    #region Windows Form Designer generated code
+            
+                    /// <summary>
+                    ///  Required method for Designer support - do not modify
+                    ///  the contents of this method with the code editor.
+                    /// </summary>
+                    private void InitializeComponent()
+                    {
+                        pictureBox1 = new PictureBox();
+                        nAttacks = new TextBox();
+                        nSystems = new TextBox();
+                        button1 = new Button();
+                        ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+                        SuspendLayout();
+                        // 
+                        // pictureBox1
+                        // 
+                        pictureBox1.Location = new Point(52, 53);
+                        pictureBox1.Name = "pictureBox1";
+                        pictureBox1.Size = new Size(698, 385);
+                        pictureBox1.TabIndex = 0;
+                        pictureBox1.TabStop = false;
+                        // 
+                        // nAttacks
+                        // 
+                        nAttacks.Location = new Point(12, 12);
+                        nAttacks.Name = "nAttacks";
+                        nAttacks.PlaceholderText = "Attacks";
+                        nAttacks.Size = new Size(125, 27);
+                        nAttacks.TabIndex = 1;
+                        // 
+                        // nSystems
+                        // 
+                        nSystems.Location = new Point(12, 53);
+                        nSystems.Name = "nSystems";
+                        nSystems.PlaceholderText = "Systems";
+                        nSystems.Size = new Size(125, 27);
+                        nSystems.TabIndex = 2;
+                        // 
+                        // button1
+                        // 
+                        button1.Location = new Point(12, 97);
+                        button1.Name = "button1";
+                        button1.Size = new Size(94, 29);
+                        button1.TabIndex = 3;
+                        button1.Text = "Calculate";
+                        button1.UseVisualStyleBackColor = true;
+                        button1.Click += buttonCalculate_Click;
+                        // 
+                        // Form1
+                        // 
+                        AutoScaleDimensions = new SizeF(8F, 20F);
+                        AutoScaleMode = AutoScaleMode.Font;
+                        ClientSize = new Size(800, 450);
+                        Controls.Add(button1);
+                        Controls.Add(nSystems);
+                        Controls.Add(nAttacks);
+                        Controls.Add(pictureBox1);
+                        Name = "Form1";
+                        Text = "Form1";
+                        Load += Form1_Load;
+                        ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+                        ResumeLayout(false);
+                        PerformLayout();
+                    }
+            
+                    #endregion
+            
+                    private PictureBox pictureBox1;
+                    private TextBox nAttacks;
+                    private TextBox nSystems;
+                    private Button button1;
+                }
+            }
+        </code>
+    </pre>
+
+</body>
+</html>
