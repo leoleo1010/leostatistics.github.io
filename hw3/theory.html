@@ -7,5 +7,75 @@
 </head>
 <body>
     <h1>Exercise 2</h1>
+    <p>
+        A probability space, also known as a probability triple, is a fundamental concept in probability theory. It provides a formal
+        framework for understanding and modeling random events and uncertainty. A probability space consists of three key components:
+        <ul>
+            <li class="list-item"><b> Sample Space (Ω): </b>The sample space is the set of all possible outcomes of a random experiment or
+            process. It is denoted as Ω. For example, when rolling a six-sided die, the sample space Ω would be {1, 2, 3, 4, 5, 6} 
+            because these are all the possible outcomes.
+
+            <li class="list-item"><b> Event Space (F):</b> The event space, denoted as F, is a collection of subsets of the sample space Ω. 
+            These subsets represent events that we are interested in, such as the event of rolling an even number on a six-sided die, 
+            which can be represented as {2, 4, 6}.
+
+            <li class="list-item"><b> Measure (P):</b> The probability measure, denoted as P, assigns a probability to each event
+            in the event space. It is a function that maps events to real numbers and satisfies certain axioms, ensuring that 
+            probabilities are non-negative and sum to 1.</li>
+        </ul>
+        Mathematically, a probability space is represented as the triplet (Ω, F, P). This framework allows us to quantify and 
+        work with uncertainty and randomness rigorously.
+    </p>
+    <h3>Examples</h3>
+    <p>
+        <ul>
+            <li class="list-item"><b>Example 1:</b>
+            Consider a fair six-sided die. The sample space Ω is {1, 2, 3, 4, 5, 6}. The event space F includes events like "rolling an 
+            even number" {2, 4, 6} and "rolling a prime number" {2, 3, 5}. The probability measure P assigns equal probabilities to each
+            outcome, making it a fair die, so P({1}) = P({2}) = ... = P({6}) = 1/6.</li>
+
+            <li class="list-item"><b>Example 2:</b>
+            Suppose you are flipping a fair coin. The sample space Ω is {H, T}, representing the possible outcomes: heads (H) or tails (T).
+            The event space F might include events like "getting heads" {H} and "getting tails" {T}. The probability measure P assigns 
+            equal probabilities to each outcome, so P({H}) = P({T}) = 0.5.</li>
+
+            <li class="list-item"><b>Example 3:</b>
+            Consider drawing a playing card from a standard deck of 52 cards. The sample space Ω consists of all 52 cards in the deck.
+            The event space F might include events like "drawing a red card" {hearts, diamonds}, "drawing a face card" {king of hearts,
+            queen of diamonds, etc.}, or "drawing a specific card" {ace of spades}. The probability measure P assigns probabilities
+            based on the uniformity of the deck, so P({hearts}) = 13/52, P({king of hearts}) = 1/52, and so on.</li>
+        </ul>
+    </p>
+
+    <p>
+        In the context of the examples, you can define a probability space (Ω, F, P) as follows:
+        <ul>
+            <li class="list-item"><b>Sample Space (Ω):</b>
+
+            In this case, the sample space Ω represents all the possible sequences of outcomes for each system over a series of N attacks.
+            Ω could be seen as the set of all possible "security score" trajectories for M systems. Each trajectory is a sequence of -1s
+            (indicating penetration) and 1s (indicating successful protection) over the N attacks.
+
+            <li class="list-item"><b>Event Space (F):</b>
+
+            The event space F consists of subsets of the sample space Ω. Each event in F represents a specific outcome or set of outcomes 
+            for the systems being attacked.
+            For Part a, we are interested in events like "the system remained protected throughout all N attacks" or "the system was
+            penetrated at least once during the N attacks." For Part b, we would define different events related to the cumulated 
+            frequency, relative frequency,and normalized ratio of penetration.
+
+            <li class="list-item"><b>Probability Measure (P):</b>
+
+            The probability measure P assigns probabilities to events in the event space F. It quantifies the likelihood of each event
+            occurring based on the system's characteristics and the constant penetration probability p. For Part a, we would assign
+            probabilities to events like "the system remained protected throughout all N attacks" based on the constant penetration 
+            probability p. For Part b, we would assign probabilities to events like "cumulated frequency of penetration," "relative 
+            frequency of penetration," and "normalized ratio of penetration" based on the characteristics of the attacks and the
+            number of attacks. The specific values assigned by the probability measure would depend on the details of the simulation 
+            and the parameters of the model. 
+            This probability space allows to analyze and model the behavior of the systems under repeated attacks and assess the
+            likelihood of different outcomes.
+        </ul>
+    </p>
 </body>
 </html>

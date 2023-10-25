@@ -10,10 +10,13 @@
             border: 1px solid #000;
         }
     </style>
+    <link href="rectCss.css" rel="stylesheet"/>
 </head>
 
 <body>
-    <canvas id="grafico"></canvas>
+    <div class="container">
+        <canvas id="grafico" width="400" height="200">></canvas>
+    </div>
     <div>
         <label for="numeroAttacchi">Inserisci il numero di attacchi:</label>
         <input type="number" id="numeroAttacchi" min="1">
@@ -139,6 +142,7 @@
         }
     }
     </script>
+    <script src="rectScript.js"></script>
 </body>
 
 </html>
