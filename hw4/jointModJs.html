@@ -14,10 +14,10 @@
     <input type="number" id="ambitiousInput" min="0" max="5" step="1"><br><br>
 
     <label for="weightInputMin">Weight (Quantitativo Continuo - Minimo):</label>
-    <input type="number" id="weightInputMin" ><br><br>
+    <input type="number" id="weightInputMin" step="0.01"><br><br>
 
     <label for="weightInputMax">Weight (Quantitativo Continuo - Massimo):</label>
-    <input type="number" id="weightInputMax" ><br><br>
+    <input type="number" id="weightInputMax" step="0.01"><br><br>
 
     <button onclick="calcolaDistribuzione()">Calcola Distribuzione</button>
 
@@ -31,6 +31,11 @@
             var ambitiousValue = parseInt(document.getElementById("ambitiousInput").value);
             var weightMin = parseFloat(document.getElementById("weightInputMin").value);
             var weightMax = parseFloat(document.getElementById("weightInputMax").value);
+
+            if (isNaN(ambitiousValue) || weightMin > weightMax) {
+                alert("Assicurati di inserire valori validi.");
+                return;
+            }
 
             // Leggi il file TSV (dati.tsv) e calcola la distribuzione di frequenza
             fetch('dati.tsv')
@@ -57,6 +62,10 @@
                         var ambitious = parseInt(values[ambitiousIndex]);
                         var weight = parseFloat(values[weightIndex]);
 
+                        if (isNaN(ambitious) || isNaN(weight)) {
+                            continue;
+                        }
+
                         // Conta la frequenza assoluta per ciascuna variabile
                         if (background) {
                             if (!frequencyCount.background[background]) {
@@ -65,23 +74,17 @@
                             frequencyCount.background[background]++;
                         }
 
-                        if (!isNaN(ambitious)) {
-                            if (!frequencyCount.ambitious[ambitious]) {
-                                frequencyCount.ambitious[ambitious] = 0;
-                            }
-                            frequencyCount.ambitious[ambitious]++;
+                        if (ambitious === ambitiousValue) {
+                            frequencyCount.ambitious[ambitiousValue] = (frequencyCount.ambitious[ambitiousValue] || 0) + 1;
                         }
 
-                        if (!isNaN(weight)) {
-                            if (!frequencyCount.weight[weight]) {
-                                frequencyCount.weight[weight] = 0;
-                            }
-                            frequencyCount.weight[weight]++;
+                        if (weight >= weightMin && weight <= weightMax) {
+                            frequencyCount.weight[weight] = (frequencyCount.weight[weight] || 0) + 1;
                         }
 
                         // Calcola il joint tra "Background (degree)" e "Weight"
-                        if (background && !isNaN(weight)) {
-                            var jointKey = background + " - " + weight;
+                        if (background && ambitious === ambitiousValue) {
+                            var jointKey = background + " - Ambitious (" + ambitiousValue + ")";
                             if (!frequencyCount.joint[jointKey]) {
                                 frequencyCount.joint[jointKey] = 0;
                             }
@@ -89,54 +92,6 @@
                         }
 
                         totalRows++;
-                    }
-
-                    // Calcola frequenze relative
-                    var relativeFrequencies = {
-                        background: {},
-                        ambitious: {},
-                        weight: {},
-                        joint: {}
-                    };
-
-                    for (var key in frequencyCount.background) {
-                        relativeFrequencies.background[key] = (frequencyCount.background[key] / totalRows).toFixed(2);
-                    }
-
-                    for (var key in frequencyCount.ambitious) {
-                        relativeFrequencies.ambitious[key] = (frequencyCount.ambitious[key] / totalRows).toFixed(2);
-                    }
-
-                    for (var key in frequencyCount.weight) {
-                        relativeFrequencies.weight[key] = (frequencyCount.weight[key] / totalRows).toFixed(2);
-                    }
-
-                    for (var key in frequencyCount.joint) {
-                        relativeFrequencies.joint[key] = (frequencyCount.joint[key] / totalRows).toFixed(2);
-                    }
-
-                    // Calcola frequenze percentuali
-                    var percentualFrequencies = {
-                        background: {},
-                        ambitious: {},
-                        weight: {},
-                        joint: {}
-                    };
-
-                    for (var key in relativeFrequencies.background) {
-                        percentualFrequencies.background[key] = (relativeFrequencies.background[key] * 100).toFixed(2) + "%";
-                    }
-
-                    for (var key in relativeFrequencies.ambitious) {
-                        percentualFrequencies.ambitious[key] = (relativeFrequencies.ambitious[key] * 100).toFixed(2) + "%";
-                    }
-
-                    for (var key in relativeFrequencies.weight) {
-                        percentualFrequencies.weight[key] = (relativeFrequencies.weight[key] * 100).toFixed(2) + "%";
-                    }
-
-                    for (var key in relativeFrequencies.joint) {
-                        percentualFrequencies.joint[key] = (relativeFrequencies.joint[key] * 100).toFixed(2) + "%";
                     }
 
                     // Visualizza i risultati
@@ -153,47 +108,15 @@
                         risultati.innerHTML += "<p>Weight (" + i.toFixed(2) + "): " + (frequencyCount.weight[i] || 0) + " occorrenze</p>";
                     }
 
-                    risultati.innerHTML += "<h3>Frequenza Relativa</h3>";
-                    if (backgroundValue) {
-                        risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (relativeFrequencies.background[backgroundValue] || 0) + "</p>";
-                    }
-                    if (!isNaN(ambitiousValue)) {
-                        risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (relativeFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
-                    }
-
-                    for (var i = weightMin; i <= weightMax; i += 0.01) {
-                        risultati.innerHTML += "<p>Weight (" + i.toFixed(2) + "): " + (relativeFrequencies.weight[i] || 0) + "</p>";
-                    }
-
-                    risultati.innerHTML += "<h3>Frequenza Percentuale</h3>";
-                    if (backgroundValue) {
-                        risultati.innerHTML += "<p>Background (" + backgroundValue + "): " + (percentualFrequencies.background[backgroundValue] || 0) + "</p>";
-                    }
-                    if (!isNaN(ambitiousValue)) {
-                        risultati.innerHTML += "<p>Ambitious (" + ambitiousValue + "): " + (percentualFrequencies.ambitious[ambitiousValue] || 0) + "</p>";
-                    }
-
-                    for (var i = weightMin; i <= weightMax; i += 0.01) {
-                        risultati.innerHTML += "<p>Weight (" + i.toFixed(2) + "): " + (percentualFrequencies.weight[i] || 0) + "</p>";
-                    }
-
                     risultati.innerHTML += "<h3>Joint Frequenza Assoluta</h3>";
                     if (backgroundValue && !isNaN(ambitiousValue)) {
                         var jointKey = backgroundValue + " - Ambitious (" + ambitiousValue + ")";
                         risultati.innerHTML += "<p>" + jointKey + ": " + (frequencyCount.joint[jointKey] || 0) + " occorrenze</p>";
                     }
-
-                    risultati.innerHTML += "<h3>Joint Frequenza Relativa</h3>";
-                    if (backgroundValue && !isNaN(ambitiousValue)) {
-                        var jointKey = backgroundValue + " - Ambitious (" + ambitiousValue + ")";
-                        risultati.innerHTML += "<p>" + jointKey + ": " + (relativeFrequencies.joint[jointKey] || 0) + "</p>";
-                    }
-
-                    risultati.innerHTML += "<h3>Joint Frequenza Percentuale</h3>";
-                    if (backgroundValue && !isNaN(ambitiousValue)) {
-                        var jointKey = backgroundValue + " - Ambitious (" + ambitiousValue + ")";
-                        risultati.innerHTML += "<p>" + jointKey + ": " + (percentualFrequencies.joint[jointKey] || 0) + "</p>";
-                    }
+                })
+                .catch(error => {
+                    alert("Si è verificato un errore nella lettura del file TSV.");
+                    console.error(error);
                 });
         }
     </script>
