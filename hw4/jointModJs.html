@@ -55,6 +55,8 @@
 
                     var weightFrequencies = {};
 
+                    var jointFrequency = {};
+
                     var totalRows = 0;
 
                     for (var i = 1; i < lines.length; i++) {
@@ -89,6 +91,16 @@
                                 weightFrequencies[weightKey] = 0;
                             }
                             weightFrequencies[weightKey]++;
+
+                            // Calcola il joint tra "Background" e "Weight" nell'intervallo
+                            if (background) {
+                                var jointKey = background + " - " + weightKey;
+                                if (!jointFrequency[jointKey]) {
+                                    jointFrequency[jointKey] = 0;
+                                }
+                                jointFrequency[jointKey]++;
+                            }
+
                             totalRows++;
                         }
                     }
@@ -135,6 +147,11 @@
                     risultati.innerHTML += "<h3>Frequenza Relativa per Weight</h3>";
                     for (var key in weightRelativeFrequencies) {
                         risultati.innerHTML += "<p>Weight (" + key + "): " + weightRelativeFrequencies[key] + "</p>";
+                    }
+
+                    risultati.innerHTML += "<h3>Joint Frequenza Assoluta tra Background e Weight</h3>";
+                    for (var jointKey in jointFrequency) {
+                        risultati.innerHTML += "<p>" + jointKey + ": " + jointFrequency[jointKey] + " occorrenze</p>";
                     }
                 });
         }
