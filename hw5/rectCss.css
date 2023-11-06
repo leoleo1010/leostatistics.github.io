@@ -1,0 +1,24 @@
+/* Stile generale per il body e l'html */
+body, html {
+    height: 100%;
+    margin: 0;
+  }
+  
+  /* Stile per i contenitori dei grafici */
+  .container {
+    width: 50%; /* Imposta la larghezza iniziale del contenitore */
+    padding: 20px;
+    border: 1px solid #000;
+    resize: both;
+    overflow: auto;
+    margin: 20px auto; /* Centra il contenitore e aggiunge spazio tra di essi */
+  }
+  
+  /* Stile per il canvas (grafico) all'interno del contenitore */
+  canvas {
+    width: 100%; /* Il canvas riempirà sempre il contenitore */
+    height: 100%;
+    border: 1px solid #000;
+    display: block;
+  }
+  
