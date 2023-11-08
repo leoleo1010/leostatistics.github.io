@@ -36,6 +36,9 @@
                 private Region clipRegion;
                 List<List<Tuple<int, int>>> drawingData;
                 List<Tuple<int, int>> systemData;
+                private List<int> systemScores;
+                private List<int> secondHalfScores;
+                private List<int> firstHalfScores;
                 private int redRectX;
                 private int redRectY;
                 public int redRectTop;
@@ -44,8 +47,8 @@
                 public List<Color> systemColors;
                 private int subIntervals;
                 private double lambda;
-                private float firstHalf;
-                private float secondHalf;
+                private List<int> firstHalf;
+                private List<int> secondHalf;
                 private int centerY;
                 private int centerX;
             
@@ -63,6 +66,11 @@
                     redRectX = redRect.Rectangle.X;
                     redRectY = redRect.Rectangle.Y;
                     redRectHeight = redRect.Rectangle.Height;
+                    secondHalfScores = new List<int>(subIntervals);
+                    firstHalfScores = new List<int>(subIntervals);
+                    firstHalf = new List<int>(subIntervals);
+                    secondHalf = new List<int>(subIntervals);
+            
             
                 }
             
@@ -82,8 +90,18 @@
                 {
                     Random random = new Random();
                     drawingData = new List<List<Tuple<int, int>>>(systemsCount);
-                    firstHalf = 0;
-                    secondHalf = 0;
+                    firstHalf = new List<int>(systemsCount);
+                    secondHalf = new List<int>(systemsCount);
+                    secondHalfScores = new List<int>(subIntervals);
+                    firstHalfScores = new List<int>(subIntervals);
+            
+                    for (int i = 0; i < subIntervals; i++)
+                    {
+                        firstHalfScores.Add(0);
+                        secondHalfScores.Add(0);
+                        firstHalf.Add(0);
+                        secondHalf.Add(0);
+                    }
             
                     for (int currentSystem = 0; currentSystem < systemsCount; currentSystem++)
                     {
@@ -100,14 +118,13 @@
                             {
                                 if (subInterval <= subIntervals / 2)
                                 {
-                                    firstHalf++;
-                                    secondHalf++;
+                                    this.firstHalf[currentSystem]++;
+                                    this.secondHalf[currentSystem]++;
                                 }
                                 else
                                 {
-                                    secondHalf++;
+                                    this.secondHalf[currentSystem]++;
                                 }
-                                // this.systemScores[currentSystem].Add(new Tuple<int, int>(subInterval, 1));
                                 int precY = drawingData[currentSystem].Last().Item2;
                                 int precX = drawingData[currentSystem].Last().Item1;
                                 drawingData[currentSystem].Add(new Tuple<int, int>(subInterval, precY));
@@ -115,12 +132,27 @@
                             }
                             else
                             {
-                                //this.systemScores[currentSystem].Add(new Tuple<int, int>(subInterval, 0));
                                 int precY = drawingData[currentSystem].Last().Item2;
                                 drawingData[currentSystem].Add(new Tuple<int, int>(subInterval, precY));
                             }
                         }
                     }
+            
+                    for (int subInterval = 1; subInterval <= subIntervals; subInterval++)
+                    {
+                        for (int currentSystem = 0; currentSystem < systemsCount; currentSystem++)
+                        {
+                            if (subInterval - 1 == firstHalf[currentSystem])
+                            {
+                                firstHalfScores[subInterval - 1]++;
+                            }
+                            if (subInterval - 1 == secondHalf[currentSystem])
+                            {
+                                secondHalfScores[subInterval - 1]++;
+                            }
+                        }
+                    }
+            
                 }
                 public void DrawLines(Graphics graphics)
                 {
@@ -170,58 +202,53 @@
                     }
                 }
             
+            
                 public void DrawHistograms(Graphics graphics)
                 {
-                    float barWidth = 10.0f / 5.0f * scaleX * cartesianZoom; // Larghezza delle barre divisa per due
+                    float barWidth = 10.0f * cartesianZoom;
+                    float barSpacing = 1.0f * cartesianZoom;
             
-                    // Calcola la posizione iniziale delle barre
-                    float startXFirstSeries = (subIntervals / 2) * scaleX * cartesianZoom + chartX;
-                    float startXSecondSeries = subIntervals * scaleX * cartesianZoom + chartX;
+                    float anchorXFirstSeries = (subIntervals / 2) * scaleX * cartesianZoom;
+                    float anchorXSecondSeries = subIntervals * scaleX * cartesianZoom;
+            
+                    // Calcola la posizione iniziale della prima serie (ancorata a "numero di attacchi / 2")
+                    float startXFirstSeries = anchorXFirstSeries - (barWidth * systemsCount / 2);
+            
+                    // Calcola la posizione iniziale della seconda serie (ancorata a "numero di attacchi")
+                    float startXSecondSeries = anchorXSecondSeries - (barWidth * systemsCount / 2);
             
                     float initialY = chartY + 4 * scaleY * cartesianZoom;  // Posizione iniziale delle barre
+              
             
-                    // Normalizza le somme rispetto al numero di sistemi
-                    float normalizedFirstScore = firstHalf / systemsCount;
-                    float normalizedSecondScore = secondHalf / systemsCount;
             
-                    float initialHeight = 4 * scaleY * cartesianZoom;  // Altezza iniziale delle barre
-                    float firstBarHeight = normalizedFirstScore * scaleY * cartesianZoom;
-                    float secondBarHeight = normalizedSecondScore * scaleY * cartesianZoom;
+                    for (int sub = 0; sub < subIntervals; sub++)
+                    {
+                        float xFirstSeries = startXFirstSeries + sub * (barWidth + barSpacing);
+                        float xSecondSeries = startXSecondSeries + sub * (barWidth + barSpacing);
             
-                    float yFirstSeries = initialY - firstBarHeight;  // Imposta l'ordinata dell'istogramma in subIntervals/2
-                    float ySecondSeries = initialY - secondBarHeight;  // Imposta l'ordinata dell'istogramma in subIntervals
+                        if (sub < firstHalfScores.Count)
+                        {
+                            int firstScore = firstHalfScores[sub];
+                            float normalizedFirstScore = (float)firstScore * 3.0f;
+                            float firstBarHeight = normalizedFirstScore * scaleY;
+                            float yFirstSeries = initialY - firstBarHeight;
             
-                    RectangleF barFirstSeries = new RectangleF(startXFirstSeries, yFirstSeries, barWidth, firstBarHeight);
-                    RectangleF barSecondSeries = new RectangleF(startXSecondSeries, ySecondSeries, barWidth, secondBarHeight);
+                            RectangleF barFirstSeries = new RectangleF(xFirstSeries, yFirstSeries, barWidth, firstBarHeight);
+                            graphics.FillRectangle(new SolidBrush(Color.Blue), barFirstSeries);
+                        }
             
-                    graphics.FillRectangle(new SolidBrush(Color.Orange), barFirstSeries); // Colore rosso per il primo istogramma
-                    graphics.FillRectangle(new SolidBrush(Color.LightBlue), barSecondSeries); // Colore blu per il secondo istogramma
+                        if (sub < secondHalfScores.Count)
+                        {
+                            int secondScore = secondHalfScores[sub];
+                            float normalizedSecondScore = (float)secondScore * 3.0f;
+                            float secondBarHeight = normalizedSecondScore * scaleY;
+                            float ySecondSeries = initialY - secondBarHeight;
             
-                    // Scrivi i valori delle variabili sopra agli istogrammi
-                    // Specifica la dimensione del font desiderata
-                    float desiredFontSize = 16.0f; // Puoi regolare questo valore
-            
-                    // Crea un nuovo font con la dimensione desiderata
-                    Font font = new Font(SystemFonts.DefaultFont.FontFamily, desiredFontSize);
-            
-                    // Usa il nuovo font per disegnare il testo
-                    string valueFirst = firstHalf.ToString();
-                    string valueSecond = secondHalf.ToString();
-            
-                    SizeF textSizeFirst = graphics.MeasureString(valueFirst, font);
-                    SizeF textSizeSecond = graphics.MeasureString(valueSecond, font);
-            
-                    PointF textLocationFirst = new PointF(startXFirstSeries + barWidth, yFirstSeries + firstBarHeight / 2 - textSizeFirst.Height / 2);
-                    PointF textLocationSecond = new PointF(startXSecondSeries + barWidth, ySecondSeries + secondBarHeight / 2 - textSizeSecond.Height / 2);
-            
-                    graphics.DrawString(valueFirst, font, Brushes.Black, textLocationFirst);
-                    graphics.DrawString(valueSecond, font, Brushes.Black, textLocationSecond);
-            
+                            RectangleF barSecondSeries = new RectangleF(xSecondSeries, ySecondSeries, barWidth, secondBarHeight);
+                            graphics.FillRectangle(new SolidBrush(Color.Green), barSecondSeries);
+                        }
+                    }
                 }
-            
-            
-            
-            
             
             
             
