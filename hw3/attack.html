@@ -67,6 +67,10 @@
         if (N < 1 || M < 1) {
             alert("I numeri devono essere > 1");
         } else {
+            var coloriRette = [];
+            for (var i = 0; i < M; i++) {
+                coloriRette.push(getRandomColor());
+            }
             // Disegna gli assi cartesiani con numeri
             ctx.beginPath();
             ctx.moveTo(originX, 0);
@@ -124,9 +128,10 @@
 
                         // traccia la linea dalla posizione attuale a quella finale
                         ctx.lineTo(canvasX, canvasY);
-                         ctx.strokeStyle ="blue";
+                        ctx.strokeStyle = getRandomColor();
                         // FUNZIONE PER GENERARE COLORE RANDOM
                         // ctx.strokeStyle = getRandomColor();
+                         ctx.strokeStyle = coloriRette[i];
                         ctx.stroke();
                     }
                     j--;

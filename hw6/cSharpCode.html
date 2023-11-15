@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Code C# developed </h1>
+    <hr> <!-- separatore -->
+    <h2>SECURITY SCORE CHART</h2>
+    <pre>
+        <code>
+            using System;
+            using System.Collections.Generic;
+            using System.Data;
+            using System.Drawing;
+            using System.Drawing.Drawing2D;
+            using System.Media;
+            using System.Windows.Forms;
+            using static System.Formats.Asn1.AsnWriter;
+            using Timer = System.Windows.Forms.Timer;
+            
+            public class SecurityScoreChart
+            {
+            
+                private int attacksCount; // Numero di attacchi.
+                public int chartWidth; // Larghezza del grafico.
+                public int chartHeight; // Altezza del grafico.
+                public int chartX; // Posizione X del grafico all'interno del rettangolo rosso.
+                public int chartY; // Posizione Y del grafico all'interno del rettangolo rosso.
+                private float scaleX = 100; // Fattore di scala per adattare il grafico alle dimensioni del rettangolo rosso.
+                private float scaleY = 100;
+                private PictureBox pictureBox; // Riferimento al PictureBox su cui disegnare il grafico.
+                private int systemsCount;
+                private Bitmap chartbitmap;
+                private ResizableRect redRect;
+                private Region clipRegion;
+                List<List<Tuple<int, int>>> drawingData;
+                List<Tuple<int, int>> systemData;
+                List<int> securityScores;
+                List<int> penetrationScores;
+                List<bool> reached;
+                List<int> discardedFirstHalf;
+                List<int> discardedSecondHalf;
+                private int redRectX;
+                private int redRectY;
+                public int redRectTop;
+                private int redRectHeight;
+                private float cartesianZoom = 1.0f;
+                public List<Color> systemColors;
+                private int centerY;
+                private int centerX;
+                private int securityScore;
+                private int penetrationScore;
+            
+                public SecurityScoreChart(int attacksCount, int chartWidth, int chartHeight, int chartX, int chartY, int systemsCount, Bitmap chartbitmap, ResizableRect redRect, List<Color> systemColors)
+                {
+                    this.attacksCount = attacksCount;
+                    this.chartWidth = chartWidth;
+                    this.chartHeight = chartHeight;
+                    this.chartX = chartX;
+                    this.chartY = chartY;
+                    this.chartbitmap = chartbitmap;
+                    this.systemsCount = systemsCount; // Inizializza il numero di sistemi.
+                    this.redRect = redRect;
+                    this.systemColors = systemColors;
+                    redRectX = redRect.Rectangle.X;
+                    redRectY = redRect.Rectangle.Y;
+                    redRectHeight = redRect.Rectangle.Height;
+            
+                    CalculateScores();
+            
+                }
+            
+            
+            
+                public void SetPictureBox(PictureBox pictureBox)
+                {
+                    this.pictureBox = pictureBox;
+                }
+            
+                public PictureBox GetPictureBox()
+                {
+                    return this.pictureBox;
+                }
+            
+                public void CalculateScores()
+                {
+                    Random random = new Random();
+                    securityScores = new List<int>(systemsCount);
+                    penetrationScores = new List<int>(systemsCount);
+                    reached = new List<bool>(systemsCount);
+                    discardedFirstHalf = new List<int>(attacksCount);
+                    discardedSecondHalf = new List<int>(attacksCount);
+                    drawingData = new List<List<Tuple<int, int>>>(systemsCount);
+                    discardedFirstHalf.Add(0);
+                    discardedSecondHalf.Add(0);
+            
+                    for (int att = 1; att<=attacksCount; att++)
+                    {
+                        discardedFirstHalf.Add(0);
+                        discardedSecondHalf.Add(0);
+                    }
+                    
+            
+                    for (int currentSystem = 0; currentSystem < systemsCount; currentSystem++)
+                    {
+                        systemData = new List<Tuple<int, int>>();
+                        systemData.Add(new Tuple<int, int>(0, 4));
+                        drawingData.Add(systemData);
+            
+                        securityScores.Add(0);
+                        penetrationScores.Add(0);
+                        reached.Add(false);
+            
+            
+                        for (int attack = 1; attack <= attacksCount; attack++)
+                        {
+                          
+                            double successProbability = random.NextDouble();
+            
+                            // Calcola l'esito dell'attacco e aggiorna il punteggio.
+                            if (successProbability > 0.5)
+                            {
+                                penetrationScores[currentSystem]++;
+                                int precY = drawingData[currentSystem].Last().Item2;
+                                drawingData[currentSystem].Add(new Tuple<int, int>(attack, precY + 1));
+                            }
+                            else
+                            {
+                                securityScores[currentSystem]++;
+                                int precY = drawingData[currentSystem].Last().Item2;
+                                drawingData[currentSystem].Add(new Tuple<int, int>(attack, precY - 1));
+                            }
+            
+                            if (securityScores[currentSystem] == securityScore)
+                            {
+                                reached[currentSystem] = true;
+                            }
+            
+                            if (reached[currentSystem] == false && penetrationScores[currentSystem] == penetrationScore)
+                            {
+                                if (attack <= attacksCount / 2)
+                                {
+                                    discardedFirstHalf[attack]++;
+                                    discardedSecondHalf[attack]++;
+                                } else
+                                {
+                                    discardedSecondHalf[attack]++;
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            
+                public void DrawLines(Graphics graphics)
+                {
+                    int startX;
+                    int startY;
+                    int endX;
+                    int endY;
+                    int thickness = systemsCount;
+            
+                    // Distanza tra i punti sulle ascisse e le ordinate
+                    float stepX = 1 * scaleX * cartesianZoom; // Distanza tra i punti sull'asse x
+                    float stepY = 1 * scaleY * cartesianZoom; // Distanza tra i punti sull'asse y
+            
+                    // Calcola l'origine del piano in base al fattore di zoom
+                    float originX = chartX + 0;  // Origine x (non spostato)
+                    float originY = chartY + 6 * scaleY * cartesianZoom; // Origine y (spostato di 6 e considerando lo zoom)
+            
+                    // Calcola il numero di punti lungo le ascisse e le ordinate in base alle dimensioni del rettangolo rosso
+                    int pointsCountX = (int)(redRect.Rectangle.Width / stepX);
+                    int pointsCountY = (int)(redRect.Rectangle.Height / stepY);
+            
+                    // Disegna la griglia
+            
+                    for (int i = -pointsCountX; i <= pointsCountX; i++)
+                    {
+                        float x = i * stepX + originX;
+                        int textX = (int)x;
+                        int textY = (int)redRect.Rectangle.Bottom + 2;
+            
+                        string numberX = (i).ToString();  // Usa i come numero progressivo
+                        SizeF textSizeX = graphics.MeasureString(numberX, SystemFonts.DefaultFont);
+                        PointF textLocationX = new PointF(x, chartY + 4 * scaleY * cartesianZoom);
+            
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point((int)x, (int)redRect.Rectangle.Top), new Point((int)x, (int)redRect.Rectangle.Bottom));
+                        graphics.DrawString(numberX, SystemFonts.DefaultFont, Brushes.Black, textLocationX);
+                    }
+            
+                    for (int i = -pointsCountY; i <= pointsCountY; i++)
+                    {
+                        float y = i * stepY + originY;
+            
+                        // Linee orizzontali
+                        graphics.DrawLine(new Pen(Color.Gray, 1), new Point((int)redRect.Rectangle.Left, (int)y), new Point((int)redRect.Rectangle.Right, (int)y));
+                    }
+            
+                    for (int system = 0; system < systemsCount; system++)
+                    {
+                        for (int point = 0; point < drawingData[system].Count - 1; point++)
+                        {
+            
+                            startX = (int)(drawingData[system][point].Item1 * scaleX * cartesianZoom) + chartX;
+                            startY = (int)(drawingData[system][point].Item2 * scaleY * cartesianZoom) + chartY;
+                            endX = (int)(drawingData[system][point + 1].Item1 * scaleX * cartesianZoom) + chartX;
+                            endY = (int)(drawingData[system][point + 1].Item2 * scaleY * cartesianZoom) + chartY;
+            
+                            // Disegna solo se il grafico è visibile
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), startX, startY, 4, 4);
+                            graphics.DrawEllipse(new Pen(Color.Green, 2), endX, endY, 4, 4);
+                            graphics.DrawLine(new Pen(systemColors[system], 3), new Point(startX, startY), new Point(endX, endY));
+                        }
+                    }
+                }
+            
+                public void DrawHistograms(Graphics graphics)
+                {
+                    float barWidth = 10.0f * cartesianZoom;
+                    float barSpacing = 1.0f * cartesianZoom;
+            
+                    float anchorXFirstSeries = (attacksCount / 2) * scaleX * cartesianZoom;
+                    float anchorXSecondSeries = attacksCount * scaleX * cartesianZoom;
+            
+                    // Calcola la posizione iniziale della prima serie (ancorata a "numero di attacchi / 2")
+                    float startXFirstSeries = anchorXFirstSeries - (barWidth * attacksCount / 2);
+            
+                    // Calcola la posizione iniziale della seconda serie (ancorata a "numero di attacchi")
+                    float startXSecondSeries = anchorXSecondSeries - (barWidth * attacksCount / 2);
+            
+                    float initialY = chartY + 4 * scaleY * cartesianZoom;  // Posizione iniziale delle barre
+            
+            
+            
+                    for (int att = 1; att <= attacksCount; att++)
+                    {
+                        float xFirstSeries = startXFirstSeries + att * (barWidth + barSpacing);
+                        float xSecondSeries = startXSecondSeries + att * (barWidth + barSpacing);
+            
+                        if (att < discardedFirstHalf.Count)
+                        {
+                            int firstScore = discardedFirstHalf[att];
+                            float normalizedFirstScore = (float)firstScore / 3.0f;
+                            float firstBarHeight = normalizedFirstScore * scaleY;
+                            float yFirstSeries = initialY - firstBarHeight;
+            
+                            RectangleF barFirstSeries = new RectangleF(xFirstSeries, yFirstSeries, barWidth, firstBarHeight);
+                            graphics.FillRectangle(new SolidBrush(Color.Blue), barFirstSeries);
+                        }
+            
+                        if (att < discardedSecondHalf.Count)
+                        {
+                            int secondScore = discardedSecondHalf[att];
+                            float normalizedSecondScore = (float)secondScore / 3.0f;
+                            float secondBarHeight = normalizedSecondScore * scaleY;
+                            float ySecondSeries = initialY - secondBarHeight;
+            
+                            RectangleF barSecondSeries = new RectangleF(xSecondSeries, ySecondSeries, barWidth, secondBarHeight);
+                            graphics.FillRectangle(new SolidBrush(Color.Green), barSecondSeries);
+                        }
+                    }
+                }
+            
+            
+            
+            
+                public void Draw()
+                {
+                    using (Graphics graphics = Graphics.FromImage(chartbitmap))
+                    {
+                        // Calcola la regione di clipping basata sul resizableRect rosso
+                        clipRegion = new Region(redRect.Rectangle);
+                        graphics.SetClip(clipRegion, CombineMode.Intersect);
+            
+                        centerX = redRect.Rectangle.Left + redRect.Rectangle.Width / 2;
+                        chartX = centerX - chartWidth / 2;
+            
+                        int desiredDistanceFromBottom = 80; // Regola questa distanza come desideri
+            
+                        centerY = redRect.Rectangle.Bottom - desiredDistanceFromBottom;
+                        chartY = centerY - chartHeight / 6;
+            
+            
+                        DrawHistograms(graphics);
+                        DrawLines(graphics);
+            
+                    }
+                    pictureBox.Invalidate();
+                }
+            
+            
+            
+                internal Image GetChartBitmap()
+                {
+                    return this.chartbitmap;
+                }
+            
+                public void SetCartesianZoom(float zoomFactor)
+                {
+                    cartesianZoom = zoomFactor;
+                }
+            
+                public float GetCartesianZoom()
+                {
+                    return this.cartesianZoom;
+                }
+            
+                public void Zoom(float zoomFactor)
+                {
+                    // Aggiorna il fattore di scala
+                    scaleX *= zoomFactor;
+                    scaleY *= zoomFactor;
+            
+                    SetCartesianZoom(cartesianZoom * zoomFactor);
+            
+                    // Ricalcola il disegno del grafico
+                    Draw();
+                }
+            
+                public static Color GetRandomColor()
+                {
+                    Random random = new Random();
+                    return Color.FromArgb(random.Next(256), random.Next(256), random.Next(256));
+                }
+            
+                public List<List<Tuple<int, int>>> GetDrawingData()
+                {
+                    return this.drawingData;
+                }
+            
+                public List<Color> GetSystemColors()
+                {
+                    return this.systemColors;
+                }
+            
+                public void SetSystemsCount(int systemsCount)
+                {
+                    this.systemsCount = systemsCount;
+                }
+            
+                public void SetAttacksCount(int numberOfAttacks)
+                {
+                    this.attacksCount = numberOfAttacks;
+                }
+            
+                public void SetSecurityScore(int securityScore)
+                {
+                    this.securityScore = securityScore;
+                }
+            
+                public void SetPenetrationScore(int penetrationScore)
+                {
+                    this.penetrationScore = penetrationScore;
+                }
+            
+                public void SetSystemColor(List<Color> systemColors)
+                {
+                    this.systemColors = systemColors;
+                }
+            }  
+        </code>
+    </pre>
+</body>
+</html>
