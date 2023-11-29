@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Euler-Maruyama simulator for stochastic differential equation (SDE)</title>
+    <style>
+        body * {
+            font-family: verdana, sans-serif;
+            font-size: 13px;
+          }
+      
+          h3 {
+            font-weight: bold;
+            font-family: verdana, sans-serif;
+            color: rgb(0, 128, 11);
+          }
+      
+          label {
+            font-weight: bold;
+            grid-column: label;
+            alignment: top;
+            color: rgb(11, 11, 11);
+            display: inline-block;
+          }
+      
+          input[type="radio"] {
+            width: 60px;
+            grid-column: input;
+          }
+      
+          input[type="number"] {
+            margin-right: 20px;
+          }
+      
+          div {
+            height: 600px;
+            background-color: whitesmoke;
+            display: grid;
+            grid-template-columns: [input] 50px [label];
+            align-content: start;
+            grid-row-gap: 15px;
+          }
+      
+          canvas {
+            background-color: black;
+            border: 1px solid blue;
+            vertical-align: top;
+            margin-left: 10px;
+            float: left;
+          }    
+    </style>
+</head>
+<body>
+    <h3>Euler-Maruyama simulator for stochastic differential equation (SDE)</h3>
+
+    <label for="processSelect">Select a Stochastic Process:</label>
+        <select id="processSelect" class="form-control">
+            <option value="geometricBrownianMotion">Geometric Brownian Motion</option>
+            <option value="arithmeticBrownianMotion">Arithmetic Brownian Motion</option>
+            <option value="hullWhite">Hull - White</option>
+            <option value="coxIngellRoss">Cox-Ingell-Ross</option>
+            <!-- Add more options for other stochastic processes -->
+        </select>
+    <label for="mu">Drift (\( \mu \)): </label>
+    <input type="number" step="0.01" id="mu" value="0.1"><br>
+
+    <label for="sigma">Diffusion (\( \sigma \)): </label>
+    <input type="number" step="0.01" id="sigma" value="0.2"><br>
+
+    <label for="dt">Time Step (\( \Delta t \)): </label>
+    <input type="number" step="0.01" id="dt" value="0.01"><br>
+
+    <label for="totalTime">Total Time: </label>
+    <input type="number" step="1" id="totalTime" value="100"><br>
+
+    <label for="numPaths">Number of Machines: </label>
+    <input type="number" step="1" id="numPaths" value="3"><br>
+
+
+    <button onclick="exploreStochasticProcess()">Simulate</button>
+
+    <button onclick="clearCanvas()">Clear Canvas</button>
+
+    <canvas id="myCanvas" width="800" height="450"></canvas>
+
+    <script>
+       
+        // exploreStochasticProcess(): FUNZIONE che si occupa di fare lo switch per ogni SDE
+        function exploreStochasticProcess() {
+            const processSelect = document.getElementById('processSelect');
+            const simulateBtn = document.getElementById('simulateBtn');
+
+            const canvas = document.getElementById('myCanvas');
+            const context = canvas.getContext('2d');
+    
+            const selectedProcess = processSelect.value;
+
+            // clear the canvas
+            clearCanvas();
+
+            // Simulate and display the selected stochastic process
+            switch (selectedProcess) {
+                case 'geometricBrownianMotion':
+                    simulateGeometricBrownianMotion();
+                  //  const theoryGBM = document.getElementById('theoryGBM');
+                  // if(theoryGBM.style.display === "none"){
+                       // theoryGBM.style.display = "block";
+                  //  } 
+                    break;
+                case 'arithmeticBrownianMotion':
+                    simulateArithmeticBrownianMotion();
+                    break;
+                // Add cases for other stochastic processes
+                default:
+                    // Handle invalid selection
+                    break;
+            }
+        }
+
+        function standardNormalDistribution() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random(); // Converting [0,1) to (0,1)
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        function simulateArithmeticBrownianMotion () {
+
+            const mu = parseFloat(document.getElementById('mu').value);
+            const sigma = parseFloat(document.getElementById('sigma').value);
+            const dt = parseFloat(document.getElementById('dt').value);
+            const totalTime = parseFloat(document.getElementById('totalTime').value);
+            const numPaths = parseInt(document.getElementById('numPaths').value);
+
+            const canvas = document.getElementById('myCanvas');
+            const context = canvas.getContext('2d');
+
+
+            const scaleX = canvas.width / totalTime;
+            const scaleY = canvas.height / 10; // Adjust as needed
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
+                let currentValue = 0;
+
+                context.beginPath();
+                context.moveTo(0, canvas.height / 2);
+
+                for (let t = 0; t <= totalTime; t += dt) {
+                    const randomValue = standardNormalDistribution();
+                    currentValue = currentValue + mu * dt + sigma * Math.sqrt(dt) * randomValue;
+
+                    const x = t * scaleX;
+                    const y = canvas.height / 2 - currentValue * scaleY;
+
+                    context.lineTo(x, y);
+                }
+
+                // Set a random color for each path
+                context.strokeStyle = getRandomColor();
+                context.stroke();
+            }
+        }
+
+        // UTILITY Function to generate a random color
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+        
+        // UTILITY Function to clear the canvas
+        function clearCanvas() {
+            const canvas = document.getElementById('myCanvas');
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+    </script>
+</body>
+</html>

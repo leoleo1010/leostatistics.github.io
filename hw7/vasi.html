@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasicek SDE Simulation</title>
+    <style>
+        body * {
+            font-family: verdana, sans-serif;
+            font-size: 13px;
+        }
+
+        h3 {
+            font-weight: bold;
+            font-family: verdana, sans-serif;
+            color: rgb(0, 128, 11);
+        }
+
+        label {
+            font-weight: bold;
+            grid-column: label;
+            alignment: top;
+            color: rgb(11, 11, 11);
+            display: inline-block;
+        }
+
+        input[type="number"] {
+            margin-right: 20px;
+        }
+
+        canvas {
+            background-color: black;
+            border: 1px solid blue;
+            vertical-align: top;
+            margin-left: 10px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <h3>Vasicek SDE Simulation</h3>
+
+    <label for="theta">Coefficiente di ritorno al valore medio (\( \theta \)): </label>
+    <input type="number" step="0.01" id="theta" value="0.1"><br>
+
+    <label for="mu">Drift (\( \mu \)): </label>
+    <input type="number" step="0.01" id="mu" value="0.1"><br>
+
+    <label for="sigma">Diffusion (\( \sigma \)): </label>
+    <input type="number" step="0.01" id="sigma" value="0.2"><br>
+
+    <label for="dt">Time Step (\( \Delta t \)): </label>
+    <input type="number" step="0.01" id="dt" value="0.01"><br>
+
+    <label for="totalTime">Total Time: </label>
+    <input type="number" step="1" id="totalTime" value="100"><br>
+
+    <label for="numPaths">Number of Paths: </label>
+    <input type="number" step="1" id="numPaths" value="3"><br>
+
+    <button onclick="simulateVasicek()">Simulate</button>
+
+    <button onclick="clearCanvas()">Clear Canvas</button>
+
+    <canvas id="myCanvas" width="800" height="450"></canvas>
+
+    <script>
+        function simulateVasicek() {
+            const theta = parseFloat(document.getElementById('theta').value);
+            const mu = parseFloat(document.getElementById('mu').value);
+            const sigma = parseFloat(document.getElementById('sigma').value);
+            const dt = parseFloat(document.getElementById('dt').value);
+            const totalTime = parseFloat(document.getElementById('totalTime').value);
+            const numPaths = parseInt(document.getElementById('numPaths').value);
+
+            const canvas = document.getElementById('myCanvas');
+            const context = canvas.getContext('2d');
+
+            const scaleX = canvas.width / totalTime;
+            const scaleY = canvas.height / 10; // Adjust as needed
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
+                let currentValue = 0;
+
+                context.beginPath();
+                context.moveTo(0, canvas.height / 2);
+
+                for (let t = 0; t <= totalTime; t += dt) {
+                    const randomValue = standardNormalDistribution();
+                    currentValue = currentValue + theta * (mu - currentValue) * dt + sigma * Math.sqrt(dt) * randomValue;
+
+                    const x = t * scaleX;
+                    const y = canvas.height / 2 - currentValue * scaleY;
+
+                    context.lineTo(x, y);
+                }
+
+                // Set a random color for each path
+                context.strokeStyle = getRandomColor();
+                context.stroke();
+            }
+        }
+
+        function standardNormalDistribution() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random(); // Converting [0,1) to (0,1)
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function clearCanvas() {
+            const canvas = document.getElementById('myCanvas');
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+</body>
+</html>
