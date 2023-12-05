@@ -3,9 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="fileCss.css" rel="stylesheet"/>
+
     <title>Document</title>
 </head>
 <body>
+    <h1> C# IMPLEMENTATION</h1>
     
+    <div>
+        <p><b>LINK CODE:</b></p>
+                <ul>
+                    <!-- Primo link -->
+                    <li class="list-item"><a href="https://github.com/leoleo1010/leostatistics.github.io/blob/main/hw4/jointModC#">FOLDER CODE</a></li>
+                </ul>
+    </div>
+    <hr>
+    <pre class="container4">
+        <code>
+            private void btnCalculate_Click(object sender, EventArgs e)
+            {
+                string filePath = "C:\\Users\\ricca\\Downloads\\pr_life.tsv";
+                string outputFilePath = "C:\\Users\\ricca\\Downloads\\risultati.txt";
+                string intervalVariableName = IntervalVariable.Text;
+                string numIntervalsInput = NumIntervals.Text;
+             
+                // Leggi il file TSV e dividi le linee in righe
+                string[] lines = File.ReadAllLines(filePath);
+             
+                if (lines.Length < 2)
+                {
+                    MessageBox.Show("Il file TSV non contiene dati.", "Errore");
+                    return;
+                }
+             
+                string[] header = lines[0].Split('\t');
+             
+                if (!header.Contains(intervalVariableName))
+                {
+                    MessageBox.Show($"La variabile '{intervalVariableName}' non è presente nel file.", "Errore");
+                    return;
+                }
+             
+                if (!int.TryParse(numIntervalsInput, out int numIntervals) || numIntervals <= 0)
+                {
+                    MessageBox.Show("Il numero di intervalli non è valido.", "Errore");
+                    return;
+                }
+             
+                // Estrai le variabili per la distribuzione congiunta
+                string jointVariablesInput = jointDistr.Text;
+                List<string> jointVariableNames = ExtractVariableNames(jointVariablesInput, header);
+                Dictionary<string, int> variableIndices = CreateVariableIndices(header);
+             
+                Dictionary<string, int> jointDistribution = CalculateJointDistribution(lines, jointVariableNames, variableIndices);
+             
+                Dictionary<Tuple<int, int>, int> intervalDistribution = CalculateIntervalDistribution(lines, variableIndices, intervalVariableName, numIntervals);
+                Dictionary<int, int> hardWorkerDistribution = CalculateNumericDistribution(lines, variableIndices, "Hard Worker (0-5)", 0, 5);
+                Dictionary<string, int> backgroundDistribution = CalculateCategoricalDistribution(lines, variableIndices, "Background (degree)");
+             
+                WriteOutputToFile(outputFilePath, intervalDistribution, hardWorkerDistribution, backgroundDistribution, jointDistribution, lines.Length - 1);
+             
+                MessageBox.Show("Distribuzioni di frequenza calcolate e salvate nel file risultati.txt.", "Completato");
+            }
+             
+            private List<string> ExtractVariableNames(string input, string[] header)
+            {
+                List<string> variableNames = new List<string>();
+                foreach (var variable in input.Split(','))
+                {
+                    variableNames.Add(variable.Trim());
+                }
+                return variableNames;
+            }
+             
+            private Dictionary<string, int> CreateVariableIndices(string[] header)
+            {
+                Dictionary<string, int> variableIndices = new Dictionary<string, int>();
+                for (int i = 0; i < header.Length; i++)
+                {
+                    variableIndices[header[i]] = i;
+                }
+                return variableIndices;
+            }
+             
+            private Dictionary<string, int> CalculateJointDistribution(string[] lines, List<string> variableNames, Dictionary<string, int> variableIndices)
+            {
+                Dictionary<string, int> jointDistribution = new Dictionary<string, int>();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] row = lines[i].Split('\t');
+                    string key = string.Join(",", variableNames.ConvertAll(variableName => row[variableIndices[variableName]]));
+                    jointDistribution[key] = jointDistribution.ContainsKey(key) ? jointDistribution[key] + 1 : 1;
+                }
+                return jointDistribution;
+            }
+             
+            private Dictionary<Tuple<int, int>, int> CalculateIntervalDistribution(string[] lines, Dictionary<string, int> variableIndices, string variableName, int numIntervals)
+            {
+                List<int> intervalValues = new List<int>();
+             
+                // Raccogli tutti i valori della variabile specificata dal campo "IntervalVariable" dal dataset
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] row = lines[i].Split('\t');
+                    if (int.TryParse(row[variableIndices[variableName]], out int value))
+                    {
+                        intervalValues.Add(value);
+                    }
+                    else
+                    {
+                        MessageBox.Show("I valori nella variabile specificata non sono tutti numerici.", "Errore");
+                        return new Dictionary<Tuple<int, int>, int>();
+                    }
+                }
+             
+                // Trova il valore minimo e massimo
+                int minValue = intervalValues.Min();
+                int maxValue = intervalValues.Max();
+             
+                // Calcola la larghezza dell'intervallo basata sul numero di intervalli
+                int intervalWidth = (maxValue - minValue) / numIntervals;
+             
+                Dictionary<Tuple<int, int>, int> intervalDistribution = new Dictionary<Tuple<int, int>, int>();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] row = lines[i].Split('\t');
+                    if (int.TryParse(row[variableIndices[variableName]], out int value))
+                    {
+                        int intervalStart = minValue;
+                        for (int j = 0; j < numIntervals; j++)
+                        {
+                            int intervalEnd = intervalStart + intervalWidth;
+                            Tuple<int, int> interval = Tuple.Create(intervalStart, intervalEnd);
+             
+                            int count = intervalValues.Count(v => v >= intervalStart && v <= intervalEnd);
+                            intervalDistribution[interval] = count;
+                            intervalStart = intervalEnd + 1;
+                        }
+                    }
+                }
+                return intervalDistribution;
+            }
+             
+            private Dictionary<int, int> CalculateNumericDistribution(string[] lines, Dictionary<string, int> variableIndices, string variableName, int minValue, int maxValue)
+            {
+                Dictionary<int, int> distribution = new Dictionary<int, int>();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] row = lines[i].Split('\t');
+                    if (int.TryParse(row[variableIndices[variableName]], out int value) && value >= minValue && value <= maxValue)
+                    {
+                        distribution[value] = distribution.ContainsKey(value) ? distribution[value] + 1 : 1;
+                    }
+                }
+                return distribution;
+            }
+             
+            private Dictionary<string, int> CalculateCategoricalDistribution(string[] lines, Dictionary<string, int> variableIndices, string variableName)
+            {
+                Dictionary<string, int> distribution = new Dictionary<string, int>();
+                for (int i = 1; i < lines.Length; i++)
+                {
+                    string[] row = lines[i].Split('\t');
+                    string value = row[variableIndices[variableName]];
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        distribution[value] = distribution.ContainsKey(value) ? distribution[value] + 1 : 1;
+                    }
+                }
+                return distribution;
+            }
+             
+            private void WriteOutputToFile(string outputFilePath, Dictionary<Tuple<int, int>, int> intervalDistribution, Dictionary<int, int> hardWorkerDistribution, Dictionary<string, int> backgroundDistribution, Dictionary<string, int> jointDistribution, int rowCount)
+            {
+                using (StreamWriter writer = new StreamWriter(outputFilePath))
+                {
+                    writer.WriteLine("Distribuzione di frequenza per l'intervallo:");
+             
+                    foreach (var entry in intervalDistribution)
+                    {
+                        double relativeFrequency = (double)entry.Value / rowCount;
+                        double relativeFrequencyPercentage = relativeFrequency * 100;
+                        writer.WriteLine($"{entry.Key.Item1}-{entry.Key.Item2}: {entry.Value} (Relativa: {relativeFrequency:F2}, Percentuale: {relativeFrequencyPercentage:F2}%)");
+                    }
+             
+                    writer.WriteLine("\nDistribuzione di frequenza per 'Hard Worker (0-5):'");
+                    WriteFrequencyDistribution(writer, hardWorkerDistribution, rowCount);
+             
+                    writer.WriteLine("\nDistribuzione di frequenza per 'Background (degree):'");
+                    WriteFrequencyDistribution(writer, backgroundDistribution, rowCount);
+             
+                    writer.WriteLine("\nDistribuzione congiunta delle variabili:");
+                    WriteFrequencyDistribution(writer, jointDistribution, rowCount);
+                }
+            }
+             
+            private void WriteFrequencyDistribution<T>(StreamWriter writer, Dictionary<T, int> distribution, int rowCount)
+            {
+                foreach (var entry in distribution)
+                {
+                    double relativeFrequency = (double)entry.Value / rowCount;
+                    double relativeFrequencyPercentage = relativeFrequency * 100;
+                    writer.WriteLine($"{entry.Key}: {entry.Value} (Relativa: {relativeFrequency:F2}, Percentuale: {relativeFrequencyPercentage:F2}%)");
+                }
+            }
+        </code>
+    </pre>
 </body>
 </html>
