@@ -1,143 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script id="MathJax-script" async src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <title>Euler-Maruyama simulator for stochastic differential equation (SDE)</title>
     <style>
-        body * {
+        body {
             font-family: verdana, sans-serif;
             font-size: 13px;
-          }
-      
-          h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
             font-weight: bold;
             font-family: verdana, sans-serif;
             color: rgb(0, 128, 11);
-          }
-      
-          label {
+            margin-top: 20px;
+        }
+
+        label {
             font-weight: bold;
             grid-column: label;
-            alignment: top;
+            vertical-align: top;
             color: rgb(11, 11, 11);
             display: inline-block;
-          }
-      
-          input[type="radio"] {
+        }
+
+        input[type="radio"] {
             width: 60px;
             grid-column: input;
-          }
-      
-          input[type="number"] {
+        }
+
+        input[type="number"] {
             margin-right: 20px;
-          }
-      
-          div {
-            height: 600px;
-            background-color: whitesmoke;
-            display: grid;
-            grid-template-columns: [input] 50px [label];
-            align-content: start;
-            grid-row-gap: 15px;
-          }
-      
-          canvas {
-            background-color: black;
-            border: 1px solid blue;
-            vertical-align: top;
-            margin-left: 10px;
-            float: left;
-          }    
+        }
+
+        .block1 {
+            border: 1px solid #000;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .box1 {
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            padding: 2%;
+        }
+
+        .container {
+            width: 50%;
+            padding: 20px;
+            border: 1px solid #000;
+            resize: both;
+            overflow: auto;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        .container2 {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #000;
+            overflow: auto;
+            box-sizing: border-box;
+            margin-top: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #000;
+            display: block;
+        }
     </style>
 </head>
+
 <body>
-    <h3>Euler-Maruyama simulator for stochastic differential equation (SDE)</h3>
+    <h2>Euler-Maruyama simulator for stochastic differential equation (SDE)</h2>
+    <div class="box">
+        <div class="box1">
+            <div class="container2">
+                <div><label>Fix the parameters:</label></div><br>
+                <label for="mu">\( \theta \) (mean-reversion coefficient): </label>
+                <input type="number" step="0.01" id="theta" value="0.1"><br>
 
-    <label for="processSelect">Select a Stochastic Process:</label>
-        <select id="processSelect" class="form-control">
-            <option value="geometricBrownianMotion">Geometric Brownian Motion</option>
-            <option value="arithmeticBrownianMotion">Arithmetic Brownian Motion</option>
-            <option value="ornsteinUhlenbeck">Ornstein Uhlenbeck (mean-reverting)</option>
-            <option value="vasicek">Vasicek</option>
-            <option value="coxIngellRoss">Cox-Ingell-Ross</option>
-            <!-- Add more options for other stochastic processes -->
-        </select>
-    
-     <label for="mu">Coefficiente di ritorno al valore medio (\( \theta \)): </label>
-    <input type="number" step="0.01" id="theta" value="0.1"><br>
+                <label for="mu">\( \mu \) (drift): </label>
+                <input type="number" step="0.01" id="mu" value="0.1"><br>
 
-    <label for="mu">Drift (\( \mu \)): </label>
-    <input type="number" step="0.01" id="mu" value="0.1"><br>
+                <label for="sigma">\( \sigma \)(diffusion): </label>
+                <input type="number" step="0.01" id="sigma" value="0.2"><br>
 
-    <label for="sigma">Diffusion (\( \sigma \)): </label>
-    <input type="number" step="0.01" id="sigma" value="0.2"><br>
+                <label for="dt">\( \Delta t \) (time step ): </label>
+                <input type="number" step="0.01" id="dt" value="0.01"><br>
 
-    <label for="dt">Time Step (\( \Delta t \)): </label>
-    <input type="number" step="0.01" id="dt" value="0.01"><br>
+                <label for="totalTime">Total Time: </label>
+                <input type="number" step="1" id="totalTime" value="10"><br>
 
-    <label for="totalTime">Total Time: </label>
-    <input type="number" step="1" id="totalTime" value="100"><br>
+                <label for="numPaths">Number of Machines: </label>
+                <input type="number" step="1" id="numPaths" value="30"><br>
 
-    <label for="numPaths">Number of Machines: </label>
-    <input type="number" step="1" id="numPaths" value="3"><br>
+            </div>
 
+            <div class="container2">
 
-    <button onclick="exploreStochasticProcess()">Simulate</button>
+                <label for="processSelect">Select a Stochastic Process:</label>
 
-    <button onclick="clearCanvas()">Clear Canvas</button>
+                <select id="processSelect" class="form-control">
+                    <option value="geometricBrownianMotion">Geometric Brownian Motion</option>
+                    <option value="arithmeticBrownianMotion">Arithmetic Brownian Motion</option>
+                    <option value="ornsteinUhlenbeck">Ornstein Uhlenbeck (mean-reverting)</option>
+                    <option value="vasicek">Vasicek</option>
+                    <option value="coxIngellRoss">Cox-Ingell-Ross</option>
+                    <!-- Add more options for other stochastic processes -->
+                </select>
 
-    <canvas id="myCanvas" width="800" height="450"></canvas>
-    <p><b>LINK CODICE:</b></p>
-            <ul>
-                <!-- Primo link -->
-                <li class="list-item"><a href="https://github.com/leoleo1010/leostatistics.github.io/blob/main/hw7">FOLDER CODE</a></li>
-            </ul>
+                <button id="calculateButton">Simulate</button><br>
+            </div>
+            <div class="container2">
+                <label for="sdeInput">... or write a custom Stochastic Differential Equation (SDE):</label>
+                <div></div><br>
+                <div><label>dX(t)=</label><textarea id="sdeInput" rows="1" cols="40"></textarea></div>
+                <h4>These are the parameters that you can use: </h4>
+                <ul>
+                    <li>theta, mu, sigma, dt</li>
+                    <li>X (uppercase) (stochastic process itself)</li>
+                    <li>dW (differential of Wiener process)</li>
+                </ul>
+                <h4>These are the operationss that you can use: </h4>
+                <ul>
+                    <li>+, -, , /, * (exp)</li>
+                    <li>Math.sqrt() (square root)</li>
+                    <li>Math.exp() (e^y)</li>
+                </ul>
+                <button id="simulateCustomButton">Simulate with custom SDE</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <canvas id="chartCanvas" width="1500" height="500"></canvas>
+            <button onclick="clearCanvas()">Clear Canvas</button>
+        </div>
+    </div>
 
     <script>
-       
-        // exploreStochasticProcess(): FUNZIONE che si occupa di fare lo switch per ogni SDE
-        function exploreStochasticProcess() {
-            const processSelect = document.getElementById('processSelect');
-            const simulateBtn = document.getElementById('simulateBtn');
+        const chartCanvas = document.getElementById('chartCanvas');
+        const ctx = chartCanvas.getContext('2d');
+        const chartWidth = chartCanvas.width;
+        const chartHeight = chartCanvas.height;
 
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-    
-            const selectedProcess = processSelect.value;
+        const muInput = document.getElementById('mu');
+        const sigmaInput = document.getElementById('sigma');
+        const dtInput = document.getElementById('dt');
+        const thetaInput = document.getElementById('theta');
 
-            // clear the canvas
-            clearCanvas();
+        const processSelect = document.getElementById('processSelect');
 
-            // Simulate and display the selected stochastic process
-            switch (selectedProcess) {
-                case 'geometricBrownianMotion':
-                    simulateGeometricBrownianMotion();
-                  //  const theoryGBM = document.getElementById('theoryGBM');
-                  // if(theoryGBM.style.display === "none"){
-                       // theoryGBM.style.display = "block";
-                  //  } 
-                    break;
-                case 'arithmeticBrownianMotion':
-                    simulateArithmeticBrownianMotion();
-                    break;
-                case 'ornsteinUhlenbeck':
-                    simulateOrnsteinUhlenbeck();
-                    break;
-                // Add cases for other stochastic processes
-                case 'vasicek':
-                    simulateVasicek();
-                    break;
-                // Add cases for other stochastic processe
-                case 'coxIngellRoss':
-                    simulateCoxIngellRoss();
-                    break;
-                // Add cases for other stochastic processe
-                default:
-                    // Handle invalid selection
-                    break;
+        const totalTimeInput = document.getElementById('totalTime');
+        const numPathsInput = document.getElementById('numPaths');
+
+        let mu = parseFloat(muInput.value);
+        let sigma = parseFloat(sigmaInput.value);
+        let dt = parseFloat(dtInput.value);
+        let theta = parseFloat(thetaInput.value);
+
+        let totalTime = parseFloat(totalTimeInput.value);
+        let numPaths = parseInt(numPathsInput.value);
+
+        let selectedProcess = processSelect.value;
+
+        let attacksCount = 0;
+
+        let cartesianZoom = 1.0;
+        let scaleX = chartWidth / totalTime;
+        let scaleY = chartHeight / 10;
+        let chartX = 0;
+        let chartY = 0;
+
+        let drawingData = [];
+        let penetrationsHalf = 0;
+        let penetrations = 0;
+        let systemColors = generateRandomColorArray(numPaths);
+
+        simulateCustomButton.addEventListener('click', () => {
+            try {
+                const sdeInput = document.getElementById('sdeInput');
+                mu = parseFloat(document.getElementById('mu').value);
+                sigma = parseFloat(document.getElementById('sigma').value);
+                dt = parseFloat(document.getElementById('dt').value);
+                theta = parseFloat(thetaInput.value);
+
+                selectedProcess = document.getElementById('processSelect').value;
+
+                totalTime = parseFloat(document.getElementById('totalTime').value);
+                numPaths = parseInt(document.getElementById('numPaths').value);
+
+                attacksCount = parseInt(totalTime / dt);
+                systemColors = generateRandomColorArray(numPaths);
+
+
+                const userSDE = sdeInput.value.trim();
+                console.log(userSDE);
+
+                if (userSDE) {
+                    simulateUserSDE(userSDE);
+                    draw();
+                } else {
+                    alert('Inserisci una SDE valida.');
+                }
             }
+            catch (error) {
+                alert('Errore during execution: ' + error.message);
+            }
+        });
+
+        function simulateUserSDE(userSDE) {
+
+            drawingData = new Array(numPaths).fill();
+            penetrationsHalf = new Array(attacksCount).fill(0);
+            penetrations = new Array(attacksCount).fill(0);
+
+            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
+                let X = 1;
+
+                systemData = [{ x: 0, y: 0 }];
+                drawingData[pathIndex] = systemData;
+
+                var cont = 0;
+                var contHalf = 0;
+
+                for (let t = 0; t <= totalTime; t += dt) {
+                    const randomValue = standardNormalDistribution();
+                    const dW = Math.sqrt(dt) * randomValue;
+                    X = X + eval(userSDE); // Evaluate the user-input SDE as code
+
+                    drawingData[pathIndex].push({ x: t, y: X });
+
+                    if (randomValue > 0) {
+                        if (t < totalTime / 2) {
+                            contHalf++;
+                            cont++;
+                        }
+                        else {
+                            cont++;
+                        }
+                    }
+                }
+                penetrationsHalf[contHalf]++;
+                penetrations[cont]++;
+
+            }
+            penetrationsHalf = penetrationsHalf.filter(function (valore, indice, vett) {
+                return valore != 0;
+            });
+            penetrations = penetrations.filter(function (valore, indice, vett) {
+                return valore != 0;
+            });
         }
+
+        calculateButton.addEventListener('click', () => {
+
+            mu = parseFloat(document.getElementById('mu').value);
+            sigma = parseFloat(document.getElementById('sigma').value);
+            dt = parseFloat(document.getElementById('dt').value);
+            theta = parseFloat(thetaInput.value);
+
+            selectedProcess = document.getElementById('processSelect').value;
+
+            totalTime = parseFloat(document.getElementById('totalTime').value);
+            numPaths = parseInt(document.getElementById('numPaths').value);
+
+            attacksCount = parseInt(totalTime / dt);
+            systemColors = generateRandomColorArray(numPaths);
+
+            stochasticProcesses();
+            draw();
+
+        });
 
         function standardNormalDistribution() {
             let u = 0, v = 0;
@@ -146,235 +292,209 @@
             return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
         }
 
-        function simulateGeometricBrownianMotion() {
-            const mu = parseFloat(document.getElementById('mu').value);
-            const sigma = parseFloat(document.getElementById('sigma').value);
-            const dt = parseFloat(document.getElementById('dt').value);
-            const totalTime = parseFloat(document.getElementById('totalTime').value);
-            const numPaths = parseInt(document.getElementById('numPaths').value);
-        
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-        
-            const scaleX = canvas.width / totalTime;
-            const scaleY = canvas.height / 10; // Adjust as needed
-        
-            context.clearRect(0, 0, canvas.width, canvas.height);
-        
-            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
-                let currentValue = 1; // Start from an initial value of 1
-        
-                context.beginPath();
-                context.moveTo(0, canvas.height / 2);
-        
-                for (let t = 0; t <= totalTime; t += dt) {
-                    const randomValue = standardNormalDistribution();
-                    currentValue = currentValue * Math.exp((mu - (sigma ** 2) / 2) * dt + sigma * Math.sqrt(dt) * randomValue);
-        
-                    const x = t * scaleX;
-                    const y = canvas.height / 2 - currentValue * scaleY;
-        
-                    context.lineTo(x, y);
-                }
-        
-                // Set a random color for each path
-                context.strokeStyle = getRandomColor();
-                context.stroke();
-            }
-        }
-        
+        function stochasticProcesses() {
 
-        function simulateArithmeticBrownianMotion () {
-
-            const mu = parseFloat(document.getElementById('mu').value);
-            const sigma = parseFloat(document.getElementById('sigma').value);
-            const dt = parseFloat(document.getElementById('dt').value);
-            const totalTime = parseFloat(document.getElementById('totalTime').value);
-            const numPaths = parseInt(document.getElementById('numPaths').value);
-
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-
-
-            const scaleX = canvas.width / totalTime;
-            const scaleY = canvas.height / 10; // Adjust as needed
-
-            context.clearRect(0, 0, canvas.width, canvas.height);
+            drawingData = new Array(numPaths).fill();
+            penetrationsHalf = new Array(attacksCount).fill(0);
+            penetrations = new Array(attacksCount).fill(0);
 
             for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
-                let currentValue = 0;
+                let currentValue = 1;
 
-                context.beginPath();
-                context.moveTo(0, canvas.height / 2);
+                systemData = [{ x: 0, y: 0 }];
+                drawingData[pathIndex] = systemData;
 
+                var cont = 0;
+                var contHalf = 0;
                 for (let t = 0; t <= totalTime; t += dt) {
                     const randomValue = standardNormalDistribution();
-                    currentValue = currentValue + mu * dt + sigma * Math.sqrt(dt) * randomValue;
 
-                    const x = t * scaleX;
-                    const y = canvas.height / 2 - currentValue * scaleY;
+                    if (selectedProcess === "geometricBrownianMotion") {
+                        currentValue = currentValue * Math.exp((mu - (sigma ** 2) / 2) * dt + sigma * Math.sqrt(dt) * randomValue);
+                    }
+                    if (selectedProcess === "arithmeticBrownianMotion") {
+                        currentValue = currentValue + mu * dt + sigma * Math.sqrt(dt) * randomValue;
+                    }
+                    if (selectedProcess === "ornsteinUhlenbeck") {
+                        const dW = Math.sqrt(dt) * randomValue;
+                        currentValue = currentValue + theta * (mu - currentValue) * dt + sigma * dW;
+                    }
+                    if (selectedProcess === "vasicek") {
+                        currentValue = currentValue + theta * (mu - currentValue) * dt + sigma * Math.sqrt(dt) * randomValue;
+                    }
+                    if (selectedProcess === "coxIngellRoss") {
+                        currentValue = currentValue + theta * (mu - currentValue) * dt + sigma * Math.sqrt(currentValue) * randomValue;
+                    }
 
-                    context.lineTo(x, y);
+                    drawingData[pathIndex].push({ x: t, y: currentValue });
+
+                    if (randomValue > 0) {
+                        if (t < totalTime / 2) {
+                            contHalf++;
+                            cont++;
+                        }
+                        else {
+                            cont++;
+                        }
+                    }
                 }
-
-                // Set a random color for each path
-                context.strokeStyle = getRandomColor();
-                context.stroke();
+                penetrationsHalf[contHalf]++;
+                penetrations[cont]++;
             }
+            penetrationsHalf = penetrationsHalf.filter(function (valore, indice, vett) {
+                return valore != 0;
+            });
+            penetrations = penetrations.filter(function (valore, indice, vett) {
+                return valore != 0;
+            });
         }
-
-        function simulateOrnsteinUhlenbeck (){
-             // Parametri del processo di Ornstein-Uhlenbeck
-            const theta = parseFloat(document.getElementById('theta').value);
-            const mu = parseFloat(document.getElementById('mu').value); //ok
-            const sigma = parseFloat(document.getElementById('sigma').value);//ok
-
-            // Numero di percorsi da simulare
-            const numPaths = parseInt(document.getElementById('numPaths').value);// ok
-
-            // Intervallo di tempo e numero di passi
-            const dt = parseFloat(document.getElementById('dt').value); //ok
-            const totalTime = parseFloat(document.getElementById('totalTime').value);
-
-           // !!! const numSteps = parseInt(document.getElementById('numSteps').value); // NO SAREBBE: totalTime !!!
-
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-
-
-            context.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let path = 0; path < numPaths; path++) {
-                // Inizializzazione del valore iniziale per ogni percorso
-                let x = 0.0;
-
-                // Generazione di un colore casuale per ogni percorso
-                const color = getRandomColor();
-
-                context.beginPath();
-                context.strokeStyle = color;
-                context.lineWidth = 1;
-
-                for (let t = 0; t < totalTime; t += dt) {
-                // Calcolo dell'incremento stocastico
-                const dW = sigma * Math.sqrt(dt) * (2 * Math.random() - 1);
-
-                // Risoluzione dell'equazione differenziale stocastica
-                x += theta * (mu - x) * dt + dW;
-
-                // Disegno della linea tra i punti successivi
-                const xPos = t * (canvas.width / totalTime);
-                const yPos = canvas.height - x * (canvas.height / (2 * mu)) + path * 20;
-                
-                if (t === 0) {
-                    context.moveTo(xPos, yPos);
-                } else {
-                    context.lineTo(xPos, yPos);
-                }
-                }
-
-                context.stroke();
-                context.closePath();
-            }
-        }
-
-        function simulateVasicek() {
-            // FORMULA DI VASICEK: drt=a(b−rt)dt+σdWt
-            const a = parseFloat(document.getElementById('theta').value); 
-            const b = parseFloat(document.getElementById('mu').value);
-            const sigma = parseFloat(document.getElementById('sigma').value);
-            const dt = parseFloat(document.getElementById('dt').value);
-            const totalTime = parseFloat(document.getElementById('totalTime').value);
-            const numPaths = parseInt(document.getElementById('numPaths').value);
-            
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-        
-            const scaleX = canvas.width / totalTime;
-            const scaleY = canvas.height / 10; // Adjust as needed
-        
-            context.clearRect(0, 0, canvas.width, canvas.height);
-        
-            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
-                let currentValue = 0;
-        
-                context.beginPath();
-                context.moveTo(0, canvas.height / 2);
-        
-                for (let t = 0; t <= totalTime; t += dt) {
-                    const randomValue = standardNormalDistribution();
-                    currentValue = currentValue + a * (b - currentValue) * dt + sigma * Math.sqrt(dt) * randomValue;
-        
-                    const x = t * scaleX;
-                    const y = canvas.height / 2 - currentValue * scaleY;
-        
-                    context.lineTo(x, y);
-                }
-        
-                // Set a random color for each path
-                context.strokeStyle = getRandomColor();
-                context.stroke();
-            }
-        }
-
-        function simulateCoxIngellRoss() {
-            // Parametri del processo di Cox-Ingersoll-Ross
-            const a = parseFloat(document.getElementById('theta').value);
-            const b = parseFloat(document.getElementById('mu').value);
-            const sigma = parseFloat(document.getElementById('sigma').value);
-            const dt = parseFloat(document.getElementById('dt').value);
-            const totalTime = parseFloat(document.getElementById('totalTime').value);
-            const numPaths = parseInt(document.getElementById('numPaths').value);
-        
-            const canvas = document.getElementById('myCanvas');
-            const context = canvas.getContext('2d');
-        
-            const scaleX = canvas.width / totalTime;
-            const scaleY = canvas.height / 10; // Adjust as needed
-        
-            context.clearRect(0, 0, canvas.width, canvas.height);
-        
-            for (let pathIndex = 0; pathIndex < numPaths; pathIndex++) {
-                let currentValue = 0;
-        
-                context.beginPath();
-                context.moveTo(0, canvas.height / 2);
-        
-                for (let t = 0; t <= totalTime; t += dt) {
-                    const randomValue = standardNormalDistribution();
-                    currentValue = currentValue + a * (b - currentValue) * dt + sigma * Math.sqrt(currentValue) * randomValue;
-        
-                    const x = t * scaleX;
-                    const y = canvas.height / 2 - currentValue * scaleY;
-        
-                    context.lineTo(x, y);
-                }
-        
-                // Set a random color for each path
-                context.strokeStyle = getRandomColor();
-                context.stroke();
-            }
-        }
-        
-        
 
         // UTILITY Function to generate a random color
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
+        function generateRandomColor() {
+            // Generate a random number for the red channel (RR)
+            const red = Math.floor(Math.random() * 256);
+
+            // Generate a random number for the green channel (GG)
+            const green = Math.floor(Math.random() * 256);
+
+            // Generate a random number for the blue channel (BB)
+            const blue = Math.floor(Math.random() * 256);
+
+            // Compose the hexadecimal color
+            const color = `#${red.toString(16)}${green.toString(16)}${blue.toString(16)}`;
+
             return color;
         }
-        
+
+        function generateRandomColorArray(numberOfColors) {
+            const randomColors = [];
+
+            for (let i = 0; i < numberOfColors; i++) {
+                const randomColor = generateRandomColor();
+                randomColors.push(randomColor);
+            }
+            return randomColors;
+        }
+
         // UTILITY Function to clear the canvas
         function clearCanvas() {
-            const canvas = document.getElementById('myCanvas');
+            const canvas = document.getElementById('chartCanvas');
             const context = canvas.getContext('2d');
             context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function draw() {
+
+            clearCanvas();
+            ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+
+            const stepX = scaleX * cartesianZoom;
+            const stepY = scaleY * cartesianZoom;
+
+            const originX = chartX;
+            const originY = chartY;
+
+            for (let system = 0; system < numPaths; system++) {
+                ctx.beginPath();
+
+                ctx.moveTo(0, chartHeight);
+
+                for (let t = 0; t < drawingData[system].length - 1; t++) {
+
+                    const endX = drawingData[system][t].x * scaleX * cartesianZoom + chartX;
+                    const endY = chartHeight / 1.2 - drawingData[system][t].y * scaleY * cartesianZoom + chartY;
+
+                    ctx.lineTo(endX, endY);
+
+                }
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = systemColors[system];
+                ctx.stroke();
+            }
+            drawHistograms();
+        }
+
+        function drawHistograms() {
+
+            const barWidth = attacksCount / (500 * numPaths) * scaleX * cartesianZoom;
+            const initialY = chartHeight / 1.2;
+
+            ctx.fillStyle = 'rgba(255, 0, 255, 0.8)';
+            for (let i = 0; i < attacksCount / 2; i++) {
+                const barHeight = penetrationsHalf[i] * scaleY * attacksCount / (1200.0) * cartesianZoom;
+                const x = (attacksCount * 1.5 / 2) * cartesianZoom + chartX + i * barWidth;
+                const y = initialY + chartY - barHeight;
+                ctx.fillRect(x, y, barWidth, barHeight);
+            }
+
+            ctx.fillStyle = 'rgba(0, 0, 255, 0.8)';
+            for (let i = 0; i < attacksCount; i++) {
+                const barHeight = penetrations[i] * scaleY * attacksCount / (1200.0) * cartesianZoom;
+                const x = (attacksCount * 1.5) * cartesianZoom + chartX + i * barWidth;
+                const y = initialY + chartY - barHeight;
+                ctx.fillRect(x, y, barWidth, barHeight);
+            }
         }
 
     </script>
+    <script>
+        const container = document.querySelector('.container');
+        const canvas = document.getElementById('chartCanvas');
+        const context = canvas.getContext('2d');
+
+        let isResizing = false;
+
+        container.addEventListener('mousedown', (e) => {
+            if (e.target === container) {
+                isResizing = true;
+                initialX = e.clientX - container.offsetWidth;
+            }
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            container.style.width = (e.clientX - initialX) + 'px';
+            canvas.width = container.offsetWidth;
+            // Aggiorna il contenuto del canvas se necessario
+            draw();  // Chiamata per disegnare il contenuto del canvas dopo il ridimensionamento
+        });
+
+        document.addEventListener('mouseup', () => {
+            isResizing = false;
+        });
+
+        const zoomStep = 0.05;  // Incremento/decremento della scala ad ogni passo di zoom
+
+        function handleZoom(event) {
+            const zoomCenterX = 0;  // Usa la posizione x dell'angolo in basso a sinistra come centro x
+            const zoomCenterY = canvas.height;  // Usa la posizione y dell'angolo in basso a sinistra come centro y
+
+            if (event.deltaY < 0) {
+                // Zoom in quando scrolli verso l'alto
+                cartesianZoom += zoomStep;
+            } else {
+                // Zoom out quando scrolli verso il basso
+                cartesianZoom -= zoomStep;
+            }
+
+            // Impedisci che la scala diventi troppo piccola o troppo grande
+            cartesianZoom = Math.min(Math.max(cartesianZoom, 0.1), 3.0);
+
+            // Cancella il canvas e ridisegna con la nuova scala
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.save();
+            context.translate(zoomCenterX, zoomCenterY);
+            context.scale(cartesianZoom, cartesianZoom);
+            context.translate(-zoomCenterX, -zoomCenterY);
+            if (drawingData.length > 0) {
+                draw();
+            }
+            // Chiamata alla tua funzione di disegno
+            context.restore();
+        }
+
+        document.addEventListener('wheel', handleZoom);
+    </script>
 </body>
+
 </html>
