@@ -17,9 +17,9 @@
 .container3 {
     width: 100%;
     padding: 10px;
-    border: 5px solid rgb(19, 19, 18);
+    border: 2px solid green;
+    background-color: black;
     overflow: auto;
     box-sizing: border-box;
     margin-top: 20px;
-    text-emphasis-color: rgb(190, 18, 18);
 }

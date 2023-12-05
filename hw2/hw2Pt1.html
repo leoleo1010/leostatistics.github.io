@@ -22,8 +22,13 @@
 
     <h2>Risultati:</h2>
     <div id="risultati"></div>
-
-    <div class="container3">
+    <div style="margin-left: 1000px;">
+        <p><b>LINK CODE:</b></p>
+                <ul>
+                    <!-- Primo link -->
+                    <li class="list-item"><a href="https://github.com/leoleo1010/leostatistics.github.io/blob/main/hw2">FOLDER CODE</a></li>
+                </ul>
+    </div>
         <script>
             function calcolaDistribuzione() {
                 // Ottieni i valori inseriti dall'utente
@@ -193,6 +198,216 @@
                     });
             }
         </script>
-    </div>
+    <hr>
+    <h2>C# IMPLEMENTATION</h2>
+    <pre class="container3" style="color: green;">
+        <code>
+            using System;
+            using System.Collections.Generic;
+            using System.IO;
+            using System.Windows.Forms;
+             
+            namespace FrequencyDistributionApp
+            {
+                public partial class Form1 : Form
+                {
+                    public Form1()
+                    {
+                        InitializeComponent();
+                    }
+             
+                    private void Form1_Load(object sender, EventArgs e)
+                    {
+                        // Initialization code for the form
+                    }
+             
+                    private void btnCalculate_Click(object sender, EventArgs e)
+                    {
+                        string filePath = "C:\\...";
+                        string outputFilePath = "C:\\...";
+                        string ageIntervalsInput = ageIntervalsTextBox.Text;
+                        string jointVariablesInput = jointDistr.Text;
+             
+                        // Read TSV file and divide it into rows
+                        string[] lines = File.ReadAllLines(filePath);
+             
+                        if (lines.Length < 2)
+                        {
+                            MessageBox.Show("Il file TSV non contiene dati.", "Errore");
+                            return;
+                        }
+             
+                        string[] header = lines[0].Split('\t');
+             
+                        // Extract variables for joint distribution
+                        List<string> jointVariableNames = ExtractVariableNames(jointVariablesInput, header);
+                        Dictionary<string, int> variableIndices = CreateVariableIndices(header);
+             
+                        if (!ValidateVariables(jointVariableNames, variableIndices))
+                        {
+                            return;
+                        }
+             
+                        Dictionary<string, int> jointDistribution = CalculateJointDistribution(lines, jointVariableNames, variableIndices);
+                        List<Tuple<int, int>> ageIntervalsList = ParseAgeIntervals(ageIntervalsInput);
+                        Dictionary<Tuple<int, int>, int> ageDistribution = CalculateAgeDistribution(lines, variableIndices, ageIntervalsList);
+                        Dictionary<int, int> hardWorkerDistribution = CalculateNumericDistribution(lines, variableIndices, "Hard Worker (0-5)", 0, 5);
+                        Dictionary<string, int> backgroundDistribution = CalculateCategoricalDistribution(lines, variableIndices, "Background (degree)");
+             
+                        WriteOutputToFile(outputFilePath, ageDistribution, hardWorkerDistribution, backgroundDistribution, jointDistribution, lines.Length - 1);
+             
+                        MessageBox.Show("Distribuzioni di frequenza calcolate e salvate nel file risultati.txt.", "Completato");
+                    }
+             
+                    // Extracts variable names from user input
+                    private List<string> ExtractVariableNames(string input, string[] header)
+                    {
+                        List<string> variableNames = new List<string>();
+                        foreach (var variable in input.Split(','))
+                        {
+                            variableNames.Add(variable.Trim());
+                        }
+                        return variableNames;
+                    }
+             
+                    // Creates a dictionary mapping variable names to their indices
+                    private Dictionary<string, int> CreateVariableIndices(string[] header)
+                    {
+                        Dictionary<string, int> variableIndices = new Dictionary<string, int>();
+                        for (int i = 0; i < header.Length; i++)
+                        {
+                            variableIndices[header[i]] = i;
+                        }
+                        return variableIndices;
+                    }
+             
+                    // Validates that the specified variables exist in the data
+                    private bool ValidateVariables(List<string> variableNames, Dictionary<string, int> variableIndices)
+                    {
+                        foreach (string variableName in variableNames)
+                        {
+                            if (!variableIndices.ContainsKey(variableName))
+                            {
+                                MessageBox.Show($"La variabile '{variableName}' non è presente nel file.", "Errore");
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+             
+                    // Calculates the joint distribution of selected variables
+                    private Dictionary<string, int> CalculateJointDistribution(string[] lines, List<string> variableNames, Dictionary<string, int> variableIndices)
+                    {
+                        Dictionary<string, int> jointDistribution = new Dictionary<string, int>();
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] row = lines[i].Split('\t');
+                            string key = string.Join(",", variableNames.ConvertAll(variableName => row[variableIndices[variableName]]));
+                            jointDistribution[key] = jointDistribution.ContainsKey(key) ? jointDistribution[key] + 1 : 1;
+                        }
+                        return jointDistribution;
+                    }
+             
+                    // Parses age intervals from user input
+                    private List<Tuple<int, int>> ParseAgeIntervals(string input)
+                    {
+                        List<Tuple<int, int>> ageIntervals = new List<Tuple<int, int>>();
+                        foreach (var interval in input.Split(';'))
+                        {
+                            string[] parts = interval.Split('-');
+                            if (parts.Length == 2 && int.TryParse(parts[0], out int lower) && int.TryParse(parts[1], out int upper))
+                            {
+                                ageIntervals.Add(Tuple.Create(lower, upper));
+                            }
+                        }
+                        return ageIntervals;
+                    }
+             
+                    // Calculates the distribution of age within specified intervals
+                    private Dictionary<Tuple<int, int>, int> CalculateAgeDistribution(string[] lines, Dictionary<string, int> variableIndices, List<Tuple<int, int>> ageIntervals)
+                    {
+                        Dictionary<Tuple<int, int>, int> ageDistribution = new Dictionary<Tuple<int, int>, int>();
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] row = lines[i].Split('\t');
+                            if (int.TryParse(row[variableIndices["Age"]], out int age))
+                            {
+                                foreach (var interval in ageIntervals)
+                                {
+                                    if (age >= interval.Item1 && age <= interval.Item2)
+                                    {
+                                        ageDistribution[interval] = ageDistribution.ContainsKey(interval) ? ageDistribution[interval] + 1 : 1;
+                                    }
+                                }
+                            }
+                        }
+                        return ageDistribution;
+                    }
+             
+                    // Calculates the distribution of numeric variables within a specified range
+                    private Dictionary<int, int> CalculateNumericDistribution(string[] lines, Dictionary<string, int> variableIndices, string variableName, int minValue, int maxValue)
+                    {
+                        Dictionary<int, int> distribution = new Dictionary<int, int>();
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] row = lines[i].Split('\t');
+                            if (int.TryParse(row[variableIndices[variableName]], out int value) && value >= minValue && value <= maxValue)
+                            {
+                                distribution[value] = distribution.ContainsKey(value) ? distribution[value] + 1 : 1;
+                            }
+                        }
+                        return distribution;
+                    }
+             
+                    // Calculates the distribution of categorical variables
+                    private Dictionary<string, int> CalculateCategoricalDistribution(string[] lines, Dictionary<string, int> variableIndices, string variableName)
+                    {
+                        Dictionary<string, int> distribution = new Dictionary<string, int>();
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] row = lines[i].Split('\t');
+                            string value = row[variableIndices[variableName]];
+                            if (!string.IsNullOrEmpty(value))
+                            {
+                                distribution[value] = distribution.ContainsKey(value) ? distribution[value] + 1 : 1;
+                            }
+                        }
+                        return distribution;
+                    }
+             
+                    // Writes the calculated distributions to an output file
+                    private void WriteOutputToFile(string outputFilePath, Dictionary<Tuple<int, int>, int> ageDistribution, Dictionary<int, int> hardWorkerDistribution, Dictionary<string, int> backgroundDistribution, Dictionary<string, int> jointDistribution, int rowCount)
+                    {
+                        using (StreamWriter writer = new StreamWriter(outputFilePath))
+                        {
+                            writer.WriteLine("Frequency distribution for 'Age':");
+                            WriteFrequencyDistribution(writer, ageDistribution, rowCount);
+             
+                            writer.WriteLine("\nFrequency distribution for 'Hard Worker (0-5):'");
+                            WriteFrequencyDistribution(writer, hardWorkerDistribution, rowCount);
+             
+                            writer.WriteLine("\nFrequency distribution for 'Background (degree):'");
+                            WriteFrequencyDistribution(writer, backgroundDistribution, rowCount);
+             
+                            writer.WriteLine("\Joint distribution:");
+                            WriteFrequencyDistribution(writer, jointDistribution, rowCount);
+                        }
+                    }
+             
+                    // Writes the frequency distribution to the output file
+                    private void WriteFrequencyDistribution<T>(StreamWriter writer, Dictionary<T, int> distribution, int rowCount)
+                    {
+                        foreach (var entry in distribution)
+                        {
+                            double relativeFrequency = (double)entry.Value / rowCount;
+                            double relativeFrequencyPercentage = relativeFrequency * 100;
+                            writer.WriteLine($"{entry.Key}: {entry.Value} (Relativa: {relativeFrequency:F2}, Percentuale: {relativeFrequencyPercentage:F2}%)");
+                        }
+                    }
+                }
+            }
+        </code>
+    </pre>
+
 </body>
 </html>
