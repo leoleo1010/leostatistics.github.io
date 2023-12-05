@@ -1,88 +1,365 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Array-Based Data Structure</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PT2</title>
+    <link href="fileCss.css" rel="stylesheet"/>
 </head>
 <body>
-    <div id="output"></div>
-
-    <script>
-        // Create a data structure using an array
-        const dataStructure = [];
-
-        // Method to add an element with a key and value
-        function addElement(key, value) {
-            dataStructure.push({ key, value });
-        }
-
-        // Method to remove an element based on the key
-        function removeElement(key) {
-            for (let i = 0; i < dataStructure.length; i++) {
-                if (dataStructure[i].key === key) {
-                    dataStructure.splice(i, 1);
-                    i--; // Decrement the index to avoid skipping an element
+    <h1> Point 2</h1>
+    <div class="container">
+        <h3 style="margin-top: 10x;">For the following most important data structures (or others that you may want to suggest) recall how to:
+            <ul>
+                <li>-loop (break/continue)</li>
+                <li>-add/remove/get/set/check the existence of key/value</li>
+                <li>data structures:
+                <ul>
+                array, list, dictionary, sorted list, hashset, sortedset, queue, stack, linkedlist (or any other structure
+                you think to be useful)</li></ul>
+            </ul>
+        </h3>
+    </div>
+    <pre>
+        <code>
+            <h2>ARRAY</h2>
+            <div class="container2">
+                /*ARRAY*/
+    
+                // Looping
+                for (let i = 0; i < arr.length; i++) {
+                    console.log(arr[i]);
                 }
-            }
-        }
-
-        // Method to get the value associated with a key
-        function getValue(key) {
-            for (const item of dataStructure) {
-                if (item.key === key) {
-                    return item.value;
+                
+                // Add
+                arr.push(2);
+                
+                // Remove
+                arr.pop();
+                
+                // Get
+                let value = arr[0];
+                
+                // Set
+                arr[0] = 100;
+                
+                // Check existence of value
+                let exists = arr.includes(100);
+                
+                /*LIST*/
+                
+                // Looping
+                list.forEach(value => console.log(value));
+                
+                // Add
+                list.add(113);
+                
+                // Remove
+                list.remove(113);
+                
+                // Get
+                let value = list.get(2);
+                
+                // Check existence of value
+                let exists = list.contains(2);
+            </div>
+            <h2>DICTIONARY</h2>
+            <div class="container2">
+                /*DICTIONARY*/
+                
+                // Add
+                dictionary.set("key10", "value10");
+                
+                // Remove
+                dictionary.delete("key10");
+                
+                // Get
+                let value = dictionary.get("key10");
+                
+                // Check existence of key
+                let keyExists = dictionary.has("key10");
+            </div>
+            <h2>SORTED LIST</h2>
+            <div class="container2">
+                /*SORTED LIST*/
+                
+                // Add
+                sortedSet.add(3);
+                sortedSet.add(1);
+                sortedSet.add(2);
+                
+                // Remove
+                sortedSet.remove(2);
+                
+                // Get
+                let value = sortedSet.get(0);
+                
+                // Check existence of value
+                let exists = sortedSet.contains(1);
+            </div>
+            <h2>QUEUE</h2>
+            <div class="container2">
+                /*QUEUE*/
+                
+                // Enqueue
+                queue.push(1);
+                
+                // Dequeue
+                let dequeuedItem = queue.shift();
+                
+                // Check if the queue is empty
+                let isEmpty = queue.length === 0;
+            </div>
+            <h2>HASHSET</h2>
+            <div class="container2">
+                /*HASHSET*/
+                
+                class HashSet {
+                    constructor() {
+                    this.set = Object.create(null);
+                    }
+                
+                    // Add an element to the HashSet
+                    add(value) {
+                    this.set[value] = true;
+                    }
+                
+                    // Remove an element from the HashSet
+                    remove(value) {
+                    delete this.set[value];
+                    }
+                
+                    // Check if an element exists in the HashSet
+                    has(value) {
+                    return this.set[value] === true;
+                    }
+                
+                    // Get the size (number of elements) of the HashSet
+                    size() {
+                    return Object.keys(this.set).length;
+                    }
+                
+                    // Get all values in the HashSet
+                    values() {
+                    return Object.keys(this.set);
+                    }
                 }
-            }
-            return undefined; // Key not found
-        }
-
-        // Method to set the value associated with a key
-        function setValue(key, value) {
-            for (const item of dataStructure) {
-                if (item.key === key) {
-                    item.value = value;
-                    return;
+            </div>
+            <h2>SORTEDSET</h2>
+            <div class="container2">
+                /*SORTEDSET*/
+                
+                class SortedSet {
+                    constructor() {
+                    this.elements = [];
+                    }
+                
+                    // Add an element to the sorted set
+                    add(value) {
+                    if (!this.has(value)) {
+                        this.elements.push(value);
+                        this.elements.sort((a, b) => a - b); // Keep the elements sorted
+                    }
+                    }
+                
+                    // Remove an element from the sorted set
+                    remove(value) {
+                    const index = this.elements.indexOf(value);
+                    if (index !== -1) {
+                        this.elements.splice(index, 1);
+                    }
+                    }
+                
+                    // Check if an element exists in the sorted set
+                    has(value) {
+                    return this.elements.includes(value);
+                    }
+                
+                    // Get the size (number of elements) of the sorted set
+                    size() {
+                    return this.elements.length;
+                    }
+                
+                    // Get the sorted values in the set
+                    values() {
+                    return [...this.elements];
+                    }
+                
+                    // Iterate over the elements using a callback function
+                    forEach(callback) {
+                    this.elements.forEach(callback);
+                    }
+                
+                    // Clear all elements from the sorted set
+                    clear() {
+                    this.elements = [];
+                    }
+                
+                    // Get the first element in the sorted set
+                    first() {
+                    if (this.elements.length > 0) {
+                        return this.elements[0];
+                    }
+                    return undefined;
+                    }
+                
+                    // Get the last element in the sorted set
+                    last() {
+                    const length = this.elements.length;
+                    if (length > 0) {
+                        return this.elements[length - 1];
+                    }
+                    return undefined;
+                    }
+                
+                    // Get the elements in the sorted set that are less than a specified value
+                    headSet(value) {
+                    return this.elements.filter(element => element < value);
+                    }
+                
+                    // Get the elements in the sorted set that are greater than or equal to a specified value
+                    tailSet(value) {
+                    return this.elements.filter(element => element >= value);
+                    }
+                
+                    // Get a sub-set of elements within a specified range (inclusive)
+                    subSet(start, end) {
+                    return this.elements.filter(element => element >= start && element <= end);
+                    }
                 }
-            }
-            // If the key doesn't exist, add it
-            addElement(key, value);
-        }
-
-        // Method to check the existence of a key
-        function keyExists(key) {
-            for (const item of dataStructure) {
-                if (item.key === key) {
-                    return true;
+            </div>
+            <h2>STACK</h2>  
+            <div class="container2">
+                /*STACK*/
+                
+                // Push
+                stack.push(144);
+                
+                // Pop
+                let poppedItem = stack.pop();
+                
+                // Check empty stack
+                let isEmpty = stack.length === 0;
+            </div>
+            <h2> LINKED LIST</h2> 
+            <div class="container2"> 
+                /*LINKED LIST*/
+                
+                class Node {
+                    constructor(value) {
+                    this.value = value;
+                    this.next = null;
+                    }
                 }
-            }
-            return false; // Key not found
-        }
-
-        // Display the result on the page
-        function displayResult(result) {
-            document.getElementById("output").innerHTML += result + "<br>";
-        }
-
-        // Example of using the methods
-        addElement("name", "Mario");
-        addElement("age", 30);
-
-        if (keyExists("name")) {
-            displayResult("Key 'name' exists.");
-        } else {
-            displayResult("Key 'name' does not exist.");
-        }
-
-        displayResult("Value associated with 'age': " + getValue("age"));
-
-        setValue("age", 31); // Set a new value for "age"
-        displayResult("New value associated with 'age': " + getValue("age"));
-
-        removeElement("name");
-        if (keyExists("name")) {
-            displayResult("Key 'name' exists.");
-        } else {
-            displayResult("Key 'name' does not exist.");
-        }
-    </script>
+                
+                class LinkedList {
+                    constructor() {
+                    this.head = null;
+                    }
+                
+                    // Looping
+                    forEach(callback) {
+                    let current = this.head;
+                    while (current) {
+                        callback(current.value);
+                        current = current.next;
+                    }
+                    }
+                
+                    // Add (Append to the end)
+                    add(value) {
+                    const newNode = new Node(value);
+                    if (!this.head) {
+                        this.head = newNode;
+                    } else {
+                        let current = this.head;
+                        while (current.next) {
+                        current = current.next;
+                        }
+                        current.next = newNode;
+                    }
+                    }
+                
+                    // Insert at a specific position
+                    insert(value, index) {
+                    if (index < 0) return;
+                
+                    const newNode = new Node(value);
+                
+                    if (index === 0) {
+                        newNode.next = this.head;
+                        this.head = newNode;
+                    } else {
+                        let current = this.head;
+                        let count = 0;
+                
+                        while (current) {
+                        if (count === index - 1) {
+                            newNode.next = current.next;
+                            current.next = newNode;
+                            break;
+                        }
+                        current = current.next;
+                        count++;
+                        }
+                    }
+                    }
+                
+                    // Remove
+                    remove(value) {
+                    if (!this.head) return;
+                
+                    if (this.head.value === value) {
+                        this.head = this.head.next;
+                        return;
+                    }
+                
+                    let current = this.head;
+                    while (current.next) {
+                        if (current.next.value === value) {
+                        current.next = current.next.next;
+                        return;
+                        }
+                        current = current.next;
+                    }
+                    }
+                
+                    // Get
+                    get(index) {
+                    if (index < 0) return undefined;
+                    let current = this.head;
+                    let count = 0;
+                    while (current) {
+                        if (count === index) return current.value;
+                        current = current.next;
+                        count++;
+                    }
+                    return undefined;
+                    }
+                
+                    // Check existence of value
+                    contains(value) {
+                    let current = this.head;
+                    while (current) {
+                        if (current.value === value) return true;
+                        current = current.next;
+                    }
+                    return false;
+                    }
+                
+                    // Get the size (number of elements) of the linked list
+                    size() {
+                    let count = 0;
+                    let current = this.head;
+                    while (current) {
+                        count++;
+                        current = current.next;
+                    }
+                    return count;
+                    }
+                }
+            </div>
+        </code>
+    </pre>
 </body>
 </html>

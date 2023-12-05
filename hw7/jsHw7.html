@@ -57,18 +57,20 @@
 
         .container {
             width: 50%;
+            
             padding: 20px;
-            border: 1px solid #000;
+            border: 2px solid #000000;
             resize: both;
             overflow: auto;
             box-sizing: border-box;
             margin-top: 20px;
+            margin-left: 80px;
         }
 
         .container2 {
             width: 100%;
             padding: 10px;
-            border: 1px solid #000;
+            border: 5px solid green;
             overflow: auto;
             box-sizing: border-box;
             margin-top: 20px;
@@ -79,7 +81,9 @@
             height: 100%;
             border: 1px solid #000;
             display: block;
+            background-color: black;
         }
+        
     </style>
 </head>
 
@@ -123,6 +127,7 @@
                 </select>
 
                 <button id="calculateButton">Simulate</button><br>
+                <button onclick="clearCanvas()" style="margin-right:auto;">Clear Canvas</button>
             </div>
             <div class="container2">
                 <label for="sdeInput">... or write a custom Stochastic Differential Equation (SDE):</label>
@@ -134,7 +139,7 @@
                     <li>X (uppercase) (stochastic process itself)</li>
                     <li>dW (differential of Wiener process)</li>
                 </ul>
-                <h4>These are the operationss that you can use: </h4>
+                <h4>These are the operations that you can use: </h4>
                 <ul>
                     <li>+, -, , /, * (exp)</li>
                     <li>Math.sqrt() (square root)</li>
@@ -146,7 +151,6 @@
 
         <div class="container">
             <canvas id="chartCanvas" width="1500" height="500"></canvas>
-            <button onclick="clearCanvas()">Clear Canvas</button>
         </div>
     </div>
 
