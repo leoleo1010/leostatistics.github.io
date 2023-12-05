@@ -3,9 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="fileCss.css" rel="stylesheet"/>
     <title>Document</title>
 </head>
 <body>
-    <p>pt3</p>
+    <h1> Point 3</h1>
+    <div class="container">
+        <h3 style="margin-top: 10x;">
+            Generate N uniform random variates in [0,1) and determine the distribution into class intervals [i/k, (i+1)/k), i = 0,…, k-1.
+            Play with N and k values and draw some conclusion on the “shape” of the distribution.            
+        </h3>
+    </div>
+    <div>
+        <p><b>LINK CODE:</b></p>
+                <ul>
+                    <!-- Primo link -->
+                    <li class="list-item"><a href="https://github.com/leoleo1010/leostatistics.github.io/blob/main/hw2/hw2Pt3.html">FOLDER CODE</a></li>
+                </ul>
+    </div>
+    <hr>
+    <h2> JS IMPLEMENTATION</h2>
+    <div class="container2">
+        <pre>
+            <code>
+                // Function to generate and display a distribution
+                function genDistr() {
+                    // Get the values of N and M from the input fields
+                    var N = parseInt(document.getElementById("N").value);
+                    var M = parseInt(document.getElementById("M").value);
+                     
+                    // Get the result table element
+                    var resultTable = document.getElementById("resultTable");
+                 
+                    // Initialize an array to store interval counts
+                    var intervalCounts = new Array(M).fill(0);
+                 
+                    // Generate random values and distribute them into intervals
+                    for (var i = 0; i < N; i++) {
+                        var randomValue = Math.random(); // Generates a random value between 0 and 1
+                        var intervalIndex = Math.floor(randomValue * M); // Compute the value's interval
+                        intervalCounts[intervalIndex]++;
+                    }
+                 
+                    // Clear the table and set the table header
+                    resultTable.innerHTML = "<tr><th>Interval</th><th>Number of values</th></tr">;
+                 
+                    // Populate the table with interval labels and counts
+                    for (var i = 0; i < M; i++) {
+                        var intervalStart = (i / M).toFixed(2);
+                        var intervalEnd = ((i + 1) / M).toFixed(2);
+                        var intervalLabel = `${intervalStart}-${intervalEnd}`;
+                        resultTable.innerHTML += `<tr><td>${intervalLabel}</td><td>${intervalCounts[i]}</td></tr>`;
+                    }
+                }
+            </code>
+        </pre>
+    </div>
+
+    <h2> C# IMPLEMENTATION</h2>
+    <div class="container4">
+        <pre>
+            <code>
+                private void calculate_btn(object sender, EventArgs e)
+                {
+                    // Check if the input for N and M is valid
+                    if (int.TryParse(NBox.Text, out int N) && int.TryParse(KBox.Text, out int M))
+                    {
+                        Random random = new Random();
+                        int[] intervalCounts = new int[M];
+                 
+                        // Generate random values and distribute them into intervals
+                        for (int i = 0; i < N; i++)
+                        {
+                            double randomValue = random.NextDouble(); // Generate a random value between 0 and 1
+                            int intervalIndex = (int)(randomValue * M); // Compute the value's interval
+                            intervalCounts[intervalIndex]++;
+                        }
+                 
+                        // Clear the existing data in the results DataGridView
+                        dataGridViewResults.Rows.Clear();
+                 
+                        // Populate the DataGridView with interval labels and counts
+                        for (int i = 0; i < M; i++)
+                        {
+                            double intervalStart = i / (double)M;
+                            double intervalEnd = (i + 1) / (double)M;
+                            string intervalLabel = $"{intervalStart:F2}-{intervalEnd:F2}";
+                            dataGridViewResults.Rows.Add(intervalLabel, intervalCounts[i]);
+                        }
+                    }
+                    else
+                    {
+                        // Display a message box for invalid input
+                        MessageBox.Show("Insert valid values for N and M.");
+                    }
+                }
+            </code>
+        </pre>
+    </div>
 </body>
 </html>
