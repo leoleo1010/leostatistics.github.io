@@ -4,184 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="fileCss.css" rel="stylesheet"/>
 </head>
 <body>
     <h2> C# code</h2>
-   <p><b>Code that generates a Point</b></p>
-    <pre>
-        <code>
-            using System;
-            using System.Drawing;
-            using System.Windows.Forms;
-            
-            class PointDrawingProgram : Form
-            {
-                public PointDrawingProgram()
-                {
-                    // Imposta le dimensioni della finestra
-                    this.Size = new Size(400, 400);
-            
-                    // Registra l'evento Paint per disegnare il punto
-                    this.Paint += new PaintEventHandler(OnPaint);
-                }
-            
-                private void OnPaint(object sender, PaintEventArgs e)
-                {
-                    // Crea un oggetto Graphics dal modulo PaintEventArgs
-                    Graphics g = e.Graphics;
-            
-                    // Crea una penna nera per disegnare il punto
-                    Pen blackPen = new Pen(Color.Black);
-            
-                    // Definisci le coordinate del punto
-                    int x = 200;
-                    int y = 200;
-            
-                    // Disegna il punto sulla superficie grafica
-                    g.DrawLine(blackPen, x, y, x + 1, y + 1);
-                }
-            
-                public static void Main()
-                {
-                    Application.Run(new PointDrawingProgram());
-                }
-            }
-            
-        </code>
-    </pre>
-
-    <p><b>Code that generates a Line</b></p>
-    <pre>
-        <code>
-            using System;
-            using System.Drawing;
-            using System.Windows.Forms;
-            
-            class LineDrawingProgram : Form
-            {
-                public LineDrawingProgram()
-                {
-                    // Imposta le dimensioni della finestra
-                    this.Size = new Size(400, 400);
-            
-                    // Registra l'evento Paint per disegnare la linea
-                    this.Paint += new PaintEventHandler(OnPaint);
-                }
-            
-                private void OnPaint(object sender, PaintEventArgs e)
-                {
-                    // Crea un oggetto Graphics dal modulo PaintEventArgs
-                    Graphics g = e.Graphics;
-            
-                    // Crea una penna nera per disegnare la linea
-                    Pen blackPen = new Pen(Color.Black, 2);
-            
-                    // Definisci i punti di inizio e fine della linea
-                    Point startPoint = new Point(50, 50);
-                    Point endPoint = new Point(350, 350);
-            
-                    // Disegna la linea sulla superficie grafica
-                    g.DrawLine(blackPen, startPoint, endPoint);
-                }
-            
-                public static void Main()
-                {
-                    Application.Run(new LineDrawingProgram());
-                }
-            }
-        </code>
-    </pre>
-    <p><b>Code that generates a Circle</b></p>
-    <pre>
-        <code>
-            using System;
-            using System.Drawing;
-            using System.Windows.Forms;
-            
-            // Definizione di una classe CircleGenerator che eredita da Form
-            class CircleGenerator : Form
-            {
-                public CircleGenerator()
-                {
-                    // Impostiamo la dimensione della finestra
-                    this.Size = new Size(400, 400);
-            
-                    // Aggiungiamo un gestore per l'evento Paint
-                    this.Paint += new PaintEventHandler(OnPaint);
-                }
-            
-                // Gestore per l'evento Paint
-                private void OnPaint(object sender, PaintEventArgs e)
-                {
-                    // Otteniamo un oggetto Graphics per disegnare
-                    Graphics g = e.Graphics;
-            
-                    // Creiamo una penna nera per il contorno del cerchio
-                    Pen pen = new Pen(Color.Black);
-            
-                    // Calcoliamo il centro della finestra
-                    int centerX = this.Width / 2;
-                    int centerY = this.Height / 2;
-            
-                    // Calcoliamo il raggio del cerchio in modo che sia centrato e abbia un margine di 10 pixel
-                    int radius = Math.Min(centerX, centerY) - 10;
-            
-                    // Disegniamo il cerchio utilizzando la penna
-                    g.DrawEllipse(pen, centerX - radius, centerY - radius, 2 * radius, 2 * radius);
-                }
-            
+        <p><b>Code that generates a point, a line a rectangle and a circle</b></p>
+        <pre class="container4">
+            <code>
+                using System;
+                using System.Windows.Forms;
                 
-                static void Main()
+                public class MainForm : Form
                 {
-                    Application.Run(new CircleGenerator());
-                }
-            }
-            
-        </code>
-    </pre>
-    <p><b>Code that generates a Rectangle</b></p>
-    <pre>
-        <code>
-            using System;
-            using System.Drawing;
-            using System.Windows.Forms;
-            
-            class RectangleGenerator : Form
-            {
-                public RectangleGenerator()
-                {
-                    this.Size = new Size(400, 400);
-                    this.Paint += new PaintEventHandler(OnPaint);
-                }
-            
-                private void OnPaint(object sender, PaintEventArgs e)
-                {
-                    Graphics g = e.Graphics;
-                    Pen pen = new Pen(Color.Black);
-                    int x = 50; // Coordinata x dell'angolo superiore sinistro del rettangolo
-                    int y = 50; // Coordinata y dell'angolo superiore sinistro del rettangolo
-                    int width = 200; // Larghezza del rettangolo
-                    int height = 100; // Altezza del rettangolo
-            
-                    g.DrawRectangle(pen, x, y, width, height);
-                }
-            
-                static void Main()
-                {
-                    Application.Run(new RectangleGenerator());
-                }
-            }
-              
-        </code>
-    </pre>
-    <hr width="100%" color="black" size="2">
+                    public MainForm()
+                    {
+                        // Set the size of the form
+                        this.Size = new System.Drawing.Size(400, 400);
+                
+                        // Add labels to represent points, lines, rectangles, and circles
+                        AddPoint(50, 50);
+                        AddLine(50, 100, 200, 100);
+                        AddRectangle(50, 150, 100, 50);
+                        AddCircle(200, 200, 50);
+                    }
+                
+                    private void AddPoint(int x, int y)
+                    {
+                        Label point = new Label();
+                        point.Location = new System.Drawing.Point(x, y);
+                        point.Text = "*";
+                        this.Controls.Add(point);
+                    }
+                
+                    private void AddLine(int x1, int y1, int x2, int y2)
+                    {
+                        Label line = new Label();
+                        line.Location = new System.Drawing.Point(x1, y1);
+                        int length = (int)Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2));
+                        line.Size = new System.Drawing.Size(length, 1);
+                        line.BackColor = System.Drawing.Color.Red;
+                        this.Controls.Add(line);
+                    }
+                
+                    private void AddRectangle(int x, int y, int width, int height)
+                    {
+                        Label rectangle = new Label();
+                        rectangle.Location = new System.Drawing.Point(x, y);
+                        rectangle.Size = new System.Drawing.Size(width, height);
+                        rectangle.BorderStyle = BorderStyle.FixedSingle;
+                        rectangle.BackColor = System.Drawing.Color.Blue;
+                        this.Controls.Add(rectangle);
+                    }
+                
+                    private void AddCircle(int x, int y, int radius)
+                    {
+                        Label circle = new Label();
+                        circle.Location = new System.Drawing.Point(x - radius, y - radius);
+                        circle.Size = new System.Drawing.Size(2 * radius, 2 * radius);
+                        circle.BorderStyle = BorderStyle.FixedSingle;
+                        circle.BackColor = System.Drawing.Color.Green;
+                        circle.Region = new System.Drawing.Region(new System.Drawing.Drawing2D.GraphicsPath());
+                        (circle.Region.GetPath(new System.Drawing.Drawing2D.Matrix())).AddEllipse(0, 0, circle.Width, circle.Height);
+                        this.Controls.Add(circle);
+                    }
+                
+                    [STAThread]
+                    static void Main()
+                    {
+                        Application.EnableVisualStyles();
+                        Application.Run(new MainForm());
+                    }    
+            </code>
+        </pre>
     
-    <p>Click here to see a unique program, which generates a point, a line, a rectangle and a circle</p>
-
-    <a href="drawFigure.html">
-    <button style="background-color: green; width: 110px; height: 60px;">Unique program</button>
-    </a>
-    
-
 </body>
 </html>
