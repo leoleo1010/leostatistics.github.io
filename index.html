@@ -6,7 +6,8 @@
     <title>Homepage</title>
     <!-- Aggiungi i link ai file CSS di Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/utilities/css/cubo.css" rel="stylesheet">
+    <link href="fileCss.css" rel="stylesheet">
+
 
     <style>
         body {
@@ -14,46 +15,144 @@
             background-size: cover;
             background-repeat: no-repeat;
         }
+        .cube {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg);
+            width: 200px;
+            height: 200px;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease; /* Aggiunto effetto di transizione */
+        }
+        
+        
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .face:hover {
+            background-color: #868786;
+        }
+        
+        .front { transform: translateZ(100px); }
+        .back { transform: rotateY(180deg) translateZ(100px); }
+        .left { transform: rotateY(-90deg) translateZ(100px); }
+        .right { transform: rotateY(90deg) translateZ(100px); }
+        .top { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+        
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease; /* Aggiungi 'border' alla transizione */
+            border: 2px solid #4CAF50; /* Spessore e colore del bordo */
+        }
+        
+        .btn:hover {
+            background-color: #095d0d;
+            color: white;
+            border: 2px solid #095d0d; /* Cambia colore del bordo al passaggio del mouse */
+        }
+        .welcome{
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 300px;
+            height: 50px;
+            font-size:larger;
+            font-family: 'Arial', sans-serif; /* Cambia il tipo di carattere */
+            font-weight: bold; /* Cambia il peso del carattere */
+            font-style: italic; /* Cambia lo stile del carattere */
+            border: 0px solid;
+            margin-right: 300px;
+        }
+
+        .welcome:hover {
+            background-color: #707170;
+            color: white;
+            border: 2px solid #707170; /* Cambia colore del bordo al passaggio del mouse */
+        }
+       
     </style>
 </head>
 <body>
-
-    <div>
-        <h1>Welcome to my homepage</h1>
-        <p>HW list</p>
-    </div>
+    <a href="index.html">
+        <button class="welcome">Welcome to my homepage</button>
+    </a>
+    <h2 style="margin-top: 100px; margin-left:595px;color:red;"> HW list</h2>
     <!-- CUBE -->
     <div class="cube" id="cube">
         <div class="face front">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw1/hw1.html'">HW1</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw1/hw1.html'">HW1</button>
         </div>
         <div class="face back">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw2/hw2.html'">HW2</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw2/hw2.html'">HW2</button>
         </div>
         <div class="face left">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw3/hw3.html'">HW3</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw3/hw3.html'">HW3</button>
         </div>
         <div class="face right">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw4/hw4.html'">HW4</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw4/hw4.html'">HW4</button>
         </div>
         <div class="face top">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw5/hw5.html'">HW5</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw5/hw5.html'">HW5</button>
         </div>
         <div class="face bottom">
-            <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw6/hw6.html'">HW6</button>
+            <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw6/hw6.html'">HW6</button>
         </div>
     </div>
     <!-- CUBE END -->
         <!-- Un bottone di esempio con classe Bootstrap -->
-        
+    <div>
         <button class="btn btn-primary" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw7/hw7.html'">HW7</button>
+    </div>
 
+    <script>    
+        const cube = document.getElementById('cube');
+        let isRotating = false;
+        let initialX, initialY;
+        let currentRotateX = 45;
+        let currentRotateY = 45;
+        const rotationSpeed = 0.02;
 
+        cube.addEventListener('mousedown', (e) => {
+            isRotating = true;
+            initialX = e.clientX;
+            initialY = e.clientY;
+        });
+
+        cube.addEventListener('mouseup', () => {
+            isRotating = false;
+        });
+
+        cube.addEventListener('mousemove', (e) => {
+            if (isRotating) {
+                const deltaX = (e.clientX - initialX) * rotationSpeed;
+                const deltaY = (e.clientY - initialY) * rotationSpeed;
+
+                currentRotateX += deltaY;
+                currentRotateY -= deltaX;
+
+                cube.style.transform = `translate(-50%, -50%) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+            }
+        });
+
+        // Disabilita la selezione del testo durante la rotazione
+        cube.addEventListener('selectstart', () => false);
+    </script>
 
     <!-- Aggiungi i link ai file JavaScript di Bootstrap (jQuery e Popper.js) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.min.js"></script>
-    <script src="/utilities/js/cubo.js"></script>
+    <!--<script src="/utilities/js/cubo.js"></script> -->
 
 
 </body>
