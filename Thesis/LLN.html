@@ -64,15 +64,90 @@
         <img src="gg.PNG" alt="Immagine correlata alla ricerca">
     </main>
     <main>
-        <div class="content">
+        <div class="content" style="height: 1100px;">
             <h2> Forms</h2>
             <p> There are two different versions of the law of large numbers that are described below. They are called the <b><i>strong</i></b> law of large numbers and the <b><i>weak</i></b> law of large numbers.</p>
-            <h4> Weak law</h4>
-                <p>The weak law of large numbers states that the sample average converges in probability towards the expected value
-                    <img src="weak1.PNG" style="position: absolute;
-                    top: 160%; transform: translateY(-100%); max-width: 40%;
-                    height: 10%" alt="Immagine correlata alla ricerca">              
+            <div>
+                <h4> Weak law</h4>
+                    <p>The weak law of large numbers states that the sample average converges in probability towards the expected value                 
+                    </p>
+                    <img src="weak1.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 49px; position:relative; bottom: 140px">
+                    <p style="position:relative; bottom: 140px">That is, for any positive number ε,</p>
+                    <img src="weak2.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 49px; position:relative; bottom: 280px">
+                    <p style="position:relative; bottom: 280px">
+                        Interpreting this result, the weak law states that for any nonzero margin specified (ε), no matter how small, with a sufficiently large sample there will be a very high probability that the average of the observations will be close to the expected value; that is, within the margin.The weak law applies in the case of i.i.d. random variables, but it also applies in some other cases
+                    </p>
+            </div>
+            <div style="position:relative; bottom: 280px">
+                <h4> Strong law</h4>
+                <p>
+                    The strong law of large numbers (also called Kolmogorov's law) states that the sample average converges almost surely to the expected value
                 </p>
+                <img src="strong1.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                height: 49px; position:relative; bottom: 140px">
+                <p style="position:relative; bottom: 140px">That is</p>
+                <img src="strong2.PNG" alt="Immagine correlata alla ricerca" style=" width: 228px;
+                height: 70px; position:relative; bottom: 280px">
+                <p style="position:relative; bottom: 280px">
+                    What this means is that the probability that, as the number of trials n goes to infinity, the average of the observations converges to the expected value, is equal to one. The modern proof of the strong law is more complex than that of the weak law, and relies on passing to an appropriate subsequence
+                </p>
+                <p style="position:relative; bottom: 280px">
+                    Law 3 is called the strong law because random variables which converge strongly (almost surely) are guaranteed to converge weakly (in probability). However the weak law is known to hold in certain conditions where the strong law does not hold and then the convergence is only weak (in probability)
+                </p>
+            </div>
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <div>
+                <h2> Proof</h2>
+                <h4> Weak law: Proof using Chebyshev's inequality assuming finite variance</h4>
+                <p>This proof uses the assumption of finite variance.The independence of the random variables implies no correlation between them, and we have that</p>
+                    <img src="prW1.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1904px;
+                    height: 60px; position:relative; bottom: 140px">
+                <p style="position:relative; bottom: 140px">The common mean μ of the sequence is the mean of the sample average:</p>
+                    <img src="prW2.PNG" alt="Immagine correlata alla ricerca" style=" width: 130px;
+                    height: 40px; position:relative; bottom: 280px">
+                <p style="position:relative; bottom: 280px">Using Chebyshev's inequality on </p>
+                    <img src="prW3.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1500px;
+                    height: 60px; position:relative; bottom: 420px">
+                <p style="position:relative; bottom: 420px">This may be used to obtain the following:</p>
+                    <img src="prW4.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1500px;
+                    height: 65px; position:relative; bottom: 560px">
+                <p style="position:relative; bottom: 560px">As n approaches infinity, the expression approaches 1. And by definition of convergence in probability, we have obtained</p>
+                    <img src="weak1.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 49px; position:relative; bottom: 700px">
+            </div>
+            <div style = "position:relative; bottom: 600px" >
+                <h4> Proof of the strong law </h4>
+                <p>Let us first note that without loss of generality we can assume that μ =0 by centering. In this case, the strong law says that</p>
+                    <img src="prS1.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 59px; position:relative; bottom: 140px">
+                <p style="position:relative; bottom: 140px">or</p>
+                    <img src="prS2.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 59px; position:relative; bottom: 280px">
+                <p style="position:relative; bottom: 280px">It is equivalent to show that</p>
+                    <img src="prS3.PNG" alt="Immagine correlata alla ricerca" style=" width: 268px;
+                    height: 59px; position:relative; bottom: 420px">
+                <p style="position:relative; bottom: 420px">Note that</p>
+                    <img src="prS4.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
+                    height: 49px; position:relative; bottom: 540px">
+                <p style="position:relative; bottom: 540px" > and thus to prove the strong law we need to show that for every ε > 0 we have</p>
+                    <img src="prS5.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
+                    height: 49px; position:relative; bottom: 680px">
+               <p style="position:relative; bottom: 680px" >Define the event A 
+                n
+                ​
+                 ={ω:∣S 
+                n
+                ​
+                 ∣≥nϵ}, and if we can show that
+                  </p>
+                    <img src="prS6.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
+                    height: 54px; position:relative; bottom: 820px">
+            </div>
         </div>
     </main>
 </body>
