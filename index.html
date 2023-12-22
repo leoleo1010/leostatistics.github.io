@@ -80,6 +80,28 @@
             color: white;
             border: 2px solid #707170; /* Cambia colore del bordo al passaggio del mouse */
         }
+        .thesis-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+      
+        .thesis {
+            width: 150px; /* Larghezza del bottone */
+            padding: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+            border-radius: 10px; /* Bordi circolari */
+            border: 1px solid #ffffff; /* Bordo sottile */
+            background-color: rgb(252, 255, 255);
+        }
+      
+        .thesis:hover {
+            transform: translateY(-5px);
+            border-radius: 20px; /* Aumenta il raggio per un bordo più circolare durante l'hover */
+            background-color: rgb(158, 158, 158);
+        }
        
     </style>
 </head>
@@ -87,7 +109,7 @@
     <a href="index.html">
         <button class="welcome">Welcome to my homepage</button>
     </a>
-    <h2 style="margin-top: 100px; margin-left:595px;color:red;"> HW list</h2>
+    <h2 style="margin-top: 100px; margin-left:595px;color:red"> HW list</h2>
     <!-- CUBE -->
     <div class="cube" id="cube">
         <div class="face front">
@@ -113,10 +135,47 @@
         <!-- Un bottone di esempio con classe Bootstrap -->
 
     <div style=" margin-left:800px;">
-        <h2 style="color:red;">Euler-marayama</h2>
+        <h2 style="color:red">Euler-marayama</h2>
         <button class="btn" onclick="window.location.href='https://leoleo1010.github.io/leostatistics.github.io/hw7/hw7.html'">HW7</button>
     </div>
-
+    <div class="thesis-container" style="position:relative; bottom: 160px; height: 110px; width: 50px;">
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH1</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH2</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH3</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH4</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH5</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH6</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH7</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH8</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH9</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH10</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH11</button>
+        </a>
+        <a href="Thesis/LLN/LLN.html">
+            <button class="thesis">TH12</button>
+        </a>
+      </div>
     <script>    
         const cube = document.getElementById('cube');
         let isRotating = false;

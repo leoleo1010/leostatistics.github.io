@@ -49,6 +49,7 @@
             line-height: 1.6;
         }
     </style>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
 </head>
 <body>
     <header>
@@ -100,7 +101,7 @@
         </div>
     </main>
     <main>
-        <div class="content">
+        <div class="content" style="height: 2200px;">
             <div>
                 <h2> Proof</h2>
                 <h4> Weak law: Proof using Chebyshev's inequality assuming finite variance</h4>
@@ -145,9 +146,37 @@
                 ​
                  ∣≥nϵ}, and if we can show that
                   </p>
-                    <img src="prS6.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
-                    height: 54px; position:relative; bottom: 820px">
+                <img src="prS6.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
+                 height: 54px; position:relative; bottom: 820px">
+                <p style="position:relative; bottom: 820px" >then the Borel-Cantelli Lemma implies the result. So let us estimate Pr(An​).We compute:</p>
+                <img src="prS7.PNG" alt="Immagine correlata alla ricerca" style=" max-width: 1268px;
+                 height: 90px; position:relative; bottom: 960px">
+                <p style="position:relative; bottom: 960px">There are n terms of the form \({E} [X_{i}^{4}]\) and \(3n(n-1)\)
+                    terms of the form \( ({E} [X_{i}^{2}])^{2}\), and so 
+                    $$  {E} [S_{n}^{4}]=n\tau +3n(n-1)\sigma ^{4}. $$
+                    Note that the right-hand side is a quadratic polynomial in n, and as such there exists a \(C>0 \) such that
+                    \({E} [S_{n}^{4}]\leq Cn^{2}\) for n sufficiently large. By Markov, $$ {\displaystyle \Pr(|S_{n}|\geq n\epsilon )\leq {\frac {1}{(n\epsilon )^{4}}}{\mathbb {E} }[S_{n}^{4}]\leq {\frac {C}{\epsilon ^{4}n^{2}}},} $$
+                    for \(n\) sufficiently large, and therefore this series is summable. Since this holds for any \(\epsilon >0,\) we have established the Strong LLN.
+                </p>
             </div>
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <h2> Simulation</h2>
+            <h4> First example</h4>
+            <img src="DiffusionMicroMacro.gif" style="  height: 200px;position:relative; bottom: 120px" alt="Animazione GIF">
+            <p style="position:relative; bottom: 120px">Diffusion is an example of the law of large numbers. Initially, there are solute molecules on the left side of a barrier (magenta line) and none on the right. The barrier is removed, and the solute diffuses to fill the whole container.
+                Top: With a single molecule, the motion appears to be quite random.
+                Middle: With more molecules, there is clearly a trend where the solute fills the container more and more uniformly, but there are also random fluctuations.
+                Bottom: With an enormous number of solute molecules (too many to see), the randomness is essentially gone: The solute appears to move smoothly and systematically from high-concentration areas to low-concentration areas.</p>
+            <h4> Second example</h4>
+            <img src="simulationE2.jpg" style="  max-width: 1268px;
+            height: 254px; position:relative; bottom: 120px" alt="Animazione GIF">
+            <p style="position:relative; bottom: 120px">A graphical example of the law of large numbers used for two dice rolls. The sum of the two dice fluctuates in the first few rolls, but as the number of rolls increases, the expected value of the sum of the two dice approaches 7.</p>
+            <h4> Third example </h4>
+            <img src="simulationE3.jpg" style="  height: 200px;position:relative; bottom: 120px" alt="Animazione GIF">
+            <p style="position:relative; bottom: 120px">Simulation illustrating the law of large numbers. Each frame, a coin that is red on one side and blue on the other is flipped, and a dot is added in the corresponding column. A pie chart shows the proportion of red and blue so far. Notice that while the proportion varies significantly at first, it approaches 50% as the number of trials increases.</p>
         </div>
     </main>
 </body>
