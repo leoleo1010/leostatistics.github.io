@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Gaussian distribution</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">TGD: The Gaussian distribution</h1>            
+        </header>
+        <main>
+            <div class="content">
+                <h2> Meaning </h2>
+                <p>
+                    In statistics, a normal distribution or Gaussian distribution is a type of continuous probability distribution for a real-valued random variable. The general form of its probability density function is:
+                    $${\displaystyle f(x)={\frac {1}{\sigma {\sqrt {2\pi }}}}e^{-{\frac {1}{2}}\left({\frac {x-μ }{\sigma }}\right)^{2}}}$$
+                    The parameter \(μ\)  is the mean or expectation of the distribution (and also its median and mode), while the parameter 
+                    \(σ\) is its standard deviation. The variance of the distribution is \(σ ^{2}\). A random variable with a Gaussian distribution 
+                    is said to be <b>normally distributed</b>, and is called a <b>normal deviate.</b>
+                </p>
+                <p>
+                    Normal distributions are important in statistics and are often used in the natural and social sciences to represent real-valued random variables whose distributions are not known.
+                    Their importance is partly due to the central limit theorem. It states that, under some conditions, the average of many samples (observations) of a random variable with finite mean and variance is itself a random variable—whose distribution converges to a normal distribution as the number of samples increases. Therefore, physical quantities that are expected to be the sum of many independent processes, such as measurement errors, often have distributions that are nearly normal.
+                </p>
+                <p>Moreover, Gaussian distributions have some unique properties that are valuable in analytic studies.</p> 
+            </div>
+            <img src="gauss.PNG" style="max-width: 35%;
+            height: 20%;
+            margin-top: 20%;
+            margin-right: 1%;" alt="Immagine correlata alla ricerca">
+        </main>
+        <main>
+            <div class="content">
+                <h4>Standard normal distribution</h4>
+                <p>The simplest case of a normal distribution is known as the standard normal distribution.This is a special case when 
+                    \(μ =0\) and  \(σ =1\)  and it is described by this probability density function (or density):
+                    $${\displaystyle \varphi (z)={\frac {e^{-z^{2}/2}}{\sqrt {2\pi }}}.}$$
+                    The variable \(z\) has a mean of 0 and a variance and standard deviation of 1. The density \(\varphi (z)\) has its peak 
+                    \(1/{\sqrt {2\pi }}\) at \(z=0\) and inflection points at \({\displaystyle z=+1}\) and \(z=-1\).
+                </p>
+                <p>
+                    Carl Friedrich Gauss, for example, once defined the standard normal as
+                    $${\displaystyle \varphi (z)={\frac {e^{-z^{2}}}{\sqrt {\pi }}},}$$
+                    which has a variance of 1/2.
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h4>General normal distribution</h4>
+                <p>Every normal distribution is a version of the standard normal distribution, whose domain has been stretched by a factor 
+                    \(\sigma\)  (the standard deviation) and then translated by \(\mu\)  (the mean value):
+                    $${\displaystyle f(x\mid \mu ,\sigma ^{2})={\frac {1}{\sigma }}\varphi \left({\frac {x-\mu }{\sigma }}\right)}$$
+                    The probability density must be scaled by \(1/\sigma\)  so that the integral is still 1.
+                    If Z is a standard normal deviate, then \({\displaystyle X=\sigma Z+\mu }\) will have a normal distribution with expected value \(\mu\)  and standard deviation 
+                    \(\sigma\) . This is equivalent to saying that the standard normal distribution Z can be scaled/stretched by a factor of \(\sigma\)  and shifted by 
+                    \(\mu\) to yield a different normal distribution, called \(X\). Conversely, if \(X\) is a normal deviate with parameters \(\mu\)  and 
+                    \(\sigma ^{2}\), then this \(X\) distribution can be re-scaled and shifted via the formula 
+                    \({\displaystyle Z=(X-\mu )/\sigma }\) to convert it to the standard normal distribution. This variate is also called the standardized form of \(X\).
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Properties and Derivations</h2>
+                <ul>
+                    <li class="list-item" style=" padding-bottom: 10px;">
+                        <b>The normal distribution</b> is the only distribution whose cumulants beyond the first two (i.e., other than the mean and variance) are zero. It is also the continuous distribution with the maximum entropy for a specified mean and variance
+                        Geary has shown, assuming that the mean and variance are <b>finite</b>, that the normal distribution is the only distribution where the mean and variance calculated from a set of independent draws are <b>independent</b> of each other.
+                    </li>
+                    <li class="list-item" style=" padding-bottom: 10px;">
+                        The normal distribution is <b>symmetric</b> about its mean, and is <b>non-zero</b> over the entire real line. As such it may not be a suitable model for variables that are inherently positive or strongly skewed, such as the weight of a person or the price of a share. 
+                    </li>
+                    <li class="list-item" style=" padding-bottom: 10px;">The value of the normal distribution is <b>practically</b> zero when the value 
+                        \(x\) lies more than a few standard deviations away from the mean (e.g., a spread of three standard deviations covers all but 0.27% of the total distribution).</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">The Gaussian distribution belongs to the family of <b>stable distributions</b> which are the attractors of sums of independent, identically distributed distributions whether or not the mean or variance is finite. Except for the Gaussian which is a limiting case, all stable distributions have heavy tails and infinite variance. It is one of the few distributions that are stable and that have probability density functions that can be expressed analytically, the others being
+                         the Cauchy distribution and the Lévy distribution.</li>
+                </ul>
+                <h4>Derivatives</h4>
+                <p>The normal distribution with density \(f(x)\) (mean \(\mu\)  and standard deviation \(\sigma >0)\) has the following properties:</p>
+                <ul>
+                    <li class="list-item" style=" padding-bottom: 10px;">It is symmetric around the point 
+                        \({\displaystyle x=\mu ,}\) which is at the same time the mode, the median and the mean of the distribution.</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">It is unimodal: its first derivative is positive for 
+                        \({\displaystyle x<\mu ,}\) negative for \({\displaystyle x>\mu ,}\) and zero only at \({\displaystyle x=\mu .}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">The area bounded by the curve and the 
+                        x-axis is unity (i.e. equal to one).</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its first derivative is \( {\displaystyle f'(x)=-{\frac {x-\mu }{\sigma ^{2}}}f(x).}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its second derivative is\({\displaystyle f''(x)={\frac {(x-\mu )^{2}-\sigma ^{2}}{\sigma ^{4}}}f(x).}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its density has two inflection points (where the second derivative of 
+                        f is zero and changes sign), located one standard deviation away from the mean, namely at 
+                       \({\displaystyle x=\mu -\sigma }\) and  \({\displaystyle x=\mu +\sigma .}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its density is log-concave</li>
+                    <p>Furthermore, the density 
+                        \(\varphi\)  of the standard normal distribution (i.e. 
+                        \(\mu =0\) and \({\displaystyle \sigma =1})\) also has the following properties:</p>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its first derivative is \({\displaystyle \varphi '(x)=-x\varphi (x).}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">Its second derivative is \({\displaystyle \varphi ''(x)=(x^{2}-1)\varphi (x)}\)</li>
+                    <li class="list-item" style=" padding-bottom: 10px;">The probability that a normally distributed variable X with known 
+                        \(\mu\)  and  \(\sigma\)  is in a particular set, can be calculated by using the fact that the fraction 
+                       \({\displaystyle Z=(X-\mu )/\sigma }\) has a standard normal distribution.</li>
+                </ul>
+                <p> The derivation of the Gaussian distribution involves the use of Stirling's approximation for the factorials of the binomial coefficients:
+                </p>
+                <img src="eq26.gif" style=" max-width: 50%;height: 2.5%; margin-top: 0%; margin-right: 0%;" alt="Equation A.26">
+                <p>where \(e\) is the base of the natural logarithms. The result is</p>
+                <img src="eq27.gif" style=" max-width: 65%;height: 4%; margin-top: 0%; margin-right: 0%;" alt="Equation A.26">
+                <p>where \(µ = k = np\) and \(\sigma = ((k^2) - (k^2))1/2 = (npq)1/2\), as before. \(P(k; µ, \sigma)\) \(dk\) is the probability that \(k\) will be found between \(k\) and \(k + dk\), where \(dk\) is infinitesimal. The distribution is continuous rather than discrete. Expectation values are found by taking integrals rather than sums. The distribution is symmetric about the \(mean, µ\), and its width is determined by \(\sigma\). The area of the distribution is 1, so its height is inversely proportional to \(\sigma\).</p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2> Simulations</h2>
+                <h4> Height</h4>
+                <img src="height.jpg" style=" max-width: 45%;height: 15%; margin-top: 0%; margin-right: 0%; padding-bottom: 10px;"  alt="Equation A.26">
+                <p>The height of people is an example of normal distribution. Most of the people in a specific population are of average height. The number of people taller and shorter than the average height people is almost equal, and a very small number of people are either extremely tall or extremely short. Several genetic and environmental factors influence height. Therefore, it follows the normal distribution.</p>
+                <h4>Rolling A Dice</h4>
+                <img src="rad.jpg" style=" max-width: 65%;height: 20%; margin-top: 0%; margin-right: 0%; padding-bottom: 10px;"  alt="Equation A.26">
+                <p>A fair rolling of dice is also a good example of normal distribution. In an experiment, it has been found that when a dice is rolled 100 times, chances to get ‘1’ are 15-18% and if we roll the dice 1000 times, the chances to get ‘1’ is, again, the same, which averages to 16.7% (1/6). If we roll two dice simultaneously, there are 36 possible combinations. The probability of rolling ‘1’ (with six possible combinations) again averages to around 16.7%, i.e., (6/36). More the number of dice more elaborate will be the normal distribution graph.</p>
+                <h4>Technical Stock Market</h4>
+                <img src="market.jpg" style=" max-width: 65%;height: 20%; margin-top: 0%; margin-right: 0%; padding-bottom: 10px;"  alt="Equation A.26">
+                <p>Most of us have heard about the rise and fall in the prices of shares in the stock market. These changes in the log values of Forex rates, price indices, and stock prices return often form a bell-shaped curve. For stock returns, the standard deviation is often called volatility. If returns are normally distributed, more than 99 percent of the returns are expected to fall within the deviations of the mean value. Such characteristics of the bell-shaped normal distribution allow analysts and investors to make statistical inferences about the expected return and risk of stocks.</p>
+                <p><b>LINK FONTI:</b>
+                    <!-- Primo link -->
+                 <a href="https://en.wikipedia.org/wiki/Normal_distribution#Methodological_problems_and_peer_review">1° fonte</a>
+                 <a href="https://studiousguy.com/real-life-examples-normal-distribution/">2° fonte</a>
+                </ul>
+                </p>
+            </div>
+        </main>
+
+</html>
