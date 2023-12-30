@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Glivenko-Cantelli theorem</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">The Glivenko-Cantelli theorem</h1>            
+        </header>
+        <main>
+            <div class="content">
+                <h2>Meaning</h2>
+                <p>In the theory of probability, the Glivenko–Cantelli theorem (sometimes referred to as the <b>Fundamental Theorem of Statistics</b>)
+                    describes the asymptotic behaviour of the empirical distribution function as the number of independent and identically distributed observations grows.
+                </p>
+                <p>Specifically, the empirical distribution function converges uniformly to the true distribution function almost surely.</p>
+                <p>The uniform convergence of more general empirical measures becomes an important property of the Glivenko–Cantelli classes of functions or sets.
+                    The Glivenko–Cantelli classes arise in Vapnik–Chervonenkis theory, with applications to <b>machine learning.</b>
+                </p>
+                <p>
+                    Assume that \(…X_1,X_2,\dots\) are independent and identically distributed random variables in \(\mathbb {R}\)  with common cumulative distribution function 
+                    \(F(x)\). The empirical distribution function for \(X_{1},\dots ,X_{n}\) is defined by
+                    $${\displaystyle F_{n}(x)={\tfrac {1}{n}}\sum _{i=1}^{n}I_{[X_{i},\infty )}(x)={\tfrac {1}{n}}\ {\biggl |}\left\{\ i\ \mid X_{i}\leq x,\ 1\leq i\leq n\right\}{\biggr |}}$$
+                    where \(I_{C}\) is the indicator function of the set \({\displaystyle \ C~.}\) For every (fixed) \({\displaystyle \ x\ ,}\)
+                    \({\displaystyle \ F_{n}(x)\ }\) is a sequence of random variables which converge to 
+                    \(F(x)\) almost surely by the strong law of large numbers. Glivenko and Cantelli strengthened this result by proving uniform convergence of 
+                    \({\displaystyle \ F_{n}\ }\) to \({\displaystyle \ F~.}\)
+                </p>
+            </div>
+            <figure>
+                <img src="glivenko.jpg" alt="Immagine correlata alla ricerca">
+                <figcaption><b>Valery Ivanovich Glivenko</b> </figcaption>
+                <img src="Francesco_Paolo_Cantelli.jpg"  alt="Immagine correlata alla ricerca">
+                <figcaption> <b>Francesco Paolo Cantelli</b> </figcaption>
+            </figure>
+        </main>
+        <main>
+            <div class="content">
+                <h4>Theorem</h4>
+                <p>$${\displaystyle \|F_{n}-F\|_{\infty }=\sup _{x\in \mathbb {R} }{\biggl |}F_{n}(x)-F(x){\biggr |}\longrightarrow 0}$$ almost surely.</p>
+                <ul>
+                    <li class="list-item"style=" padding-bottom: 10px;">If \({\displaystyle \ X_{n}\ }\) is a stationary ergodic process, then \(F_n(x)\) converges almost surely to 
+                    \({\displaystyle \ F(x)=\operatorname {\mathbb {E} } {\bigl [}1_{X_{1}\leq x}{\bigr ]}~.}\) The Glivenko–Cantelli theorem gives a stronger mode of
+                     convergence than this in the iid case.</li>
+                    <li class="list-item"style=" padding-bottom: 10px;">An even stronger uniform convergence result for the empirical distribution function is available in the form of an extended type of law of the iterated logarithm.</li>
+                </ul>
+                <p>In simpler terms, the supremum (maximum) difference between the empirical distribution function and the true distribution function converges to zero almost surely as the sample size 
+                    \(n\) becomes larger. This implies that the empirical distribution function converges uniformly to the true distribution function.</p>
+                <p>
+                    The Glivenko-Cantelli theorem is a powerful result with important implications for statistical inference. It provides theoretical justification for using the empirical distribution function as an estimator for the true distribution function, especially when dealing with large samples.
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Proof</h2>
+                <p>
+                    For simplicity, consider a case of continuous random variable \(X\). Fix 
+                    $${\displaystyle -\infty =x_{0}< x_{1}<\cdots < x_{m-1}< x_{m}=\infty }$$
+                    such that \({\displaystyle F(x_{j})-F(x_{j-1})={\frac {1}{m}}}\) for  \(j=1,\dots ,m.\) Now for all \(x \in \mathbb{R}\) there exists 
+                    \({\displaystyle j\in \{1,\dots ,m\}}\) such that \({\displaystyle x\in [x_{j-1},x_{j}]}.\) Note that
+                    $${\displaystyle {\begin{aligned}F_{n}(x)-F(x)&\leq F_{n}(x_{j})-F(x_{j-1})=F_{n}(x_{j})-F(x_{j})+{\frac {1}{m}},\\F_{n}(x)-F(x)&\geq F_{n}(x_{j-1})-F(x_{j})=F_{n}(x_{j-1})-F(x_{j-1})-{\frac {1}{m}}.\end{aligned}}}$$
+                    Therefore,
+                    $${\displaystyle \|F_{n}-F\|_{\infty }=\sup _{x\in \mathbb {R} }|F_{n}(x)-F(x)|\leq \max _{j\in \{1,\dots ,m\}}|F_{n}(x_{j})-F(x_{j})|+{\frac {1}{m}}.}$$
+                    Since max
+                    \({\textstyle \max _{j\in \{1,\dots ,m\}}|F_{n}(x_{j})-F(x_{j})|\to 0{\text{ a.s.}}}\) by strong law of large numbers, we can guarantee
+                     that for any positive \({\textstyle \varepsilon }\) and any integer \({\textstyle m}\) such that \({\textstyle 1/m<\varepsilon }\), we can find 
+                    \({\textstyle N}\)such that for all \(n\geq N\), we have \({\textstyle \max _{j\in \{1,\dots ,m\}}|F_{n}(x_{j})-F(x_{j})|\leq \varepsilon -1/m{\text{ a.s.}}}\).
+                    Combined with the above result, this further implies that \({\textstyle \|F_{n}-F\|_{\infty }\leq \varepsilon {\text{ a.s.}}}\), which is the definition of almost sure convergence.
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Simulations</h2>
+                <h4>GLIVENKO-CANTELLI THEOREMS FOR INTEGRATED
+                    FUNCTIONALS OF STOCHASTIC PROCESSES</h4>
+                    <img src="ex1.PNG" style=" max-width: 65%;height: 40%; margin-top: 0%; margin-left: 20%; padding-bottom: 10px;"  alt="Equation A.26">
+                <p>Figure 1 plots the estimated beta occupation time for each stock in each
+                    of the four subsamples. Looking at the estimates for Amazon on the top-left
+                    panel, we see that in 2019 the occupation measure of the e-commerce firm’s
+                    beta concentrates near (indeed moderately above) unity, and we get essentially the same estimate in the first two months of 2020. However, we find
+                    a remarkable left-shift of the occupation time for the later two subsamples
+                    during the pandemic, suggesting that Amazon’s market beta has become
+                    much lower and, in particular, is below unity most of the time. It is interesting to note that the estimates for the March-April period and the May-June
+                    period are virtually the same, despite that they were estimated separately
+                    without any restriction. This distributional evidence for Amazon’s reduced
+                    sensitivity with respect to the market portfolio suggests that the Amazon
+                    stock may play a useful role for diversifying the market-level risk during the
+                    crisis. The estimates for Facebook, shown on the top-right panel of Figure
+                    1, are similar to those of Amazon in the pre-COVID subsamples (i.e., 2019
+                    and 2020 Jan-Feb), as well as the early pandemic period of March and April.
+                    However, in the more recent May-June period, the estimate appears to have
+                    largely returned to its pre-COVID level, which shows an interesting contrast
+                    to Amazon.
+                </p>  
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <img src="ex1.PNG" style=" max-width: 65%;height: 50%; margin-top: 0%; margin-left: 20%; padding-bottom: 10px;"  alt="Equation A.26">
+                <p>
+                                        The estimates of Boeing and Airlines, shown on the bottom panels of
+                    Figure 1, are drastically different from the technology companies. Indeed,
+                    their occupation time estimates have evidently shifted to the right during
+                    the early pandemic period (March and April), and even more so in the
+                    more recent period (May and June). More specifically, we see that, during
+                    the pandemic, not only do their occupation measures center at much higher
+                    levels of beta, they also become much more dispersed. These findings suggest
+                    that firms in the airline industry load on an elevated level of systematic risk,
+                    and their risk loadings also bear an additional “layer” of high uncertainty.
+                    Overall, this empirical example demonstrates how the proposed uniform
+                    estimation theory may be applied in practice. Admittedly, a limitation of the
+                    theory developed here is that it only provides consistent functional estimation. Formal hypothesis testing would further require empirical process-type
+                    functional central limit theorems (i.e., Donsker theorems) for the family of
+                    integrated functionals. Existing results on this issue are rather limited and the empirical-process theory for either nonsmooth test
+                    functions (e.g., the occupation time) or noisy data remains to be challenging
+                    open questions. These may be interesting topics for future research.
+                </p>
+            </div>
+        </main>
+        <p><b>LINK FONTI:</b>
+            <!-- Primo link -->
+         <a href="https://en.wikipedia.org/wiki/Glivenko%E2%80%93Cantelli_theorem">1° fonte</a>
+         <a href="https://pdfs.semanticscholar.org/5ffe/cdfa5bc364ea89f462ac4c7b8ca21355c4bc.pdf">2° fonte</a>
+    
+</body>
+</html>
