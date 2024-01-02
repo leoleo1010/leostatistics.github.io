@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Algorithms for random variates generation</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">Algorithms for random variates generation</h1>
+        </header>
+        <main>
+            <div class="content">
+                <h2>Documentation</h2>
+                <p>
+                    Random variates generation is a crucial aspect of simulation and statistical modeling. The process involves generating random numbers that follow a specific probability distribution. Various algorithms exist for generating random variates from different distributions.
+
+                </p>
+                <p>Formal algorithm—depends on desired distribution</p>
+                <p>But all algorithms have the same general form:</p>
+                <img src="alg1.PNG" style="max-width: 70%;
+                height: 10%;
+                margin-top: 0%;
+                margin-left: 20%;" alt="Immagine correlata alla ricerca">
+                <p>May be several algorithms for a desired input distribution form; want:</p>
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px">Exact: X has exactly (not approximately) the desired distribution</li>
+                    <li class="list-item" style="padding-bottom:10px">Example of approximate algorithm:</li>
+                </ul>
+                <p>\( Treat Z = U1 + U2 + ... + U12 – 6\) as \(N(0, 1)\)</p>
+                <p>Mean, variance correct; rely on CLT for approximate normality.
+                    Range clearly incorrect.</p>
+                <p>Efficient: Low storage</p>
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px">Fast (marginal, setup)</li>
+                    <li class="list-item" style="padding-bottom:10px">Efficient regardless of parameter values (robust)</li>
+                </ul>
+                <p>Simple: Understand, implement (often tradeoff against efficiency)</p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                Here, I'll discuss a few general methods and touch upon some specific distributions:
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px"><b>Inverse Transform Method: 
+                    </b>The Inverse Transform method is a fundamental technique for generating random variates from probability distributions. The key idea is to use the inverse of the cumulative distribution function (CDF) to transform uniform random variables into variables following a desired distribution.
+                        <ul>
+                            <li class="list-item" style="padding-top:10px">
+                                Suppose \(X\) is a random variable with cumulative distribution function \(F(x)\). The CDF gives the probability that 
+                                \(X\) is less than or equal to 
+                                \(x\). The Inverse Transform method involves finding the inverse function 
+                                \(F^{-1}(y)\), where \(y\) is a random variable uniformly distributed between 0 and 1.
+                            </li>
+                            <li class="list-item" style="padding-bottom:10px">The algorithm generate a random variable 
+                                \(U\) from a uniform distribution on the interval 
+                                \([0,1]\) Compute \( X=F^{−1}(U)\), where \(F^{−1}(U)\) is the inverse of the CDF.</li>
+                            <li class="list-item" style="padding-bottom:10px">The <b>step for the implementations:</b>
+                                <p style="margin-left: 30px;">
+                                    Identify the probability distribution of interest and its cumulative distribution function 
+                                    \(F(x)\)
+                                </p>
+                                <p style="margin-left: 30px;">
+                                    Find the inverse function   \(F^{-1}(y)\)
+                                </p>
+                                <p style="margin-left: 30px;">
+                                    Generate a uniform random variable \(U\) in the interval \([0,1]\)
+                                </p>
+                                <p style="margin-left: 30px;">
+                                    Compute \( X=F^{−1}(U)\)
+                                </p>
+                            </li>
+                            <li class="list-item" style="padding-bottom:10px"><b>Advantages</b> are that the method is straightforward and easy to understand and  It can be applied to a wide range of distributions as long as their CDFs have invertible functions.</li>
+                            <li class="list-item" style="padding-bottom:10px">It also have some <b>Limitations</b> like inverting the CDF may not be analytically tractable for all distributions and it may not be computationally efficient for complex distributions</li>
+                            <li class="list-item" style="padding-bottom:10px">For computationally intensive simulations, it's crucial to ensure that the inversion process is efficient.Precomputing values or using numerical methods for inversion can enhance efficiency.</li>
+                            <li class="list-item" style="padding-bottom:10px"><b>Example:</b> Suppose 
+                                
+                                \(X\) follows an exponential distribution with probability density function \(f(x) = \lambda e^{-\lambda x}\)
+                                for x > 0 and  0 otherwise, where  λ is the rate parameter. The cumulative distribution function is \(F(x) = 1 - e^{-\lambda x}
+                                \). The inverse is \( F^{-1}(y) = -\frac{\ln(1-y)}{\lambda} \)
+                                
+                            </li>
+                        </ul> 
+                    </li>
+                </ul>
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px"><b>Acceptance-Rejection Method:</b>The Acceptance-Rejection Method is a versatile algorithm for generating random variates from a probability distribution, especially when direct sampling is challenging. It's based on the idea of accepting or rejecting sampled values based on a comparison with a known, easily sampled distribution.
+                        <ul>
+                            <li class="list-item" style="padding-top:10px"> The <b>method</b> relies on the concept of bounding the target distribution by a simpler distribution from which it is easy to generate random variates.The algorithm involves generating a candidate from the bounding distribution and accepting or rejecting it based on a comparison. 
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b>The algorithm</b>  generate a candidate \(X\) from a proposal distribution (majorizing function) \(g(x)\), then generate a uniform random variable \(U\) on the interval \([0,1]\). If \(U \leq \frac{f(X)}{M \cdot g(X)}\), where \(M\) is a constant such that \(M \geq \frac{f(x)}{g(x)}\) for all \(x\), accept \(X\); otherwise, reject and repeat the process.
+                            </li>
+                            <li class="list-item" style="padding-top:10px"><b> The step for the implementation:</b>
+                                <p style="margin-left: 30px;">Choose a proposal distribution \(g(x)\) that is easier to sample from.</p>
+                                <p style="margin-left: 30px;">Determine a constant \(M\) such that \(M \geq \frac{f(x)}{g(x)}\) for all \(x\) in the support of \(f(x)\).</p>
+                                <p style="margin-left: 30px;">Generate a candidate \(X\) from \(g(x)\).</p>
+                                <p style="margin-left: 30px;"> Generate a uniform \(U\) and accept \(X\) with probability \(\frac{f(X)}{M \cdot g(X)}\).</p>
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                               The <b> Advantages</b> are that are applicable to a wide range of distributions, even when the inverse transform method is impractical and relatively simple to implement.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                It also have some <b>Limitations</b> because Efficiency depends on the choice of the proposal distribution and the constant
+                                \(M\). May require tuning for optimal performance.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                The <b>efficiency</b> of the Acceptance-Rejection Method is influenced by the tightness of the bounding function and the ease of sampling from it.
+                                Optimizing the choice of 
+                                g(x) and 
+                                M is crucial for efficient sampling.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                Commonly used in Bayesian statistics, Monte Carlo simulations, and when dealing with non-standard or complex distributions.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                Example: Generating Normal Variates using the Box-Muller Transform: The Box-Muller transform generates two independent standard normal variates (
+                                    Z
+                                    0  ​
+                                     and Z
+                                    1
+                                     ) by accepting or rejecting candidates generated from a uniform distribution.
+                            </li>
+                        </ul> 
+                    </li>
+                </ul>
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px"><b>Acceptance-Rejection for Exponential Distribution:</b> The Acceptance-Rejection Method for the Exponential Distribution involves generating random variates from an exponential distribution by accepting or rejecting candidates sampled from a different, easily generated distribution.
+                        <ul>
+                            <li class="list-item" style="padding-top:10px">
+                                The <b>probability density function (PDF) </b> of the exponential distribution is given by \(f(x) = \lambda e^{-\lambda x}\) for \(x \geq 0\), where \(\lambda\) is the rate parameter.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">To apply the Acceptance-Rejection Method, a proposal distribution (\(g(x)\)) is chosen. A common choice is the uniform distribution on \([0, 1]\), as it is easy to generate.</li>
+                            <li class="list-item" style="padding-top:10px">The <b>constant \(M\)</b> is determined such that \(M \geq \frac{f(x)}{g(x)}\) for all \(x\) in the support of \(f(x)\). For the exponential distribution, \(\frac{f(x)}{g(x)} = \lambda e^{-\lambda x}\), and choosing \(g(x) = 1\) leads to \(M = \lambda\).</li>
+                            <li class="list-item" style="padding-top:10px"><b>The algorithm</b> Generate a candidate \(X\) from the proposal distribution (e.g., uniform on \([0, 1]\)), then Generate a uniform random variable \(U\) on the interval \([0, 1]\).If \(U \leq \lambda e^{-\lambda X}\), accept \(X\); otherwise, reject and repeat the process.</li>
+                            <li class="list-item" style="padding-top:10px"><b>Efficiency Considerations:</b>The efficiency of this method depends on the tightness of the bounding function (\(g(x)\)) and the ease of sampling from it. In the case of the exponential distribution, the choice of \(g(x) = 1\) simplifies the process.</li>
+                            <li class="list-item" style="padding-top:10px">This method is applied when direct sampling from the exponential distribution is <b>challenging or inefficient.</b>It demonstrates the flexibility of the Acceptance-Rejection Method in generating random variates from different distributions.</li>
+                        </ul> 
+                    </li>
+                </ul>
+                <ul>
+                    <li class="list-item" style="padding-bottom:10px"><b>Convolution</b> The Convolution Method is a technique used to determine the probability distribution of the sum of independent random variables. It is particularly useful when dealing with the sum of two or more random variables and provides an analytical way to compute the distribution of their sum.
+                        <ul>
+                            <li class="list-item" style="padding-top:10px"><b>Concept:</b>
+                                <p style="padding-left: 30px;">Sum of Random Variables:Given independent random variables \(X\) and \(Y\), the sum \(Z = X + Y\) is a new random variable.</p>
+                                <p style="padding-left: 30px;">Convolution:The Convolution Method involves finding the probability distribution of the sum \(Z\) through the convolution of the probability distributions of \(X\) and \(Y\).</p>
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                For <b>random variables</b> \(X\) and \(Y\) with probability density functions \(f_X(x)\) and \(f_Y(y)\), respectively, the PDF of their sum \(Z = X + Y\) is given by the convolution integral:
+
+                                \[ f_Z(z) = \int_{-\infty}^{\infty} f_X(x) \cdot f_Y(z - x) \,dx \]
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b>For discrete random variables</b>, the convolution of the probability mass functions (PMFs) \(P_X(x)\) and \(P_Y(y)\) is given by:
+
+                                \[ P_Z(z) = \sum_{\text{all } x} P_X(x) \cdot P_Y(z - x) \]
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b>Convolution Sum:</b>The convolution of \(X\) and \(Y\) involves summing the products of the probabilities of all possible pairs of values that sum to \(z\). The process is repeated for all possible values of \(z\) to obtain the entire distribution of \(Z\).
+
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b>Characteristics of Convolution:</b>
+                                <p style="padding-left: 30px;"><b>Commutative:</b> \(X + Y\) has the same distribution as \(Y + X\).</p>
+                                <p style="padding-left: 30px;"><b>Associative:</b> \((X + Y) + Z\) has the same distribution as \(X + (Y + Z)\).</p>
+                                <p style="padding-left: 30px;"><b>Closure:</b>  If \(X\) and \(Y\) are independent, then their sum \(X + Y\) is also independent.</p> 
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b> Efficiency Considerations:</b> The Convolution Method provides a closed-form solution for the distribution of the sum, which can be computationally efficient compared to other numerical methods.
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                If \(X\) and \(Y\) are independent normal random variables with means \(\mu_X\) and \(\mu_Y\) and variances \(\sigma_X^2\) and \(\sigma_Y^2\), then \(Z = X + Y\) is also a normal distribution with mean \(\mu_Z = \mu_X + \mu_Y\) and variance \(\sigma_Z^2 = \sigma_X^2 + \sigma_Y^2\).
+                            </li>
+                            <li class="list-item" style="padding-top:10px">
+                                <b>Applications:</b> In finance is to used to model the distribution of portfolio returns, in telecommunications is to used analise signal-to-noise ratios, in Queueing Theory to model service times in queues.
+                            </li>
+                        </ul> 
+                    </li>
+                </ul>
+            </div>
+        </main>
+        <p><b>LINK FONTI:</b>
+            <!-- Primo link -->
+         <a href="https://www.cyut.edu.tw/~hchorng/downdata/1st/SS8_Random%20Variate.pdf">1° fonte</a>
+         <a href="https://www.omscs-notes.com/simulation/random-variate-generation/">2° fonte</a>
+  
+            
+</body>
+</html>
