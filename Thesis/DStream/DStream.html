@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title> Algorithms for Data streams</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">Algorithms for Data streams</h1>
+        </header>
+    <main>
+        <div class="content">
+            <h2>Ideas</h2>
+            <p>
+                A data stream algorithm is a type of algorithm designed to process data that arrives continuously over time, often in a sequential manner, rather than in a batch. In traditional algorithms, the entire dataset is available from the beginning, allowing for multiple passes and complex computations. However, in a data stream scenario, the algorithm must make decisions on the fly as data arrives and typically has limited memory to work with.</p>
+                <p>As a result of these constraints, streaming algorithms often produce approximate answers based on a summary or "sketch" of the data stream.
+                </p>
+                <p>Here are some <b>key characteristics</b> and challenges associated with data stream algorithms:</p>
+            
+            <p style="padding-left:30px;">
+                <b>Sequential Processing: </b> Data stream algorithms process data one item at a time in a sequential manner. They do not have access to the entire dataset at once.
+            </p>
+            <p style="padding-left:30px;">
+                <b>Limited Memory:</b> Due to the continuous nature of data streams, these algorithms often operate under constraints, particularly with respect to memory. They need to provide approximate solutions with limited resources.
+
+            </p><p style="padding-left:30px;">
+                <b>Single Pass:</b> Many data stream algorithms aim to process the data in a single pass, making them efficient for real-time or online applications where reprocessing the entire dataset is not feasible.
+            </p><p style="padding-left:30px;">
+                <b>Approximate Solutions:</b>  Given the constraints, data stream algorithms often provide approximate solutions rather than exact results. This is acceptable in many applications where quick insights are more critical than precise accuracy
+
+            </p><p style="padding-left:30px;">
+                <b>Adaptability:</b> Data stream algorithms need to adapt to changing patterns in the data over time. They should be capable of detecting and responding to shifts in the underlying distribution.
+            </p>
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <h2>Models</h2>
+            <h4 style="padding-top: 20px;"> Data stream model </h4>
+            <p>In the data stream model, some or all of the input is represented as a finite sequence of integers (from some finite domain) which is generally not available for random access, but instead arrives one at a time in a "stream".
+                If the stream has length n and the domain has size m, algorithms are generally constrained to use space that is logarithmic in m and n.
+                They can generally make only some small constant number of passes over the stream, sometimes just one.
+            </p>
+            <h4 style="padding-top: 20px;"> Turnstile and cash register models </h4>
+            <p>Much of the streaming literature is concerned with computing statistics on frequency distributions that are too large to be stored. For this class of problems, there is a vector
+                \(\mathbf {a} =(a_{1},\dots ,a_{n})\) (initialized to the zero vector 
+                \(\mathbf {0}\) ) that has updates presented to it in a stream. The goal of these algorithms is to compute functions of 
+                \(\mathbf {a}\)  using considerably less space than it would take to represent 
+                \(\mathbf {a}\)  precisely. There are two common models for updating such streams, called the <b>"cash register"</b> and <b>"turnstile"</b> models.
+            </p>
+            <p> In the cash register model, each update is of the form 
+                \(\langle i,c\rangle\) , so that 
+                \(a_{i}\) is incremented by some positive integer 
+                c. A notable special case is when 
+                \(c=1\) (only unit insertions are permitted).</p>
+            <p> In the turnstile model, each update is of the form \(\langle i,c\rangle\) 
+                so that \(a_{i}\) is incremented by some (possibly negative) integer 
+                c. In the "strict turnstile" model, no 
+                \(a_{i}\) at any time may be less than zero.
+                </p>
+            <h4 style="padding-top: 20px;"> Sliding window model </h4>
+            <p>Several papers also consider the "sliding window" model.In this model, the function of interest is computing over a fixed-size window in the stream. As the stream progresses, items from the end of the window are removed from consideration while new items from the stream take their place. </p>
+            <p>Besides the above frequency-based problems, some other types of problems have also been studied. Many graph problems are solved in the setting where the adjacency matrix or the adjacency list of the graph is streamed in some unknown order. There are also some problems that are very dependent on the order of the stream (i.e., asymmetric functions), such as counting the number of inversions in a stream and finding the longest increasing subsequence.</p>
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <h2>Performance and code</h2>
+            <p>The performance of an algorithm that operates on data streams is measured by three basic factors:</p>
+            <ul>
+                <li class="list-item">The number of passes the algorithm must make over the stream.
+                </li>
+                <li class="list-item">The available memory.
+                </li>
+                <li class="list-item">The running time of the algorithm.
+                </li>
+            </ul>
+            <p>These algorithms have many similarities with online algorithms since they both require decisions to be made before all data are available, but they are not identical. Data stream algorithms only have limited memory available but they may be able to defer action until a group of points arrive, while online algorithms are required to take action as soon as each point arrives.
+            </p>
+            <p>If the algorithm is an approximation algorithm then the accuracy of the answer is another key factor. The accuracy is often stated as an 
+                \((\epsilon ,\delta )\) approximation meaning that the algorithm achieves an error of less than 
+                \(\epsilon\)  with probability 
+                \(1-\delta\).</p>
+            <h4 style="padding-top: 20px;"> Code example</h4>
+            <h4 style="padding-top: 20px;">  Single Pass Processing:</h4>
+            <ul>
+                <li class="list-item" style="padding-top: 10px;"><b>Idea:</b>Online algorithms aim to process the data stream in a single pass or a small number of passes, making immediate decisions without revisiting past data.</li>
+                <li class="list-item" style="padding-top: 10px;"><b>Rationale:</b> In many streaming applications, the sheer volume of data makes it impractical to store and revisit the entire dataset. Single-pass processing allows for real-time or near-real-time analysis and decision-making.</li>
+            </ul>
+            <p> Let's consider a simple example of single pass processing for calculating the sum and average of a data stream. I'll use a generator to simulate an infinite data stream and update the sum and average on-the-fly with each incoming data point.</p>
+            <pre>
+                <code>
+                    
+                    // Simulate an infinite data stream with random numbers
+                    function* dataStream() {
+                        while (true) {
+                            yield Math.floor(Math.random() * 10) + 1;
+                            // Random number between 1 and 10
+                        }
+                    }
+                
+                    // Perform single pass processing for sum and average
+                    function singlePassSumAndAverage() {
+                        // Initialize variables for sum and count
+                        let totalSum = 0;
+                        let count = 0;
+                
+                        // Get the result container
+                        const resultContainer = document.getElementById("resultContainer");
+                
+                        // Get the data stream generator
+                        const streamGenerator = dataStream();
+                
+                        // Process the data stream in a single pass
+                        setInterval(() => {
+                            // Get the next data point from the stream
+                            const dataPoint = streamGenerator.next().value;
+                
+                            // Update sum and count
+                            totalSum += dataPoint;
+                            count += 1;
+                
+                            // Calculate average on-the-fly
+                            const average = totalSum / count;
+                
+                            // Display results for each data point
+                            const resultText = `Data Point: ${dataPoint} | Sum: ${totalSum} |
+                            Average: ${average.toFixed(2)}`;
+                
+                            // Append the result to the container
+                            resultContainer.innerHTML += `${resultText}`;
+                
+                        }, 1000); // Update every 1000 milliseconds (1 second)
+                    }
+                
+                    // Run the single pass processing
+                    singlePassSumAndAverage();
+                </code>
+            </pre>
+            <p> And in the body a <b>display area</b> to show te results:</p>
+            <pre>
+                <code>
+                    &lt;!-- Display area for data stream results --&gt;
+                    &lt;div id="resultContainer"&gt;&lt;/div&gt;
+                </code>
+            </pre>
+                <p>results:</p>
+                <img src="code1.PNG" style="max-width: 30%;
+                height: 15%;
+                margin-top: 0%;
+                margin-left: 30%;">
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <h4 style="padding-top: 20px;">Memory Efficiency:</h4>
+            <ul>
+                <li class="list-item" style="padding-top: 10px;"><b>Idea:</b>Online algorithms are designed to operate with limited memory resources, efficiently summarizing or approximating the data stream without storing the entire history.</li>
+                <li class="list-item" style="padding-top: 10px;"><b>Rationale:</b> Traditional batch processing algorithms may have access to the entire dataset and extensive memory. Online algorithms prioritize memory efficiency to handle continuous data streams where storing all data is often not feasible.</li>
+            </ul>
+        <p>Let's create a simple example in HTML and JavaScript to demonstrate memory efficiency by processing a data stream with limited memory. In this example, I'll calculate the running average of a data stream while keeping track of only the latest two data points. The results will be displayed on the HTML page.</p>
+        <pre>
+            <code>
+                // Simulate a data stream with random numbers
+                function* dataStream() {
+                    while (true) {
+                        yield Math.floor(Math.random() * 10) + 1; // Random number between 1 and 10
+                    }
+                }
+            
+                // Perform memory-efficient processing for running average
+                function memoryEfficientRunningAverage() {
+                    // Initialize variables for the last two data points
+                    let lastDataPoint = 0;
+                    let currentDataPoint = 0;
+            
+                    // Get the result container
+                    const resultContainer = document.getElementById("resultContainer");
+            
+                    // Get the data stream generator
+                    const streamGenerator = dataStream();
+            
+                    // Process the data stream with limited memory
+                    setInterval(() => {
+                        // Get the next data point from the stream
+                        const newDataPoint = streamGenerator.next().value;
+            
+                        // Update memory with the new data point
+                        lastDataPoint = currentDataPoint;
+                        currentDataPoint = newDataPoint;
+            
+                        // Calculate running average with only the last two data points
+                        const runningAverage = (lastDataPoint + currentDataPoint) / 2;
+            
+                        // Display results for each data point
+                        const resultText = `New Data Point: ${newDataPoint} | 
+                        Running Average: ${runningAverage.toFixed(2)}`;
+            
+                        // Append the result to the container
+                        resultContainer.innerHTML += `${resultText}<`;
+            
+                    }, 1000); // Update every 1000 milliseconds (1 second)
+                }
+            
+                // Run the memory-efficient processing
+                memoryEfficientRunningAverage();
+            </code>
+        </pre>
+        <p>And in the body a <b> display area</b> display area:</p>
+        <pre>
+            <code>
+                &lt;!-- Display area for data stream results --&gt;
+                    &lt;div id="resultContainer"&gt;&lt;/div&gt; 
+            </code>
+        </pre>
+        <p>In this example, the running average is calculated using only the last two data points, demonstrating a memory-efficient approach. The results are displayed in the HTML page's result container, showing the new data point and the running average for each iteration.</p>
+        <img src="code2.PNG" style="max-width: 30%;
+        height: 20%;
+        margin-top: 0%;
+        margin-left: 33%;">
+        </div>
+    </main>
+    <main>
+        <div class="content">
+            <h4>FM-Sketch algorithm</h4>
+            <p>Flajolet  introduced probabilistic method of counting which was inspired
+                from a paper by Robert Morris.
+                Morris in his paper says that if the requirement of accuracy is dropped, a counter n can be replaced by a counter log n which can be stored in log log n bits.
+                Flajolet improved this method by using a hash function h which is assumed to uniformly distribute the element in the hash space (a binary string of length L).
+                $$h:[m]\rightarrow [0,2^{L}-1]$$
+                Let bit(y,k) represent the kth bit in binary representation of y
+                $$y=\sum _{k\geq 0}\mathrm {bit} (y,k)*2^{k}$$
+                Let 
+                \(\rho (y)\) represents the position of least significant 1-bit in the binary 
+                representation of yi with a suitable convention for \(\rho (0)\).
+                $${\displaystyle \rho (y)={\begin{cases}\mathrm {Min} (k:\mathrm {bit} (y,k)==1)&{\text{if }}y>0\\L&{\text{if }}y=0\end{cases}}}$$
+                Let A be the sequence of data stream of length M whose cardinality need to be determined. Let BITMAP [0...L − 1] be the
+                hash space where the ρ(hashedvalues) are recorded. The below algorithm then determines approximate cardinality of A.
+            </p>
+            <pre>
+                <code>
+                    Procedure FM-Sketch:
+
+                    for i in 0 to L − 1 do
+                        BITMAP[i] := 0 
+                    end for
+                    for x in A: do
+                        Index := ρ(hash(x))
+                        if BITMAP[index] = 0 then
+                            BITMAP[index] := 1
+                        end if
+                    end for
+                    B := Position of left most 0 bit of BITMAP[] 
+                    return 2 ^ B
+                </code>
+            </pre>
+            <p>If there are N distinct elements in a data stream:</p>
+            <ul>
+                <li class="list-item" style="padding-top: 10px;">For 
+                    \(i\gg \log(N)\) then BITMAP[i] is certainly 0</li>
+                <li class="list-item" style="padding-top: 10px;">For 
+                    \(i\ll \log(N)\) then BITMAP[i] is certainly 1</li>
+                <li class="list-item" style="padding-top: 10px;">For 
+                    \(i\approx \log(N)\) then BITMAP[i] is a fringes of 0's and 1's</li>
+            </ul>
+            <p style="padding-top: 10px;">Here's the interpreted version of the <b>pseudocode</b> in Python</p>
+            <pre>
+                <code>
+                    L = 10  # L is an arbitrary value, replace it with the desired value
+                    BITMAP = [0] * L
+                    
+                    def hash_function(x):
+                        # Implement the hash function ρ based on your requirements
+                        return hash(x) % L
+                    
+                    A = [1, 2, 3, 4, 5]  # Replace with your array of data
+                    
+                    for i in range(L):
+                        BITMAP[i] = 0
+                    
+                    for x in A:
+                        index = hash_function(x)
+                        if BITMAP[index] == 0:
+                            BITMAP[index] = 1
+                    
+                    # Find the position of the leftmost 0 bit in BITMAP
+                    B = BITMAP.index(0)
+                    result = 2 ** B
+                    
+                    print(result)
+                    
+                </code>
+            </pre>
+            <p>This Python code <b>simulates</b> the algorithm described in the pseudocode.</p>
+        </div>
+    </main>
+    <p><b>LINK FONTI:</b>
+        <!-- Primo link -->
+     <a href="https://en.wikipedia.org/wiki/Streaming_algorithm#:~:text=In%20computer%20science%2C%20streaming%20algorithms,few%20passes%2C%20typically%20just%20one.">1° fonte</a>
+     <a href="https://charuaggarwal.net/streambook.pdf">2° fonte</a>
+     <a href=" https://www.cs.princeton.edu/courses/archive/spring04/cos598B/bib/Muthu-Survey.pdf">3° fonte</a>
+
+    
+</body>
+</html>
