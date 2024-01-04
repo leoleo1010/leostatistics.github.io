@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Stochastic process and SDE</title>
+            <style>
+                body {
+                    font-family: 'Arial', sans-serif;
+                    margin: 0;
+                    padding: 0;
+                    background-color: #f4f4f4;
+                    color: #333;
+                }
+        
+                header {
+                    background-color: #007acc;
+                    color: #fff;
+                    padding: 1em;
+                    text-align: center;
+                }
+        
+                main {
+                    display: flex;
+                    max-width: 800px;
+                    margin: 20px auto;
+                    border:groove;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                }
+        
+                img {
+                    max-width: 100%;
+                    height: 40%;
+                    margin-top: 20%;
+                    margin-right: 1%;
+                }
+                figure{
+                    max-width: 30%;
+                    height: 40%;
+                    margin-top: 10%;
+                    margin-right: 1%; 
+                
+                }
+        
+                .content {
+                    flex: 1;
+                    padding: 20px;
+                }
+        
+                h1 {
+                    color: #007acc;
+                }
+        
+                p {
+                    line-height: 1.6;
+                }
+            </style>
+            <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+        </head>
+        <body>
+            <header>
+                <h1 style="color: white;">Stochastic process and SDE</h1>
+            </header>
+            <main>
+                <div class="content">
+                    <h2>Stochastic process</h2>
+                    <p>
+                        In probability theory and related fields, a stochastic or random process is a mathematical object usually defined as a sequence of random variables, where the index of the sequence often has the interpretation of time. Stochastic processes are widely used as mathematical models of systems and phenomena that appear to vary in a random manner. 
+                    </p>
+                    <p>
+                        A stochastic or random process can be defined as a collection of random variables that is indexed by some mathematical set, meaning that each random variable of the stochastic process is uniquely associated with an element in the set.The set used to index the random variables is called the index set.
+                    </p>
+                    <p>
+                        Each random variable in the collection takes values from the same mathematical space known as the state space. This state space can be, for example, the integers, the real line or 
+                        n-dimensional Euclidean space.An increment is the amount that a stochastic process changes between two index values, often interpreted as two points in time.
+                    </p>
+                    <p>
+                        A stochastic process can have many outcomes, due to its randomness, and a single outcome of a stochastic process is called, among other names, a sample function or realization.
+                    </p>
+                <h4 style="padding-top: 10px;" >Classifications</h4>
+                <p style="padding-top: 20px;">
+                    A stochastic process can be classified in different ways, for example, by its state space, its index set, or the dependence among the random variables. One common way of classification is by the cardinality of the index set and the state space
+                </p>
+                <p>
+                    When interpreted as time, if the index set of a stochastic process has a finite or countable number of elements, such as a finite set of numbers, the set of integers, or the natural numbers, then the stochastic process is said to be in discrete time. If the index set is some interval of the real line, then time is said to be continuous. The two types of stochastic processes are respectively referred to as discrete-time and continuous-time stochastic processes.Discrete-time stochastic processes are considered easier to study because continuous-time processes require more advanced mathematical techniques and knowledge, particularly due to the index set being uncountable. If the index set is the integers, or some subset of them, then the stochastic process can also be called a random sequence.
+                </p>
+                <p>
+                    If the state space is the integers or natural numbers, then the stochastic process is called a discrete or integer-valued stochastic process. If the state space is the real line, then the stochastic process is referred to as a real-valued stochastic process or a process with continuous state space. If the state space is 
+                    n-dimensional Euclidean space, then the stochastic process is called a 
+                    n-dimensional vector process or 
+                    n-vector process.
+                </p>
+                <p>
+                    A stochastic process is defined as a collection of random variables defined on a common probability space 
+                    \((\Omega ,{\mathcal {F}},P)\), where 
+                    Ω is a sample space, 
+                    \({\mathcal {F}}\) is a 
+                    \(\sigma -algebra\), and 
+                    P is a probability measure; and the random variables, indexed by some set 
+                    T, all take values in the same mathematical space 
+                    S, which must be measurable with respect to some 
+                    \(\sigma -algebra\)
+                    \(\Sigma\)
+                </p>
+                <p>In other words, for a given probability space 
+                   
+                    \((\Omega ,{\mathcal {F}},P)\) and a measurable space 
+                   
+                    \((S,\Sigma )\), a stochastic process is a collection of 
+                    
+                    S-valued random variables, which can be written as:
+                    $${\displaystyle \{X(t):t\in T\}.}$$
+                    Historically, in many problems from the natural sciences a point 
+                    \(t\in T\) had the meaning of time, so 
+                    \(X(t)\) is a random variable representing a value observed at time 
+                    \(t\). A stochastic process can also be written as \({\displaystyle \{X(t,\omega ):t\in T\}}\)
+                    o reflect that it is actually a function of two variables, 
+                    \(t\in T\) and 
+                    \({\displaystyle \omega \in \Omega }\).
+                </p>
+                <h4 style="padding-top: 10px;"> Most famous examples</h4>
+                <h5 style="padding-top: 10px;"> Bernoulli process </h5>
+                <p style="padding-top: 20px;">One of the simplest stochastic processes is the Bernoulli process, which is a sequence of independent and identically distributed (iid) random variables, where each random variable takes either the value one or zero, say one with probability 
+                    
+                   \(p\)and zero with probability 
+                    \(1-p\). This process can be linked to repeatedly flipping a coin, where the probability of obtaining a head is 
+                    \(p\) and its value is one, while the value of a tail is zero.In other words, a Bernoulli process is a sequence of iid Bernoulli random variables, where each coin flip is an example of a Bernoulli trial.
+                 </p>
+                 <h5 style="padding-top: 10px;"> Random walk</h5>
+                 <p style="padding-top: 20px;">Random walks are stochastic processes that are usually defined as sums of iid random variables or random vectors in Euclidean space, so they are processes that change in discrete time.But some also use the term to refer to processes that change in continuous time, particularly the Wiener process used in finance, which has led to some confusion, resulting in its criticism.
+                    There are other various types of random walks, defined so their state spaces can be other mathematical objects, such as lattices and groups, and in general they are highly studied and have many applications in different disciplines.
+
+                 </p>
+                 <p>A classic example of a random walk is known as the simple random walk, which is a stochastic process in discrete time with the integers as the state space, and is based on a Bernoulli process, where each Bernoulli variable takes either the value positive one or negative one. In other words, the simple random walk takes place on the integers, and its value increases by one with probability, say, 
+                    
+                    \(p\), or decreases by one with probability 
+                    
+                    \(1-p\), so the index set of this random walk is the natural numbers, while its state space is the integers. If 
+                    
+                    \(p = 0.5\), this random walk is called a symmetric random walk.</p>
+                 <h5 style="padding-top: 10px;"> Wiener process </h5>
+                 <p style="padding-top: 20px;">The Wiener process is a stochastic process with stationary and independent increments that are normally distributed based on the size of the increments.
+                    Playing a central role in the theory of probability, the Wiener process is often considered the most important and studied stochastic process, with connections to other stochastic processes.
+                    Its index set and state space are the non-negative numbers and real numbers, respectively, so it has both continuous index set and states space.
+                    But the process can be defined more generally so its state space can be 
+                    n-dimensional Euclidean space.
+                    If the mean of any increment is zero, then the resulting Wiener or Brownian motion process is said to have zero drift. If the mean of the increment for any two points in time is equal to the time difference multiplied by some constant 
+                    \(\mu\), which is a real number, then the resulting stochastic process is said to have drift 
+                    \(\mu\).
+                 </p>
+                 <p>
+                    Almost surely, a sample path of a Wiener process is continuous everywhere but nowhere differentiable. It can be considered as a continuous version of the simple random walk.The process arises as the mathematical limit of other stochastic processes such as certain random walks rescaled.
+
+                 </p>
+                 <p> The Wiener process is a member of some important families of stochastic processes, including Markov processes, Lévy processes and Gaussian processes.
+                    The process also has many applications and is the main stochastic process used in stochastic calculus.
+                    The process is also used in different fields, including the majority of natural sciences as well as some branches of social sciences, as a mathematical model for various random phenomena.
+                 </p>
+                 <h5 style="padding-top: 10px;">
+                    Poisson process </h5>
+                 <p style="padding-top: 20px;">The Poisson process is a stochastic process that has different
+                     forms and definitions.  It can be defined as a counting process, which is a stochastic process that represents the random number of points or events up to some time. The number of points of the process that are located in the interval from zero to some given time is a Poisson random variable that depends on that time and some parameter. This process has the natural numbers as its state space and the non-negative numbers as its index set. This process is also called the Poisson counting process, since it can be interpreted as an example of a counting process.
+                     If a Poisson process is defined with a single positive constant, then the process is called a homogeneous Poisson process.
+                     The homogeneous Poisson process is a member of important classes of stochastic processes such as Markov processes and Lévy processes.</p>
+                <p>The homogeneous Poisson process can be defined and generalized in different ways. It can be defined such that its index set is the real line, and this stochastic process is also called the stationary Poisson process.
+                    If the parameter constant of the Poisson process is replaced with some non-negative integrable function of 
+                    \(t\), the resulting process is called an inhomogeneous or nonhomogeneous Poisson process, where the average density of points of the process is no longer constant.
+                    Serving as a fundamental process in queueing theory, the Poisson process is an important process for mathematical models, where it finds applications for models of events randomly occurring in certain time windows.
+                </p>
+                <p>
+                    Defined on the real line, the Poisson process can be interpreted as a stochastic process, 
+                    among other random objects.But then it can be defined on the n-dimensional Euclidean space or other mathematical spaces,
+                    where it is often interpreted as a random set or a random counting measure, instead of a stochastic process.
+                    In this setting, the Poisson process, also called the Poisson point process, is one of the most important objects in probability theory, both for applications and theoretical reasons.
+                    But it has been remarked that the Poisson process does not receive as much attention as it should, partly due to it often being considered just on the real line, and not on other mathematical spaces.
+                </p>
+
+                </div>
+            </main>
+            <main>
+                <div class="content">
+                    <h2> SDE </h2>
+                    <p> A <b> stochastic differential equation (SDE)</b> is a differential equation in which one or more of the terms is a stochastic process,
+                        resulting in a solution which is also a stochastic process.</p>
+                    <p>SDEs have a random differential that is in the most basic case random white noise calculated as the derivative of a Brownian motion or more generally a semimartingale. However, other types of random behaviour are possible, such as jump processes like Lévy processes
+                        or semimartingales with jumps. Random differential equations are conjugate to stochastic differential equations.
+                    </p>
+                    <p>
+                        SDEs have many applications throughout pure mathematics and are used to model various behaviours of stochastic models such as stock prices,  random growth models or physical systems that are subjected to thermal fluctuations. 
+                    </p>
+                    <h4> Use in physics</h4>
+                    <p>In physics, SDEs have wide applicability ranging from molecular dynamics to neurodynamics and to the dynamics of astrophysical objects. More specifically, SDEs describe all dynamical systems, in which quantum effects are either unimportant or can be taken into account as perturbations. SDEs can be viewed as a generalization of the dynamical systems theory to models with noise. This is an important generalization because real systems cannot be completely isolated from their environments and for this reason always experience external stochastic influence.</p>
+                    <p>There are standard techniques for transforming higher-order equations into several coupled first-order equations by introducing new unknowns. Therefore, the following is the most general class of SDEs:
+                        $${\displaystyle {\frac {\mathrm {d} x(t)}{\mathrm {d} t}}=F(x(t))+\sum _{\alpha =1}^{n}g_{\alpha }(x(t))\xi ^{\alpha }(t),\,}$$
+                        where \(x\in X\) is the position in the system in its phase (or state) space, \(X\), assumed to be a differentiable manifold, the 
+                        \({\displaystyle F\in TX}\) is a flow vector field representing deterministic law of evolution, and 
+                        \({\displaystyle g_{\alpha }\in TX}\) is a set of vector fields that define the coupling of the system to Gaussian white noise, 
+                        \({\displaystyle \xi ^{\alpha }}\). If \(X\) is a linear space and 
+                        g are constants, the system is said to be subject to additive noise, otherwise it is said to be subject to multiplicative noise. This term is somewhat misleading as it has come to mean the general case even though it appears to imply the limited case in which 
+                        \(g(x) \propto x\).
+                    </p>
+                    <p>
+                        For a fixed configuration of noise, SDE has a unique solution differentiable with respect to the initial condition.Nontriviality of stochastic case shows up when one tries to average various objects of interest over noise configurations. In this sense, an SDE is not a uniquely defined entity when noise is multiplicative and when the SDE is understood as a continuous time limit of a stochastic difference equation. In this case, SDE must be complemented by what is known as "interpretations of SDE" such as Itô or a Stratonovich interpretations of SDEs. Nevertheless, when SDE is viewed as a continuous-time stochastic flow of diffeomorphisms, it is a uniquely defined mathematical object that corresponds to Stratonovich approach to a continuous time limit of a stochastic difference equation.In physics, the main method of solution is to find the probability distribution function as a function of time using the equivalent Fokker–Planck equation (FPE). The Fokker–Planck equation is a deterministic partial differential equation. It tells how the probability distribution function evolves in time similarly to how the Schrödinger equation gives the time evolution of the quantum wave function or the diffusion equation gives the time evolution of chemical concentration.
+
+                    </p>
+                    <h4 style="padding-top: 10px;"> Use in probability </h4>
+                    <p>The notation used in probability theory,and in many applications of probability theory,is slightly different.
+                        It is also the notation used in publications on numerical methods for solving stochastic differential equations. This notation makes the exotic nature of the random function of time 
+                        \(\eta_m\) in the physics formulation more explicit. In strict mathematical terms, \(\eta_m\) cannot be chosen as an ordinary function, but only as a generalized function. The mathematical formulation treats this complication with less ambiguity than the physics formulation.
+                    </p>
+                    <p> A typical equation is of the form:
+                        $$\mathrm{d} X_t = \mu(X_t,t)\, \mathrm{d} t +  \sigma(X_t,t)\, \mathrm{d} B_t$$
+                        where \(B\) denotes a <b>Wiener process</b> (standard Brownian motion). This equation should be interpreted as an informal way of expressing the corresponding integral equation
+                        $$ X_{t+s} - X_{t} = \int_t^{t+s} \mu(X_u,u) \mathrm{d} u + \int_t^{t+s} \sigma(X_u,u)\, \mathrm{d} B_u . $$
+                        The equation above characterizes the behavior of the continuous time stochastic process \(Xt\) as the sum of an ordinary Lebesgue integral and an Itô integral. A heuristic (but very helpful) interpretation of the stochastic differential equation is that in a small time interval of length δ the stochastic process \(Xt\) changes its value by an amount that is normally distributed with expectation \(μ(Xt, t)\) δ and variance \(σ(Xt, t)2\) δ and is independent of the past behavior of the process. This is so because the increments of a Wiener process are independent and normally distributed. The function μ is referred to as the drift coefficient, while σ is called the diffusion coefficient. 
+                        The stochastic process Xt is called a diffusion process, and satisfies the Markov property.
+                    
+                    </p>
+                    <p>
+                        The formal interpretation of an SDE is given in terms of what constitutes a solution to the SDE. There are two main definitions of a solution to an SDE, a strong solution and a weak solution.
+                        Both require the existence of a process Xt that solves the integral equation version of the SDE. The difference between the two lies in the underlying probability space 
+                        \(({\displaystyle \Omega ,\,{\mathcal {F}},\,P})\).
+                        A weak solution consists of a probability space and a process that satisfies the integral equation, while a strong solution is a process that satisfies the equation and is defined on a given probability space.
+                        An important example is the equation for <b>geometric Brownian motion</b>
+                        $$\mathrm{d} X_t = \mu X_t \, \mathrm{d} t +  \sigma X_t \, \mathrm{d} B_t.$$
+                        which is the equation for the dynamics of the price of a stock in the Black–Scholes options pricing model
+                        of financial mathematics.
+                
+                    </p>
+                    <p>
+                        Generalizing the geometric Brownian motion, it is also possible to define SDEs admitting strong solutions and whose distribution is a convex combination of densities coming from different geometric Brownian motions or Black Scholes models, obtaining a single SDE whose solutions is distributed as a mixture dynamics of lognormal distributions of different Black Scholes models.
+
+                    </p>
+                    <p>
+                        The simpler SDE called <b>arithmetic Brownian motion:</b>
+                        $${\displaystyle \mathrm {d} X_{t}=\mu \,\mathrm {d} t+\sigma \,\mathrm {d} B_{t}}$$
+                        There are also more general stochastic differential equations where the coefficients \(μ\) and \(σ\) depend not only on the present value of the process \(Xt\), but also on previous values of the process and possibly on present or previous values of other processes too. In that case the solution process, \(X\), is not a Markov process, and it is called an Itô process and not a diffusion process. When the coefficients depends only on present and past values of \(X\), the defining equation is called a stochastic delay differential equation.
+                    </p>
+                    <p>
+                        An innovative application in stochastic finance derives from the usage of the equation for <b>Ornstein Uhlenbeck process:</b>
+                        $${\displaystyle \mathrm {d} R_{t}=\mu R_{t}\,\mathrm {d} t+\sigma _{t}\,\mathrm {d} B_{t}.}$$
+                        which is the equation for the dynamics of the return of the price of a stock under the hypothesis that returns display a Log-normal distribution. Under this hypothesis, the methodologies developed by Marcello Minenna determines prediction interval able to identify abnormal return that could hide market abuse phenomena.
+                    </p>
+                </div>
+            </main>
+            <main>
+                <div class="content" style="height: 1800px;">
+                    <h2> Example made during the HW'S</h2>
+                    <h4 style="padding-top: 10px;">Geometric Brownian motion</h4>
+                    <p>Parameters:</p>
+                    <img src="geomParam.PNG" style=" max-width: 35%;
+                    height: 8%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                    <p>Results:</p>
+                    <img src="geom.PNG" style="max-width: 50%;
+                    height: 15%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                    <hr>
+                    <h4 style="padding-top: 10px;" >Arithmetic Brownian motion</h4>
+                    <p>Parameters:</p>
+                    <img src="geomParam.PNG" style=" max-width: 35%;
+                    height: 8%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                    <p>Results:</p>
+                    <img src="arit.PNG" style="max-width: 50%;
+                    height: 15%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                    <hr>
+                    <h4 style="padding-top: 10px;" >Ornstein Uhlenbeck</h4>
+                    <p>Parameters:</p>
+                    <img src="ornParam.PNG" style=" max-width: 35%;
+                    height: 8%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                    <p>Results:</p>
+                    <img src="orn.PNG" style="max-width: 50%;
+                    height: 13%;
+                    margin-top: 0%;
+                    margin-right: 1%;">
+                </div>
+            </main>
+            <p><b>LINK FONTI:</b>
+                <!-- Primo link -->
+             <a href="https://en.wikipedia.org/wiki/Stochastic_process#Stochastic_process">1° fonte</a>
+             <a href="https://en.wikipedia.org/wiki/Stochastic_differential_equation#Use_in_probability_and_mathematical_finance">2° fonte</a>  
+</body>
+</html>
