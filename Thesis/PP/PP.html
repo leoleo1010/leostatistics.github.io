@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Poisson Process</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">The Poisson Process</h1>
+        </header>
+        <main>
+            <div class="content">
+                <h2>Meaning</h2>
+                <p>In probability, statistics and related fields, a <b>Poisson point process</b> is a type of random mathematical object that consists of points randomly located on a mathematical space with the essential feature that the points occur independently of one another.</p>
+                <p>When the process is defined on the real line, it is often called simply the <b>Poisson process.</b></p>
+                <p>Its name derives from the fact that if a collection of random points in some space forms a Poisson process, then the number of points in a region of finite size is a random variable with a Poisson distribution. The process was discovered independently and repeatedly in several settings, including experiments on radioactive decay, telephone call arrivals and insurance mathematics.</p>
+                <p>The Poisson point process is often defined on the real line, where it can be considered as a <b>stochastic process.</b></p>
+                <p>The point process depends on a single mathematical object, which, depending on the context, may be a constant, a locally integrable function or, in more
+                     general settings, a Radon measure.In the first case, the constant, known as the rate or intensity, is the average density of the points in the Poisson process located in some region of space. The resulting point process is called a homogeneous or stationary Poisson point process. In the second case, the point process is called an inhomogeneous or nonhomogeneous Poisson point process, and the average density of points depend on the location of the underlying space of the Poisson point process.</p>
+                <h4 style="padding-top: 10px;">Poisson distribution of point counts</h4>
+                <p> A Poisson point process is characterized via the Poisson distribution. The Poisson distribution is the probability distribution of a random variable 
+                    
+                    \({\textstyle N}\) (called a Poisson random variable) such that the probability that 
+                    
+                    \(\textstyle N\) equals 
+                    
+                    \(\textstyle n\) is given by:
+                $${\displaystyle \Pr\{N=n\}={\frac {\Lambda ^{n}}{n!}}e^{-\Lambda }}$$
+                where \({\textstyle n!}\) denotes factorial and the parameter \({\textstyle \Lambda }\) determines the shape of the distribution. (In fact, 
+                \({\textstyle \Lambda }\) equals the expected value of \({\textstyle N}\).) By definition, a Poisson point process has the property that the number of points in a bounded region of the process's underlying space is a Poisson-distributed random variable.
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Homogeneous Poisson point process</h2>
+                <p>If a Poisson point process has a parameter of the form 
+                    \({\textstyle \Lambda =\nu \lambda }\), where 
+                    \({\textstyle \nu }\) is Lebesgue measure (that is, it assigns length, area, or volume to sets) and 
+                    \({\textstyle \lambda }\) is a constant, then the point process is called a homogeneous or stationary Poisson point process. The parameter, called rate or intensity, is related to the expected (or average) number of Poisson points existing in some bounded region,</p>
+                <p>The homogeneous Poisson point process, when considered on the positive half-line, can be defined as a counting process, a type of stochastic process, which can be denoted as 
+                    \({\textstyle \{N(t),t\geq 0\}}\).
+                    A counting process represents the total number of occurrences or events that have happened up to and including time 
+                    
+                    \({\textstyle t}\). A counting process is a homogeneous Poisson counting process with rate 
+                    
+                    \({\textstyle \lambda >0}\) if it has the following three properties:</p>
+                    <ul>
+                        <li class="list-item" style="padding-top: 10px;">
+                            \({\textstyle N(0)=0;}\)
+                        </li>
+                        <li class="list-item" style="padding-top: 10px;">
+                            has independent increments; 
+                        </li><li class="list-item" style="padding-top: 10px;">
+                            the number of events (or points) in any interval of length 
+                            \({\textstyle t}\) is a Poisson random variable with parameter (or mean) 
+                            \({\textstyle \lambda t}\).
+                        </li>
+                    </ul>
+                <p> The last property implies
+                    $${\displaystyle \operatorname {E} [N(t)]=\lambda t.}$$
+                    In other words, the probability of the random variable 
+                    \({\textstyle N(t)}\) being equal to 
+                    \({\textstyle n}\) is given by:
+                    $${\displaystyle \Pr\{N(t)=n\}={\frac {(\lambda t)^{n}}{n!}}e^{-\lambda t}.}$$
+                    The Poisson counting process can also be defined by stating that the time differences between events of the counting process are exponential variables with mean 
+                    \({\textstyle 1/\lambda }\). The time differences between the events or arrivals are known as interarrival or interoccurence times.
+                </p>
+                <h4>Interpreted as a point process on the real line</h4>
+                <p>Interpreted as a point process, a Poisson point process can be defined on the real line by considering the number of points of the process in the interval 
+                    \({\textstyle (a,b]}\). For the homogeneous Poisson point process on the real line with parameter 
+                    \({\textstyle \lambda >0}\), the probability of this random number of points, written here as 
+                    \({\textstyle N(a,b]}\), being equal to some counting number \({\textstyle n}\) is given by:
+                    $${\displaystyle \Pr\{N(a,b]=n\}={\frac {[\lambda (b-a)]^{n}}{n!}}e^{-\lambda (b-a)},}$$
+                    For some positive integer 
+                    \({\textstyle k}\), the homogeneous Poisson point process has the finite-dimensional distribution given by:
+                    $${\displaystyle \Pr\{N(a_{i},b_{i}]=n_{i},i=1,\dots ,k\}=\prod _{i=1}^{k}{\frac {[\lambda (b_{i}-a_{i})]^{n_{i}}}{n_{i}!}}e^{-\lambda (b_{i}-a_{i})},}$$
+                    where the real numbers \({\textstyle a_{i} < b_{i}\leq a_{i+1}}\).
+                    In other words, \({\textstyle N(a,b]}\)
+                    is a Poisson random variable with mean 
+
+                    \({\textstyle \lambda (b-a)}\), where 
+
+                    \({\textstyle a\leq b}\). Furthermore, the number of points in any two disjoint intervals, say, 
+
+                    \({\textstyle (a_{1},b_{1}]}\) and 
+
+                    \({\textstyle (a_{2},b_{2}]}\) are independent of each other, and this extends to any finite number of disjoint intervals.
+                </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Inhomogeneous Poisson point process</h2>
+                <p> The inhomogeneous or nonhomogeneous Poisson point process (see Terminology) is a Poisson point process with a Poisson parameter set as some location-dependent function in the underlying space on which the Poisson process is defined. For Euclidean space 
+                    
+                    \({\displaystyle \textstyle \mathbb {R} ^{d}}\), this is achieved by introducing a locally integrable positive function 
+                    
+                    \({\displaystyle \lambda \colon \mathbb {R} ^{d}\to [0,\infty )}\), such that for every bounded region 
+                    
+                    \(\textstyle B\) the \((
+                    
+                    \textstyle d-dimensional)\) volume integral of 
+                    
+                    \(\textstyle \lambda (x)\) over region 
+                    
+                    \(\textstyle B\) is finite. In other words, if this integral, denoted by 
+                   
+                    \(\textstyle \Lambda (B)\), is:
+                $${\displaystyle \Lambda (B)=\int _{B}\lambda (x)\,\mathrm {d} x<\infty ,}$$
+                where \({\displaystyle \textstyle {\mathrm {d} x}}\) is a \((\textstyle d-dimensional)\) volume element,
+                hen for every collection of disjoint bounded Borel measurable sets 
+                \(\textstyle B_{1},\dots ,B_{k}\), an inhomogeneous Poisson process with (intensity) function 
+                \(\textstyle \lambda (x)\) has the finite-dimensional distribution:
+                $${\displaystyle \Pr\{N(B_{i})=n_{i},i=1,\dots ,k\}=\prod _{i=1}^{k}{\frac {(\Lambda (B_{i}))^{n_{i}}}{n_{i}!}}e^{-\Lambda (B_{i})}.}$$
+                Furthermore, \(\textstyle \Lambda (B)\) has the interpretation of being the expected number of points of the Poisson process located in the bounded region 
+                (\\textstyle B\), namely
+                $${\displaystyle \Lambda (B)=\operatorname {E} [N(B)].}$$
+                </p>
+                <h4>Defined on the real line </h4>
+                <p>On the real line, the inhomogeneous or non-homogeneous Poisson point process has mean measure given by a one-dimensional integral. For two real numbers 
+                    \(\textstyle\) a and \(\textstyle b\), where \(\textstyle a\leq b\), denote by \(\textstyle N(a,b]\) the number points of an inhomogeneous Poisson process with intensity function 
+                    \(\textstyle \lambda (t)\) occurring in the interval \(\textstyle (a,b]\). The probability of \(\textstyle n\) points existing in the above interval 
+                    \(\textstyle (a,b]\) is given by:
+                    $${\displaystyle \Pr\{N(a,b]=n\}={\frac {[\Lambda (a,b)]^{n}}{n!}}e^{-\Lambda (a,b)}.}$$
+                    where the mean or intensity measure is:
+                    $${\displaystyle \Lambda (a,b)=\int _{a}^{b}\lambda (t)\,\mathrm {d} t,}$$
+                    which means that the random variable 
+                    \(\textstyle N(a,b]\) is a Poisson random variable with mean 
+                    \({\displaystyle \textstyle \operatorname {E} [N(a,b]]=\Lambda (a,b)}\).
+                    A feature of the one-dimension setting, is that an inhomogeneous Poisson process can be transformed into a homogeneous by a monotone transformation or mapping, which is achieved with the inverse of 
+                    \(\textstyle \Lambda\) 
+                    </p>
+                    <h4>Counting process interpretation</h4>
+                    <p> A counting process is said to be an inhomogeneous Poisson counting process if it has the four properties:</p>
+                    <ul>
+                        <li class="list-item" style="padding-top: 10px;">\({\displaystyle \textstyle N(0)=0;}\)</li>
+                        <li class="list-item" style="padding-top: 10px;">has independent increments</li>
+                        <li class="list-item" style="padding-top: 10px;">\({\displaystyle \textstyle \Pr\{N(t+h)-N(t)=1\}=\lambda (t)h+o(h);}\)</li>
+                        <li class="list-item" style="padding-top: 10px;">\({\displaystyle \textstyle \Pr\{N(t+h)-N(t)\geq 2\}=o(h),}\)</li>
+                    </ul>
+                    <p>where \( o(h) \) is asymptotic or little-o notation for \( \frac{o(h)}{h} \rightarrow 0 \) as \( h \rightarrow 0 \). In the case of point processes with refractoriness (e.g., neural spike trains), a stronger version of property 4 applies:
+                    $${\displaystyle \Pr\{N(t+h)-N(t)\geq 2\}=o(h^{2})}.$$
+                    The above properties imply that \(N(t+h) - N(t)\) is a Poisson random variable with the parameter (or mean) \(\lambda h\), where \(N(t)\) is the Poisson process, and \(\lambda\) is the average rate of events per unit time.
+                    $${\displaystyle \operatorname {E} [N(t+h)-N(t)]=\int _{t}^{t+h}\lambda (s)\,ds,}$$
+                    which implies
+                    $${\displaystyle \operatorname {E} [N(h)]=\int _{0}^{h}\lambda (s)\,ds.}$$
+                    </p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Properties</h2>
+                <p> Here some of the most importants properties:</p>
+                <ul>
+                    <li class="list-item" style="padding-top: 10px;"><b>Stationarity:</b> The Poisson process is stationary, meaning that the probability of observing a certain number of events in a given time interval depends only on the length of the interval, not on the specific starting point or any other characteristics of the process.                    </li>
+                    <li class="list-item" style="padding-top: 10px;"><b>Independence:</b> Consider a collection of disjoint and bounded subregions of the underlying space. By definition, the number of points of a Poisson point process in each bounded subregion will be completely independent of all the others.
+                        This property is known under several names such as complete randomness, complete independence. In other words, there is a lack of interaction between different regions and the points in general,  which motivates the Poisson process being sometimes called a purely or completely random process.</li>
+                    <li class="list-item" style="padding-top: 10px;"><b>Constant Rate:</b> The events occur at a constant average rate, denoted by the parameter 
+                        λ (lambda). This parameter represents the average number of events per unit of time or space.</li>
+                    <li class="list-item" style="padding-top: 10px;"><b>Discreteness:</b> The Poisson process is a discrete-time process, meaning that events can only occur at distinct points in time or space.
+                    </li>
+                    <li class="list-item" style="padding-top: 10px;"><b>Memorylessness:</b> The distance between two consecutive points of a point process on the real line will be an exponential random variable with parameter 
+                        \({\textstyle \lambda }\) (or equivalently, mean 
+                        \({\textstyle 1/\lambda })\). This implies that the points have the memoryless property: the existence of one point existing in a finite interval does not affect the probability (distribution) of other points existing,
+                        but this property has no natural equivalence when the Poisson process is defined on a space with higher dimensions.</li>
+                    <li class="list-item" style="padding-top: 10px;"><b>Incremental Independence: </b> 
+                        This property extends the independence property to increments over disjoint time intervals. If you consider two disjoint time intervals \( (a_1, b_1] \) and \( (a_2, b_2] \), then \( N(b_1) - N(a_1) \) and \( N(b_2) - N(a_2) \) are independent. </li> 
+                    <li class="list-item" style="padding-top: 10px;"><b>Superposition:</b> The sum of independent Poisson processes with rates \( \lambda_1, \lambda_2, \ldots, \lambda_k \) is also a Poisson process with a rate equal to the sum of the individual rates.</li> 
+                </ul>
+            </div>
+        </main>
+        <main>
+            <div class="content" style="height:2100px;">
+                <h2>Simulations</h2>
+                <h4 style="padding-top: 10px;">Poisson Distribution Example: Meteor Showers</h4>
+                <p>Observing a meteor showers from a backyard.</p>
+                <p>can model the number of meteors seen as a Poisson distribution because the meteors are independent, the average number of meteors per hour is constant (in the short term), and — this is an approximation — meteors don’t occur at the same time. </p>
+                <p>All we need to characterize the Poisson distribution is the rate parameter, the number of events per interval * interval length. In a typical meteor shower, we can expect five meteors per hour on average or one every 12 minutes. Due to the limited patience of a young child (especially on a freezing night), we never stayed out more than 60 minutes, so we’ll use that as the time period. From these values, we get:</p>
+                <img src="first1.PNG" style=" max-width: 50%;
+                height: 2%;
+                margin-top: 0%;
+                margin-right: 1%;">
+                <p>Five meteors expected mean that is the most likely number of meteors we’d observe in an hour. According to my pessimistic dad, that meant we’d see three meteors in an hour, tops. To test his prediction against the model, we can use the Poisson pmf distribution to find the probability of seeing exactly three meteors in one hour:</p>
+                <img src="first2.PNG" style=" max-width: 60%;
+                height: 3%;
+                margin-top: 0%;
+                margin-right: 1%;">
+                <p>The graph below shows the probability mass function for the number of meteors in an hour with an average of 12 minutes between meteors, the rate parameter (which is the same as saying five meteors expected in an hour).</p>
+                <img src="first3.PNG" style=" max-width: 60%;
+                height: 10%;
+                margin-top: 0%;
+                margin-right: 1%;">
+                <p>The most likely number of meteors is five, the rate parameter of the distribution. (Due to a quirk of the numbers, four and five have the same probability, 18 percent). There is one most likely value as with any distribution, but there is also a wide range of possible values. For example, we could see zero meteors or see more than 10 in one hour. </p>
+                <p>To visualize other possible scenarios, we can run an experiment by having our sister record the number of meteors she sees every hour for 10,000 hours. The results are in the histogram below:</p>
+                <img src="first4.PNG" style=" max-width: 60%;
+                height: 12%;
+                margin-top: 0%;
+                margin-right: 1%;">
+                <hr>
+                <h4 style="padding-top: 10px;">Example: Poisson Process for Bus Arrivals</h4>
+                <p>Suppose the average rate of bus arrivals at a particular bus stop is 3 buses per hour 
+                    <b>(λ=3).</b> We can use a Poisson process to model the number of buses arriving in a specific time interval. </p>
+                <p><b>1.Probability Distribution:</b>
+                    The probability of observing \( k \) arrivals in a one-hour interval is given by the Poisson distribution formula:
+                    \[
+                    P(N(t) = k) = \frac{e^{-\lambda t} (\lambda t)^k}{k!}
+                    \]
+                    where \( N(t) \) is the number of arrivals in time interval \( t \) (in this case, 1 hour).
+                 
+                 <p><b>2. Example Calculation:</b>
+                    Let's calculate the probability of observing 2 buses arriving in the next 30 minutes (\( t = 0.5 \) hours):
+                    \[
+                    P(N(0.5) = 2) = \frac{e^{-3 \times 0.5} (3 \times 0.5)^2}{2!}
+                    \]
+                </p>
+                 <b>3.Interpretation</b>
+                    The result would give the probability of observing exactly 2 buses arriving at the bus stop in the next 30 minutes.
+                 
+                 <p><b>4.Superposition (Extension):</b>
+                    If we want to model the combined arrivals at two independent bus stops with rates \( \lambda_1 = 2 \) and \( \lambda_2 = 4 \), the superposition property states that the total arrivals process is also a Poisson process with rate \( \lambda_{\text{total}} = \lambda_1 + \lambda_2 = 6 \):
+                    \[
+                    P(N_{\text{total}}(t) = k) = \frac{e^{-6t} (6t)^k}{k!}
+                    \]</p></p>
+                <p>This example demonstrates how the Poisson process can model the random occurrence of events, such as bus arrivals, with a known average rate.</p>
+            </div>
+        </main>
+        <p><b>LINK FONTI:</b>
+            <!-- Primo link -->
+         <a href="https://en.wikipedia.org/wiki/Poisson_point_process">1° fonte</a>
+         <a href="https://www.probabilitycourse.com/chapter11/11_1_2_basic_concepts_of_the_poisson_process.php">2° fonte</a> 
+         <a href="https://builtin.com/data-science/poisson-process">3° fonte</a>  
+</body>
+</html>
