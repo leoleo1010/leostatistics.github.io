@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Functional CLT: The Donsker's invariance principle</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">Functional CLT: The Donsker's invariance principle</h1>            
+        </header>
+        <main>
+            <div class="content">
+                <h2> Meaning </h2>
+                <p>
+                    Consider a principle, stating that under certain conditions, the distribution of a functional of normalized sums \(S_n = \sum_{k=1}^{n} \xi_k\),
+                    \(n >= 1\), of independent and identically distributed random variables \(\xi_k\), where \(n \geq 1\), converges to the distribution of this functional of the Wiener process.
+                </p>
+                <p>Donsker's theorem is as follows: Suppose the random variables \(\xi_k\), \(k \geq 1\), are independent and identically distributed with mean \(0\) and finite, positive variance \(\mathbb{E}(\xi_k^2) = \sigma^2 > 0\). </p>
+                <p> Then the random continous functions
+                    $$ X_n(t) = \frac{1}{\sigma\sqrt{n}} \left[ S_{\lfloor nt \rfloor} + (nt - \lfloor nt \rfloor)\xi_{\lfloor nt  + 1 \rfloor} \right], $$
+                    $$(a1)$$
+                </p>
+                <p> converges weakly (cf. also Weak convergence of probability measures) to the Wiener process: \(X_n(t) \Rightarrow w(t)\). That is, for every bounded and continuous real-valued functional \(f\) on the space \(\mathcal{C}[0,1]\) of continuous functions on the interval \([0,1]\), with the uniform topology, the weak convergence is given by:
+                   $$\mathbb{E}[f(X_n)] \rightarrow \mathbb{E}[f(w)] \quad \text{as} \quad n \rightarrow \infty $$
+                    $$(a2)$$
+                </p>
+                <p>Takes place; equivalently, for an arbitrary set \(G\) in the Borel \(\sigma\)-algebra \(\mathcal{B}_c\) in \(\mathcal{C}[0,1]\) with \(P\{w \in \partial G\} = 0\), one has
+                    $$ P\{X_n \in G\} \rightarrow P\{w \in G\} \quad (\text{a3})$$
+                    
+                    For the more general case of a triangular array with, in every line, independent random variables \(\xi_{n,k}\), \(1 \leq k \leq n\), and under the conditions of the Lindeberg--Levy central limit theorem (cf. also Central limit theorem), the weak convergence in \((\text{a2})\) for sums \(S_n = \sum_{k=1}^{n} \xi_{n,k}\), \(n \geq 1\), is called the Donsker--Prokhorov invariance principle .
+                    
+                    <p>The notion of "invariance principle" is applied as follows. The sums \(S[nt]\), \(0 \leq t \leq 1\), \(n \geq 1\), can be interpreted as positions of a random walk. The convergence \((\text{a2})\) means that all trajectories are trajectories of a Brownian motion \(w(t)\), \(0 \leq t \leq 1\), when \(n\) is large enough. This is the reason that the invariance principle is also called the functional central limit theorem.</p>
+                    
+                    An important application of the invariance principle is to prove limit theorems for various functions of the partial sums, for example, \(X_{\overline{n}} = \sup_t X_n(t)\), \(X_{\underline{n}} = \inf_t X_n(t)\), \(|X_{\overline{n}}| = \sup_t |X_n(t)|\), etc.</p>
+                    
+                <p>The independence of the limiting distribution from the distribution of the random terms enables one to compute the limit distribution in certain easy special cases. For example, the distribution \(P\{\sup_{t}w(t) < z\}\) can be calculated from the partial sums \(S_n = \sum_{k=1}^{n}\alpha_k\), \(n \geq 1\), of independent and identically Bernoulli-distributed \(\alpha_k = \pm 1\) with probabilities \(\pm 1/2\) by using the reflection principle. This argument follows a general pattern. If \(f\) is a continuous functional on \(\mathcal{C}[0,1]\) (or continuous except at points forming a set of Wiener measure \(0\)), then one can find the distribution of \(f(w)\) by finding the explicit distribution of \(f(X_n)\), which is the distribution of \(f(w)\) by the invariance principle.</p>
+                </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2> Proof </h2>
+                <p>
+                        \(\textbf{Step 1: Characteristic Functions}\)
+
+                        <p>Consider the characteristic function of the standardized partial sum process:
+                        \[ \phi_{n,t}(u) = \mathbb{E}\left[e^{iu\frac{S_{\lfloor nt \rfloor}}{\sqrt{n}}}\right]. \]
+
+                        Use properties of characteristic functions and the independence of the random variables \(X_i\) to express this as the product of the characteristic functions of individual terms. Since \(X_i\) has mean zero and finite variance, the characteristic function of each term is known. Manipulate this expression to get a form that converges to the characteristic function of a standard normal distribution as \(n\) approaches infinity.</p>
+
+                        \(\textbf{Step 2: Use of Characteristic Functions}\)
+
+                        <p>Invoke Lindeberg's Central Limit Theorem (LCLT), which states that under certain conditions, the distribution of the sum of independent and identically distributed random variables, properly normalized, converges to a standard normal distribution. Check and prove the conditions of Lindeberg's theorem, ensuring that they are satisfied for the given sequence of random variables.
+
+                        Establish pointwise convergence of the characteristic functions, which is a key step in proving convergence in distribution.
+                        \[ \lim_{n \to \infty} \phi_{n,t}(u) = e^{-\frac{u^2 t}{2}}. \]
+                        </p>
+                        <p>\(\textbf{Step 3: Tightness}\)
+
+                        Prove tightness by controlling the possible deviations of the process. For any \(\epsilon > 0\), find a compact set \(K\) such that:
+                        \[ \limsup_{n \to \infty} P\left(\frac{S_{\lfloor nt \rfloor}}{\sqrt{n}} \in K^c\right) < \epsilon. \]
+
+                        This involves using inequalities and bounding techniques, and may include arguments based on the properties of exponential moments and the law of iterated logarithms.
+                        </p>
+                        <p>\(\textbf{Step 4: Convergence of Finite-Dimensional Distributions}\)
+
+                        Utilize tightness to conclude that any subsequence has a further subsequence that converges in distribution. This often involves Prokhorov's theorem or other tightness criteria.
+
+                        For finite-dimensional distributions, establish convergence of the joint distribution of the process to that of a standard Brownian motion. This step usually involves characteristic function convergence and continuity theorems.
+                        </p>
+                        <p>\(\textbf{Step 5: Uniqueness of the Limit}\)
+
+                        Prove that the limit, obtained as the weak limit of the finite-dimensional distributions, is indeed a standard Brownian motion. Show that it satisfies properties such as independent increments and continuous paths.
+
+                        The uniqueness is often established by showing that any other possible limit would also have to satisfy the same properties, making it essentially the same as the standard Brownian motion.
+
+                        Each of these steps involves careful and rigorous mathematical reasoning, often employing advanced probability theory tools and techniques. For a complete and formal proof, it is recommended to refer to specialized probability theory textbooks or research papers on Donsker's invariance principle.
+                        </p>
+                    </p>
+            </div>
+        </main>
+        <main>
+            <div class="content" style="height: 3100px;">
+                <h2> Simulations </h2>
+                <h4 style="padding-top: 10px;">First simulation</h4>
+                <p>In Figure, you can see an illustration of Donsker's theorem at work for the simple <b>random walk case</b>. What this plot really shows is the convergence of our rescaled random walk to a <b>Brownian motion </b> sample path.</p>
+                <img src="firstEx.gif" style="max-width: 80%;
+                height: 12%;
+                margin-top: 0%;
+                margin-right: 1%;">
+                <hr>
+                <h4 style="padding-top: 10px;">Second simulation</h4>
+                <p>The simulation demonstrates Donsker's invariance principle, a result in probability theory stating that under certain conditions, the normalized partial sums of independent and identically distributed random variables converge in distribution to a standard Brownian motion.
+                </p>
+                <img src="secondEx.PNG" style="max-width: 100%;
+                height: 13%;
+                margin-top: 00%;
+                margin-right: 1%;">
+                <p>Here's a breakdown of the simulation:</p>
+                <ol style="padding-left: 20px;"> <!-- Adjust the padding as needed -->
+                    <li style="margin-bottom: 10px; padding-left: 10px; padding-top: 5px;"><strong>Data Generation:</strong>
+                        <ul>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Generates a sequence of independent and identically distributed random variables.</li>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">The random variables are drawn from a uniform distribution in the interval [-1, 1].</li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 10px; padding-top: 5px;"><strong>Cumulative Sum:</strong>
+                        <ul>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Calculates the cumulative sum of the generated random variables, simulating the partial sums.</li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 10px; padding-top: 5px;"><strong>Normalization:</strong>
+                        <ul>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Normalizes the partial sums by dividing each element by the square root of the sample size.</li>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Mimics the scaling required for the convergence in Donsker's theorem.</li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 10px; padding-top: 5px;"><strong>Brownian Motion Generation:</strong>
+                        <ul>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Generates a sequence of random numbers to simulate a standard Brownian motion.</li>
+                        </ul>
+                    </li>
+                    <li style="margin-bottom: 10px; padding-left: 10px; padding-top: 5px;"><strong>Charting:</strong>
+                        <ul>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">Uses the Chart.js library to create a line chart.</li>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">The blue line represents the normalized partial sums.</li>
+                            <li style="margin-bottom: 5px; padding-left: 10px; padding-top: 5px;">The red line represents the simulated Brownian motion.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p><b>Interpretation:</b>
+                    Observing how the blue line (normalized partial sums) behaves over time.The simulation aims to illustrate the convergence of the normalized partial sums to a standard Brownian motion, as predicted by Donsker's invariance principle.
+                </p>
+                <p> The visualization provides an intuitive understanding of the theorem by showing the dynamic relationship between the normalized partial sums and the Brownian motion.</p>
+                <p>Here the <b> code :</b></p>
+                <pre>
+                    <code>
+                        &lt;script&gt;
+                            // Function to generate random variables following a normal distribution
+                            function generateRandomVariables(n) {
+                                return Array.from({ length: n }, () => Math.random() * 2 - 1); 
+                                // Uniform distribution in [-1, 1]
+                            }
+                    
+                            // Function to calculate cumulative sum
+                            function cumulativeSum(arr) {
+                                return arr.reduce((acc, val, i) => [...acc, val + (acc[i - 1] || 0)], []);
+                            }
+                    
+                            // Function to normalize partial sums
+                            function normalizePartialSums(partialSums) {
+                                const n = partialSums.length;
+                                return partialSums.map(sum => sum / Math.sqrt(n));
+                            }
+                    
+                            // Function to generate Brownian motion
+                            function generateBrownianMotion(n) {
+                                return Array.from({ length: n }, () => Math.random());
+                            }
+                    
+                            // Function to plot the results using Chart.js
+                            function plotResults(normalizedSums, brownianMotion) {
+                                const ctx = document.getElementById('myChart').getContext('2d');
+                                const chart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: Array.from({ length: normalizedSums.length }, 
+                                        (_, i) => i + 1),
+                                        datasets: [
+                                            {
+                                                label: 'Normalized Partial Sums',
+                                                data: normalizedSums,
+                                                borderColor: 'blue',
+                                                fill: false,
+                                            },
+                                            {
+                                                label: 'Brownian Motion',
+                                                data: brownianMotion,
+                                                borderColor: 'red',
+                                                fill: false,
+                                            },
+                                        ],
+                                    },
+                                    options: {
+                                        scales: {
+                                            x: {
+                                                type: 'linear',
+                                                position: 'bottom',
+                                            },
+                                            y: {
+                                                min: -3,
+                                                max: 3,
+                                            },
+                                        },
+                                    },
+                                });
+                            }
+                    
+                            // Main simulation function
+                            function simulateDonskerTheorem() {
+                                const n = 1000;
+                                const randomVariables = generateRandomVariables(n);
+                                const partialSums = cumulativeSum(randomVariables);
+                                const normalizedSums = normalizePartialSums(partialSums);
+                                const brownianMotion = generateBrownianMotion(n);
+                    
+                                plotResults(normalizedSums, brownianMotion);
+                            }
+                    
+                            // Run the simulation on page load
+                            window.onload = simulateDonskerTheorem;
+                    &lt;/script&gt;
+                    </code>
+                </pre>
+                <p>Display area:</p>
+                <pre>
+                    <code>
+                        &lt;canvas id="myChart" width="800" height="400"&gt;&lt;/canvas&gt;
+                    </code>
+                </pre>
+            </div>
+        </main>
+    
+
+    <p><b>LINK FONTI:</b>
+        <!-- Primo link -->
+     <a href="https://encyclopediaofmath.org/wiki/Donsker_invariance_principle#References">1° fonte</a>
+     <a href="https://people.cam.cornell.edu/amt269/DonskerSimulate.html">2° fonte</a>
+
+</body>
+</html>
