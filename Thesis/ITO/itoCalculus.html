@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Itô Integral Simulation</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.5.1/plotly.min.js"></script>
+    </head>
+    <body>
+
+        <div id="plot"></div>
+
+        <script>
+        // Parameters
+        const mu = 0.1;
+        const sigma = 0.2;
+        const T = 1.0;
+        const dt = 0.01;
+        const numSteps = Math.floor(T / dt);
+
+        // Time vector
+        const t = Array.from({ length: numSteps + 1 }, (_, i) => i * dt);
+
+        // Brownian motion increments
+        const dB = t.map(() => Math.sqrt(dt) * (2 * Math.random() - 1));
+
+        // Geometric Brownian motion
+        let X = [1.0];  // Initial value
+        for (let i = 1; i <= numSteps; i++) {
+            const increment = (mu - 0.5 * sigma**2) * dt + sigma * dB[i - 1];
+            X.push(X[i - 1] * Math.exp(increment));
+        }
+
+        // Itô integral approximation
+        let integral = [0];
+        for (let i = 1; i <= numSteps; i++) {
+            integral.push(integral[i - 1] + X[i - 1] * dB[i - 1]);
+        }
+
+        // Plotting
+        const trace1 = {
+            x: t,
+            y: X,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Geometric Brownian Motion'
+        };
+
+        const trace2 = {
+            x: t.slice(0, numSteps),
+            y: integral,
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Itô Integral Approximation'
+        };
+
+        const layout = {
+            title: 'Simulation of Itô Integral',
+            xaxis: { title: 'Time' },
+            yaxis: { title: 'Value' },
+        };
+
+        Plotly.newPlot('plot', [trace1, trace2], layout);
+        </script>
+
+    </body>
+</html>
