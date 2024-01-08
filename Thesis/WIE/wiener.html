@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiener Process Simulation</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+    <h1>Wiener Process Simulation</h1>
+    <div id="wienerPlot"></div>
+
+    <script>
+        // Function to generate multiple Wiener process paths
+        function generateWienerPaths(numPaths, steps, timeIncrement) {
+            const paths = [];
+
+            for (let i = 0; i < numPaths; i++) {
+                paths.push(generateWienerPath(steps, timeIncrement));
+            }
+
+            return paths;
+        }
+
+        // Function to generate a Wiener process path
+        function generateWienerPath(steps, timeIncrement) {
+            const path = [0]; // Initial value
+            let currentStep = 0;
+
+            for (let i = 1; i < steps; i++) {
+                const randomIncrement = Math.sqrt(timeIncrement) * (2 * Math.random() - 1);
+                const nextValue = path[currentStep] + randomIncrement;
+                path.push(nextValue);
+                currentStep++;
+            }
+
+            return path;
+        }
+
+        // Number of paths in the simulation
+        const numPaths = 5;
+
+        // Number of steps in each path
+        const steps = 1000;
+
+        // Time increment between steps
+        const timeIncrement = 1 / steps;
+
+        // Generate multiple Wiener process paths
+        const wienerPaths = generateWienerPaths(numPaths, steps, timeIncrement);
+
+        // Plot Wiener process paths using Plotly
+        const plotData = wienerPaths.map((path, index) => ({
+            type: 'scatter',
+            mode: 'lines',
+            x: Array.from({ length: steps }, (_, i) => i * timeIncrement),
+            y: path,
+            name: `Path ${index + 1}`
+        }));
+
+        const layout = {
+            title: 'Wiener Process Simulation',
+            xaxis: { title: 'Time' },
+            yaxis: { title: 'Value' }
+        };
+
+        Plotly.newPlot('wienerPlot', plotData, layout);
+    </script>
+</body>
+</html>

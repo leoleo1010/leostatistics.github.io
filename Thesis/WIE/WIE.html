@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Wiener process and the GBM</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f4f4;
+                color: #333;
+            }
+    
+            header {
+                background-color: #007acc;
+                color: #fff;
+                padding: 1em;
+                text-align: center;
+            }
+    
+            main {
+                display: flex;
+                max-width: 800px;
+                margin: 20px auto;
+                border:groove;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            img {
+                max-width: 100%;
+                height: 40%;
+                margin-top: 20%;
+                margin-right: 1%;
+            }
+            figure{
+                max-width: 30%;
+                height: 40%;
+                margin-top: 10%;
+                margin-right: 1%; 
+            
+            }
+    
+            .content {
+                flex: 1;
+                padding: 20px;
+            }
+    
+            h1 {
+                color: #007acc;
+            }
+    
+            p {
+                line-height: 1.6;
+            }
+        </style>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: white;">MAIN THESIS:</h1>
+            <h1 style="color: white;">The Wiener process and the GBM</h1>           
+        </header>
+        <main>
+            <div class="content">
+                <h2>An In-depth Study on the Wiener Process and Geometric Brownian Motion</h2>
+                <h3 style="padding-top: 10px; padding: bottom 10px;"> Abstract</h3>
+                <p> This thesis provides a comprehensive exploration of the Wiener process and Geometric Brownian Motion (GBM), two fundamental stochastic processes with wide-ranging applications in various fields.</p>
+                <p>The study aims to elucidate the mathematical foundations of these processes, derive their key equations, and employ numerical simulations to gain insights into their behavior.
+                    The introduction highlights the significance of stochastic processes, motivating the investigation into the Wiener process and GBM.
+                    Chapter 2 elucidates the way for a detailed examination of the Wiener process.
+                    Subsequently, Chapter 3 explores the extension to GBM, emphasizing its role in financial modeling. Then the last chapter is dedicated totally to the 
+                    derivations e the simulations of the processes, giving conclusion on the key findings and the rilevance of the processes in real application.
+                </p>
+                <h3>Index</h3>
+                <div style="padding-left: 20px;">
+                    <h4>1. Introduction</h4>
+                    <ul>
+                    <li style="padding-bottom: 8px;">1.1 Background and Significance of Stochastic Processes</li>
+                    <li style="padding-bottom: 8px;">1.2 Motivation for Investigating Wiener Process and GBM</li>
+                    </ul>
+                
+                    <h4>2. Mathematical Foundations</h4>
+                    <ul>
+                    <li style="padding-bottom: 8px;">2.1 Detailed Examination of Wiener Process</li>
+                    </ul>
+                
+                    <h4>3. Extension to Geometric Brownian Motion (GBM)</h4>
+                    <ul>
+                    <li style="padding-bottom: 8px;">3.1 Detailed Examination of GBM</li>
+                    <li style="padding-bottom: 8px;">3.2 Emphasis on GBM's Role in Financial Modeling</li>
+                    </ul>
+                
+                    <h4>4. Derivations and Simulations</h4>
+                    <ul>
+                    <li style="padding-bottom: 8px;">4.1 Derivation of Wiener Process Equations</li>
+                    <li style="padding-bottom: 8px;">4.2 Derivation of GBM Equations</li>
+                    <li style="padding-bottom: 8px;">4.3 Simulations</li>
+                    </ul>
+                
+                    <h4>5. Conclusion</h4>
+                </div>
+            </div>
+        </main> 
+        <main>
+            <div class="content">
+                <h2>Chapter 1</h2>
+                <h2>1.1 Background and Significance of Stochastic Processes</h2>
+                <h4>Background:</h4>
+                <p>
+                  Stochastic processes are mathematical models that describe the evolution of a system over time in a way that incorporates randomness or uncertainty.
+                  The concept of stochastic processes has roots in probability theory and has evolved over time to become a fundamental tool in various scientific and engineering disciplines.
+                </p>
+                <p>
+                  Historically, the development of stochastic processes can be traced back to early efforts to understand and quantify random phenomena. The field gained momentum in the 20th century with the advent of probability theory and its applications in diverse areas. Notable contributors like Wiener, Kolmogorov, and Ito played pivotal roles in shaping the theory and applications of stochastic processes.
+                </p>
+              
+                <h4>Significance of Stochastic Processes:</h4>
+                <p>
+                  The significance of stochastic processes lies in their ability to model and analyze systems that exhibit random behavior or uncertainty. Some key points highlighting their importance include:
+                </p>
+                <ol>
+                  <li style="padding-top: 8px;"><strong>Modeling Uncertainty:</strong> Stochastic processes provide a robust framework for modeling systems where outcomes are influenced by random factors. This is crucial in situations where deterministic models fall short in capturing real-world variability.</li>
+                  <li style="padding-top: 8px;"><strong>Applications in Finance:</strong> In the financial world, stochastic processes are extensively used to model asset prices. The Wiener process and Geometric Brownian Motion, for instance, are foundational in option pricing and risk management.</li>
+                  <li style="padding-top: 8px;"><strong>Biological Systems:</strong> Stochastic processes find applications in biology, where they are used to model population dynamics, gene expression, and other biological processes that involve inherent randomness.</li>
+                  <li style="padding-top: 8px;"><strong>Physics and Engineering:</strong> In physics and engineering, stochastic processes are employed to study phenomena such as Brownian motion, random vibrations, and the behavior of particles in a fluid.</li>
+                </ol>
+                <p>
+                  Understanding the background and significance of stochastic processes is essential as it provides the groundwork for a deeper exploration of specific processes, such as the Wiener process and Geometric Brownian Motion.
+                </p>
+
+              
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>1.2 Motivation for Investigating Wiener Process and GBM</h2>
+                <p> The Wiener process and Geometric Brownian Motion (GBM), we find motivation rooted in their profound impact on mathematical modeling, particularly in the dynamic world of finance.
+                </p>
+                <p>
+                  The Wiener process, also known as Brownian motion, emerges as a continuous-time stochastic journey marked by independent and normally distributed increments.
+                  Its significance goes beyond abstraction; it forms the bedrock of stochastic calculus. This mathematical framework becomes an indispensable tool for modeling intricate systems laden with randomness, notably in the domain of finance.
+                </p>
+              
+                <h4>Applications in Finance</h4>
+                <p>
+                  In finance, the Wiener process unfolds as a fundamental model for deciphering the random trajectory of asset prices over time. Its properties become the cornerstone for understanding the dynamics of stock prices, guiding us through the labyrinth of financial markets.
+                </p>
+                <h4>Geometric Brownian Motion (GBM): Continuous and Exponential Growth</h4>
+                <p>
+                  GBM, an extension of the Wiener process, introduces continuous and exponential growth by incorporating a drift term. This augmentation renders it a versatile model for various real-world phenomena, extending beyond finance.
+                </p>
+              
+                <h4>Applications in Finance</h4>
+                <p>
+                  In the financial realm, GBM's allure lies in its capacity to model the continuous-time evolution of asset prices, encapsulating both deterministic and random components. This becomes paramount for pricing options and unraveling the nuanced movements of financial markets.
+                </p>
+              
+                <h4>Stochastic Differential Equations (SDEs)</h4>
+                <p>
+                  GBM's mathematical prowess extends to its role as a solution to stochastic differential equations (SDEs). Delving into GBM offers insights into the broader field of SDEs, a foundational element in mathematical finance and quantitative modeling.
+                </p>
+              
+                <h4>Overall Motivation: Real-world Relevance</h4>
+                <p>
+                  The Wiener process and GBM transcend their financial roots, finding applications in diverse disciplines like physics, biology, and engineering. Their importance is underscored by their integral role in comprehending and modeling real-world phenomena steeped in randomness.
+                </p>
+              
+                <h4>Risk and Uncertainty</h4>
+                <p>
+                  Our investigation is driven by the inherent need to develop mathematical tools adept at modeling and managing risk and uncertainty. Whether navigating financial intricacies or understanding dynamic systems in various fields, the Wiener process and GBM become our allies in this quest.
+                </p>
+              
+                <h4>Computational Finance</h4>
+                <p>
+                  In the era of computational finance, the Wiener process and GBM emerge not just as theoretical constructs but as practical components in simulations and numerical methods.
+                <p>In essence, this thesis it is a quest for understanding, relevance, and practical application across the spectrum of dynamic and uncertain systems.</p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h2>Chapter 1</h2>
+                <h2>2.1 Detailed Examination of Wiener Process</h2>
+                <p>The Wiener process is a real-valued continuous-time stochastic process named in honor of American mathematician Norbert Wiener for his investigations on the mathematical properties of the one-dimensional Brownian motion.</p>
+                <p>The Wiener process plays an important role in both pure and applied mathematics. In pure mathematics, the Wiener process gave rise to the study of continuous time martingales. It is a key process in terms of which more complicated stochastic processes can be described. As such, it plays a vital role in stochastic calculus, diffusion processes and even potential theory.</p>
+                <p>The Wiener process has applications throughout the mathematical sciences. In physics it is used to study Brownian motion, the diffusion of minute particles suspended in fluid, and other types of diffusion via the Fokker–Planck and Langevin equations. It also forms the basis for the rigorous path integral formulation of quantum mechanics.and the study of eternal inflation in physical cosmology. It is also prominent in the mathematical theory of finance, in particular the Black–Scholes option pricing model.</p>
+                <h4 style="padding-top: 10px;">Characterisations of the Wiener process</h4>
+                <p>The Wiener process \(W_t\) is characterized by the following properties \cite{reference}:
+                    <ul>
+                        <li>\(W_{0}=0\) almost surely</li>
+                        <li>\(W\) has independent increments: for every \(t > 0\), the future increments \((W_{t+u}-W_{t})\), \(u \geq 0\), are independent of the past values \(W_s\), \(s < t\).</li>
+                        <li>\(W\) has Gaussian increments: \((W_{t+u}-W_{t})\) is normally distributed with mean \(0\) and variance \(u\), \((W_{t+u}-W_{t} \sim \mathcal{N}(0,u))\).</li>
+                        <li>\(W\) has almost surely continuous paths: \(W_{t}\) is almost surely continuous in \(t\).</li>
+                      </ul>
+
+                    <p>That the process has independent increments means that if \(0 \leq s_1 < t_1 \leq s_2 < t_2\), then \(W_{t_1} - W_{s_1}\) and \(W_{t_2} - W_{s_2}\) are independent random variables, and the similar condition holds for \(n\) increments.</p>
+                    
+                    <p>An alternative characterization of the Wiener process is the so-called Lévy characterization that says that the Wiener process is an almost surely continuous martingale with \(W_0 = 0\) and quadratic variation \([W_t, W_t] = t\) (which means that \(W_t^2 - t\) is also a martingale).</p>
+                    
+                    <p>A third characterization is that the Wiener process has a spectral representation as a sine series whose coefficients are independent \(N(0, 1)\) random variables. This representation can be obtained using the Karhunen–Loève theorem.</p>
+                    
+                    <p>Another characterization of a Wiener process is the definite integral (from time zero to time \(t\)) of a zero mean, unit variance, delta correlated ("white") Gaussian process.</p>
+                    
+                    <p>The Wiener process can be constructed as the scaling limit of a random walk, or other discrete-time stochastic processes with stationary independent increments. This is known as Donsker's theorem. Like the random walk, the Wiener process is recurrent in one or two dimensions (meaning that it returns almost surely to any fixed neighborhood of the origin infinitely often) whereas it is not recurrent in dimensions three and higher (where a multidimensional Wiener process is a process such that its coordinates are independent Wiener processes). Unlike the random walk, it is scale invariant, meaning that
+                    
+                    \[
+                    \alpha^{-1}W_{\alpha^2 t}
+                    \]
+                    
+                    is a Wiener process for any nonzero constant \(\alpha\). The Wiener measure is the probability law on the space of continuous functions \(g\), with \(g(0) = 0\), induced by the Wiener process. An integral based on Wiener measure may be called a Wiener integral.
+                    
+                </p></p>
+            </div>
+        </main>
+        <main>
+            <div class="content">
+                <h4 style="padding-top: 10px;">Properties of a one-dimensional Wiener process</h4>
+                <p>The unconditional probability density function follows a normal distribution with mean \(0\) and variance \(t\), at a fixed time \(t\):</p>
+
+                <p>\[
+                f_{W_{t}}(x) = \frac{1}{\sqrt{2\pi t}}e^{-\frac{x^2}{2t}}
+                \]</p>
+                
+                <p>The <b>expectation</b> is zero:</p>
+                
+                <p>\[
+                \operatorname{E}[W_{t}] = 0
+                \]</p>
+                
+                <p>The <b>variance</b>, using the computational formula, is \(t\):</p>
+                
+                <p>\[
+                \operatorname{Var}(W_{t}) = t
+                \]</p>
+                
+                <p>These results follow immediately from the definition that increments have a <b>normal distribution</b>, centered at zero. Thus:</p>
+                
+                <p>\[
+                W_{t} = W_{t} - W_{0} \sim \mathcal{N}(0, t)
+                \]</p>
+                <h4> Covariance and correlation </h4>
+                <p>The covariance and correlation (where \(s \leq t\)): </p>
+                <p>
+                \[
+                \begin{align*}
+                  \operatorname{cov}(W_{s}, W_{t}) &= s, \\
+                  \operatorname{corr}(W_{s}, W_{t}) &= \frac{\operatorname{cov}(W_{s}, W_{t})}{\sigma_{W_{s}}\sigma_{W_{t}}} = \frac{s}{\sqrt{st}} = \sqrt{\frac{s}{t}}.
+                \end{align*}
+                \]
+                </p>
+                
+                <p>These results follow from the definition that non-overlapping increments are independent, of which only the property that they are uncorrelated is used. Suppose that \(t_{1} \leq t_{2}\):</p>
+                
+                <p>
+                \[
+                \begin{align*}
+                  \operatorname{cov}(W_{t_{1}}, W_{t_{2}}) &= \operatorname{E} \left[(W_{t_{1}} - \operatorname{E}[W_{t_{1}}]) \cdot (W_{t_{2}} - \operatorname{E}[W_{t_{2}}])\right] \\
+                  &= \operatorname{E} \left[W_{t_{1}} \cdot W_{t_{2}}\right].
+                \end{align*}
+                \]
+                </p>
+                
+                <p>Substituting \(W_{t_{2}} = (W_{t_{2}} - W_{t_{1}}) + W_{t_{1}}\), we arrive at:</p>
+                
+                <p>
+                \[
+                \begin{align*}
+                  \operatorname{E}[W_{t_{1}} \cdot W_{t_{2}}] &= \operatorname{E} \left[W_{t_{1}} \cdot ((W_{t_{2}} - W_{t_{1}}) + W_{t_{1}})\right] \\
+                  &= \operatorname{E} \left[W_{t_{1}} \cdot (W_{t_{2}} - W_{t_{1}})\right] + \operatorname{E} \left[W_{t_{1}}^{2}\right].
+                \end{align*}
+                \]
+                </p>
+                
+                <p>Since \(W_{t_{1}} = W_{t_{1}} - W_{t_{0}}\) and \(W_{t_{2}} - W_{t_{1}}\) are independent, \(\operatorname{E}[W_{t_{1}} \cdot (W_{t_{2}} - W_{t_{1}})] = \operatorname{E}[W_{t_{1}}] \cdot \operatorname{E}[W_{t_{2}} - W_{t_{1}}] = 0\).</p>
+                
+                <p>Thus, \(\operatorname{cov}(W_{t_{1}}, W_{t_{2}}) = \operatorname{E}[W_{t_{1}}^{2}] = t_{1}\).</p>
+                
+                <p>A corollary useful for simulation is that we can write, for \(t_{1} < t_{2}\):</p>
+                
+                <p>
+                \[
+                W_{t_{2}} = W_{t_{1}} + \sqrt{t_{2} - t_{1}} \cdot Z
+                \]
+                </p>
+                
+                <p>where \(Z\) is an independent standard normal variable.</p>
+                
+            </div>
+        </main>
+        <main>
+          <div class="content">
+            <h2> Chapter 3</h2>
+            <h2>3.1 Detailed Examination of GBM</h2>
+            <p>A <b>geometric Brownian motion (GBM)</b> is a continuous-time stochastic process in which the logarithm of the randomly varying quantity follows a Brownian motion (also called a Wiener process) with drift.
+              It is an important example of stochastic processes satisfying a stochastic differential equation (SDE); in particular, it is used in mathematical finance to model stock prices in the Black–Scholes model.</p>
+            <h4>Technical definition: the SDE</h4>
+            A stochastic process \(S_{t}\) is said to follow a GBM if it satisfies the following stochastic differential equation (SDE):
+            $$dS_{t}=\mu S_{t}\,dt+\sigma S_{t}\,dW_{t}$$
+            where \(W_{t}\) is a Wiener process or Brownian motion, and 
+            \(\mu\)  ('the percentage drift') and 
+            \(\sigma\)  ('the percentage volatility') are constants.
+            
+            The former parameter is used to model deterministic trends, while the latter parameter models unpredictable events occurring during the motion.
+            <h4 >Solving the SDE</h4>
+            <p>For an arbitrary initial value \(S_{0}\) the above SDE has the analytic solution (under Itô's interpretation):</p>
+            
+            <p>
+                \[
+                dS_{t} = S_{0} \exp\left(\left(\mu - \frac{\sigma^2}{2}\right)t + \sigma W_{t}\right)dt
+                \]
+            </p>
+            
+            <p>The derivation involves the use of Itô calculus. Applying Itô's formula leads to:</p>
+            
+            <p>
+                \[
+                d(\ln S_{t}) = (\ln S_{t})'dS_{t} + \frac{1}{2}(\ln S_{t})''dS_{t}dS_{t} = \frac{dS_{t}}{S_{t}} - \frac{1}{2}\frac{1}{S_{t}^{2}}dS_{t}dS_{t}
+                \]
+            </p>
+            
+            <p>where \(dS_{t}dS_{t}\) is the quadratic variation of the SDE.</p>
+            
+            <p>
+                \[
+                dS_{t}dS_{t} = \sigma^2 S_{t}^{2}dW_{t}^{2} + 2\sigma S_{t}^{2}\mu dW_{t}dt + \mu^{2}S_{t}^{2}dt^{2}
+                \]
+            </p>
+            
+            <p>When \(dt \to 0\), \(dt\) converges to 0 faster than \(dW_{t}\), since \(dW_{t}^{2} = O(dt)\). So the above infinitesimal can be simplified by:</p>
+            
+            <p>
+                \[
+                dS_{t}dS_{t} = \sigma^2 S_{t}^{2}dt
+                \]
+            </p>
+            
+            <p>Plugging the value of \(dS_{t}\) in the above equation and simplifying, we obtain:</p>
+            
+            <p>
+                \[
+                \ln\left(\frac{S_{t}}{S_{0}}\right) = \left(\mu - \frac{\sigma^2}{2}\right)t + \sigma W_{t}
+                \]
+            </p>
+            
+            <p>Taking the exponential and multiplying both sides by \(S_{0}\) gives the solution claimed above.</p>
+            
+            <h4 style="padding-top: 50px;">Properties of GBM</h4>
+            <p>The solution \(S_{t}\) (for any value of \(t\)) is a log-normally distributed random variable with expected value and variance given by:</p>
+
+            <p>
+                \[
+                \operatorname{E}(S_{t}) = S_{0}e^{\mu t},
+                \]
+            </p>
+            
+            <p>
+                \[
+                \operatorname{Var}(S_{t}) = S_{0}^{2}e^{2\mu t}\left(e^{\sigma^2 t} - 1\right).
+                \]
+            </p>
+            
+            <p>They can be derived using the fact that \(Z_{t} = \exp(\sigma W_{t} - \frac{1}{2}\sigma^2 t)\) is a martingale, and that:</p>
+            
+            <p>
+                \[
+                \operatorname{E}\left[\exp\left(2\sigma W_{t} - \sigma^2 t\right) \mid \mathcal{F}_{s}\right] = e^{\sigma^2(t-s)}\exp\left(2\sigma W_{s} - \sigma^2 s\right), \quad \forall 0 \leq s < t.
+                \]
+            </p>
+            
+            <p>The probability density function of \(S_{t}\) is:</p>
+            
+            <p>
+                \[
+                f_{S_{t}}(s; \mu, \sigma, t) = \frac{1}{\sqrt{2\pi}}\frac{1}{s\sigma\sqrt{t}}\exp\left(-\frac{(\ln s - \ln S_{0} - (\mu - \frac{1}{2}\sigma^2)t)^{2}}{2\sigma^2 t}\right).
+                \]
+            <b>Derivation of  GBM probability density function</b>
+              </p>
+            <p>When deriving further properties of GBM, use can be made of the SDE of which GBM is the solution, or the explicit solution given above can be used. For example, consider the stochastic process log(St). This is an interesting process, because in the Black–Scholes model it is related to the log return of the stock price. </p>
+            <p> Using Itô's lemma with f(S) = log(S) gives:</p>
+            <p>
+                \[
+                \begin{alignedat}{2}
+                d\log(S) &= f'(S)\,dS + \frac{1}{2}f''(S)S^{2}\sigma ^{2}\,dt \\
+                &= \frac{1}{S}(\sigma S\,dW_{t} + \mu S\,dt) - \frac{1}{2}\sigma ^{2}\,dt \\
+                &= \sigma \,dW_{t} + (\mu -\sigma ^{2}/2)\,dt.
+                \end{alignedat}
+                \]
+            </p>
+            
+            <p>It follows that:</p>
+            
+            <p>
+                \[
+                \operatorname{E}\log(S_{t}) = \log(S_{0}) + (\mu -\sigma ^{2}/2)t.
+                \]
+            </p>
+            
+            <p>This result can also be derived by applying the logarithm to the explicit solution of GBM:</p>
+            
+            <p>
+                \[
+                \begin{alignedat}{2}
+                \log(S_{t}) &= \log\left(S_{0}\exp\left(\left(\mu -\frac{\sigma ^{2}}{2}\right)t + \sigma W_{t}\right)\right) \\
+                &= \log(S_{0}) + \left(\mu -\frac{\sigma ^{2}}{2}\right)t + \sigma W_{t}.
+                \end{alignedat}
+                \]
+            </p>
+            
+            <p>Taking the expectation yields the same result as above:</p>
+            
+            <p>
+                \[
+                \operatorname{E}\log(S_{t}) = \log(S_{0}) + (\mu -\sigma ^{2}/2)t.
+                \]
+            </p>
+            
+          </div>
+        </main>
+        <main>
+          <div class="content">
+            <h2>3.2 Emphasis on GBM's Role in Financial Modeling</h2>
+            <p>Geometric Brownian motion (GBM) is used to model stock prices in the Black–Scholes model and is widely employed in the modeling of stock price behavior.</p>
+
+            <p>Some arguments for using GBM to model stock prices include:</p>
+            
+            <ul>
+                <li style="padding-top: 10px;">The expected returns of GBM are independent of the value of the process (stock price), aligning with real-world expectations.</li>
+                <li style="padding-top: 10px;">A GBM process only assumes positive values, similar to real stock prices.</li>
+                <li style="padding-top: 10px;">A GBM process exhibits the same kind of 'roughness' in its paths as observed in real stock prices.</li>
+                <li style="padding-top: 10px;">Calculations with GBM processes are relatively easy.</li>
+            </ul>
+            
+            <p>However, GBM is not a completely realistic model and falls short of reality in the following points:</p>
+            
+            <ul>
+                <li style="padding-top: 10px;">In real stock prices, volatility changes over time, possibly stochastically, while in GBM, volatility is assumed to be constant.</li>
+                <li style="padding-top: 10px;">In real life, stock prices often show jumps caused by unpredictable events or news, but in GBM, the path is continuous without discontinuity.</li>
+            </ul>
+            
+            <p>Apart from modeling stock prices, Geometric Brownian motion has also found applications in the monitoring of trading strategies.</p>
+          </div>
+        </main>
+        <main>
+          <div class="content">
+            <h2>Chapter 4</h2>
+            <h2>4.1 Derivation of Wiener Process Equations</h2>
+            <p>Let's consider a one-dimensional Wiener process \(W_t\) over the time interval \([0, t]\). The Wiener process has the following properties:</p>
+            
+            <ol>
+                <li style="padding-top: 10px;"><strong>Incremental Independence:</strong> For any \(0 \leq s_1 < t_1 \leq s_2 < t_2 \leq \ldots \leq s_n < t_n\), the increments \(W_{t_1} - W_{s_1}, W_{t_2} - W_{s_2}, \ldots, W_{t_n} - W_{s_n}\) are independent.</li>
+                
+                <li style="padding-top: 10px;"><strong>Normal Distribution of Increments:</strong> The increments \(W_{t_1} - W_{s_1}, W_{t_2} - W_{s_2}, \ldots, W_{t_n} - W_{s_n}\) are normally distributed with mean 0 and variance \(t_i - s_i\).</li>
+            </ol>
+            
+            <p>Now, let's consider the Wiener process over a small time interval \(\Delta t\). We want to derive the differential equation for \(dW_t\) over this small time interval.</p>
+            
+            <p>The increment \(dW_t\) can be written as:</p>
+            
+            \[
+            dW_t = Z \sqrt{\Delta t}
+            \]
+            
+            <p>where \(Z\) is a random variable with a standard normal distribution (mean 0, variance 1), and \(\sqrt{\Delta t}\) ensures that the variance of \(dW_t\) is \(\Delta t\).</p>
+            
+            <p>Now, we want to express this increment in terms of the differential \(dt\), which represents an infinitesimally small time interval. We can achieve this by dividing both sides of the equation by \(\sqrt{\Delta t}\):</p>
+            
+            \[
+            \frac{dW_t}{\sqrt{\Delta t}} = Z
+            \]
+            
+            <p>As \(\Delta t\) approaches 0, the left side converges to the differential \(dW_t\), and the right side remains a standard normal random variable.</p>
+            
+            <p>So, in the limit as \(\Delta t\) approaches 0, we have:</p>
+            
+            \[
+            dW_t = Z \,dt
+            \]
+            
+            <p>This is the differential form of the Wiener process equation. It describes the infinitesimal change in the Wiener process over a very small time interval.</p>
+            
+          </div>
+        </main>
+        <main>
+          <div class="content">
+            <h2>Chapter 4</h2>
+            <h2>4.2 Derivation of GBM</h2>
+            <p>The Geometric Brownian Motion (GBM) is commonly used to model the continuous-time evolution of financial assets, such as stock prices. The stochastic differential equation (SDE) governing GBM is given by:</p>
+
+            \[ dS_t = \mu S_t \, dt + \sigma S_t \, dW_t \]
+            
+            <p>where:</p>
+            <ul>
+                <li>\(S_t\) is the stock price at time \(t\),</li>
+                <li>\(\mu\) is the drift (average rate of return),</li>
+                <li>\(\sigma\) is the volatility (standard deviation of the rate of return),</li>
+                <li>\(W_t\) is a Wiener process (Brownian motion), representing random market movements.</li>
+            </ul>
+            
+            <p>Now, let's derive the GBM equation:</p>
+            
+            <ol>
+                <li><strong>Start with the SDE:</strong></li>
+                \[ dS_t = \mu S_t \, dt + \sigma S_t \, dW_t \]
+            
+                <li><strong>Divide both sides by \(S_t\):</strong></li>
+                \[ \frac{dS_t}{S_t} = \mu \, dt + \sigma \, dW_t \]
+            
+                <li><strong>Integrate both sides:</strong></li>
+                \[ \int \frac{1}{S_t} \, dS_t = \int \mu \, dt + \int \sigma \, dW_t \]
+            
+                <li><strong>Apply the integral:</strong></li>
+                \[ \ln|S_t| = \mu t + \sigma W_t + C \]
+            
+                <li><strong>Exponentiate both sides:</strong></li>
+                \[ |S_t| = e^{\mu t + \sigma W_t + C} \]
+            
+                <li><strong>Simplify with a positive constant \(C_1\):</strong></li>
+                \[ S_t = C_1 e^{\mu t + \sigma W_t} \]
+            </ol>
+            
+            <p>Now, since \(e^{\sigma W_t}\) is a log-normally distributed random variable, we can rewrite the equation in a more common form:</p>
+            
+            \[ S_t = S_0 e^{(\mu - \frac{\sigma^2}{2})t + \sigma W_t} \]
+            
+            <p>This is the final form of the Geometric Brownian Motion equation, representing the continuous-time evolution of a financial asset's price under the assumptions of constant drift (\(\mu\)) and constant volatility (\(\sigma\)). The term \(\frac{\sigma^2}{2}\) in the exponent adjusts for the volatility.</p>
+           
+          </div>
+        </main>
+        <main>
+          <div class="content" style="height: 3800px;">
+            <h2>4.3 Simulations</h2>
+            <p> In this chapter, will be shown some <b>simulations</b> of the Wiener process and GBM:</p>
+            <h3> 1° simulation</h3>
+            <img src="wienerPr1.svg" style=" max-width: 50%;
+            height: 10%;
+            margin-top: 0%;
+            margin-right: 1%;">
+            <p>Five sampled <b>Wiener processes</b>, with expected standard deviation in gray.</p>
+            <hr>
+            <h3> 2° simulation</h3>
+            <img src="wienerPr2.png" style=" max-width: 50%;
+            height: 8%;
+            margin-top: 0%;
+            margin-right: 1%;">
+            <p><b>Wiener processes</b> <b>with</b> drift (blue) and <b>without</b> drift (red)</p>
+            <hr>
+            <h3> 3° simulation</h3>
+            <img src="wienerPr3.PNG" style=" max-width: 70%;
+            height: 8%;
+            margin-top: 0%;
+            margin-right: 1%;">
+            <a href=""> LINK TO THE CODE</a>
+            <p> Here the breakdown of the general flow and purpose of the code of the simulation:</p>
+            <section>
+              <h4>Simulation Functions:</h4>
+              <ul>
+                  <li><code>generateWienerPath(steps, timeIncrement)</code>: Generates a single path of a Wiener process using a random increment at each step.</li>
+                  <li><code>generateWienerPaths(numPaths, steps, timeIncrement)</code>: Generates multiple paths of the Wiener process by calling <code>generateWienerPath</code> for the specified number of paths (numPaths).</li>
+              </ul>
+          </section>
+      
+          <section>
+              <h4>Simulation Parameters:</h4>
+              <ul>
+                  <li><strong>numPaths:</strong> Specifies the number of Wiener process paths to be simulated.</li>
+                  <li><strong>steps:</strong> Determines the number of steps in each Wiener process path.</li>
+                  <li><strong>timeIncrement:</strong> Represents the time increment between steps in the simulation.</li>
+              </ul>
+          </section>
+      
+          <section>
+              <h4>Visualization using Plotly:</h4>
+              <ul>
+                  <li>The code uses the Plotly library, a JavaScript plotting library for creating interactive and visually appealing plots.</li>
+                  <li>It prepares data for Plotly by creating an array of plot objects, each representing a Wiener process path with x-values (time) and y-values (Wiener process values).</li>
+                  <li>The <code>Plotly.newPlot</code> function is used to create an interactive line plot inside a designated HTML element ("wienerPlot"). Each line corresponds to a different Wiener process path.</li>
+              </ul>
+          </section>
+      
+          <section>
+              <h4>Interactive Plot:</h4>
+              <ul>
+                  <li>The resulting plot is interactive and provides features like zooming, panning, and hover information.</li>
+              </ul>
+          </section>
+      
+          <section>
+              <h4>Adjustable Parameters:</h4>
+              <ul>
+                  <li>Users can modify the simulation parameters (numPaths, steps, and timeIncrement) to observe how changes impact the simulated Wiener process paths.</li>
+              </ul>
+          </section>
+      
+          <section>
+              <h4>Purpose:</h4>
+              <ul>
+                  <li>It demonstrates how to simulate and visualize multiple paths of a Wiener process using a simple random increment approach and visualizes the results using the Plotly library.</li>
+              </ul>
+          </section>
+          <hr>
+          <h3> 4° simulation</h3>
+          <img src="gbm1.png" style="max-width:50%;
+          height: 8%;
+          margin-top: 0%;
+          margin-right: 1%;">
+          <p><b>GBM</b> simulation made by python code:</p>
+          <pre>
+            <code>
+              # Python code for the plot
+
+              import numpy as np
+              import matplotlib.pyplot as plt
+              
+              mu = 1
+              n = 50
+              dt = 0.1
+              x0 = 100
+              np.random.seed(1)
+              
+              sigma = np.arange(0.8, 2, 0.2)
+              
+              x = np.exp(
+                  (mu - sigma ** 2 / 2) * dt
+                  + sigma * np.random.normal(0, np.sqrt(dt), size=(len(sigma), n)).T
+              )
+              x = np.vstack([np.ones(len(sigma)), x])
+              x = x0 * x.cumprod(axis=0)
+              
+              plt.plot(x)
+              plt.legend(np.round(sigma, 2))
+              plt.xlabel("$t$")
+              plt.ylabel("$x$")
+              plt.title(
+                  "Realizations of Geometric Brownian Motion with different variances\n $\mu=1$"
+              )
+              plt.show()
+            </code>
+          </pre>
+          <hr>
+          <h3> 5° simulation </h3>
+          <p>The last simulation is part of a request of the HW7, and the aim of that simulation is specified in the HW7.</p>
+          <p>
+            <a href="">Link to the code </a>
+          </p>
+          <img src="gbm2.png" style="max-width:60%;
+          height: 8%;
+          margin-top: 0%;
+          margin-right: 1%;">
+          <p>The code serves as an interactive simulator for users to experiment with different parameters and stochastic processes using the Euler-Maruyama method. Users can visualize the simulated paths and histograms of penetration events on the canvas. The code provides flexibility for users to choose pre-defined processes or input custom SDEs, offering an educational tool for understanding stochastic processes and numerical methods.
+            In particular we can have the possibilty to choose the GBM SDE, and try a simulation, like the one in the picture.
+          </p>
+          </div> 
+        </main>
+        <main>
+          <div class="content">
+            <h2>Chapter 5</h2>
+            <h2>Conclusion</h2>
+            <p>the Wiener process and Geometric Brownian Motion (GBM) are fundamental mathematical models used to describe random processes, particularly in the context of financial markets. While the Wiener process provides a foundation for understanding stochastic behavior with continuous, independent, and normally distributed increments, GBM extends this concept to model stock prices, exhibiting positivity, roughness, and simplicity in calculations. However, both models have limitations, such as GBM's assumption of constant volatility and the absence of jumps in the paths, highlighting the need for more sophisticated models in capturing the complexities of real-world financial dynamics.</p>
+          </div>
+        </main>
+        <p><b>LINK FONTI:</b>
+          <!-- Primo link -->
+       <a href="https://en.wikipedia.org/wiki/Wiener_process">1° fonte</a>
+       <a href="https://en.wikipedia.org/wiki/Geometric_Brownian_motion">2° fonte</a>
+       <a href="https://stackoverflow.com/questions/tagged/stochastic-process">3° fonte</a>
+</body>
+
+</html>
